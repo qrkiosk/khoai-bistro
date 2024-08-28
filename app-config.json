@@ -1,13 +1,12 @@
 {
   "app": {
     "title": "Khoai Bistro",
-    "headerTitle": "Khoai Bistro",
-    "headerColor": "#1843EF",
-    "textColor": "white",
-    "statusBarColor": "#1843EF",
-    "leftButton": "back",
-    "statusBar": "normal",
-    "actionBarHidden": false,
+    "headerColor": "",
+    "textColor": "#000000",
+    "statusBarColor": "#ffffff",
+    "leftButton": "none",
+    "statusBar": "transparent",
+    "actionBarHidden": true,
     "hideAndroidBottomNavigationBar": false,
     "hideIOSSafeAreaBottom": false
   },
@@ -16,3 +15,4 @@
   "listSyncJS": [],
   "listAsyncJS": []
 }
+

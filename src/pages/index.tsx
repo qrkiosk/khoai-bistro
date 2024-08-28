@@ -1,36 +1,29 @@
-import React from 'react';
-import {
-  List,
-  Page,
-  Icon,
-  useNavigate
-} from 'zmp-ui';
-import { useRecoilValue } from 'recoil';
-import { userInfo } from "zmp-sdk";
-import { userState } from '../state';
+import React from "react";
+import { Box, List, Page, Icon, useNavigate } from "zmp-ui";
+import { useRecoilValue } from "recoil";
 
-import UserCard from '../components/user-card';
+import { userState } from "../state";
+import UserCard from "../components/UserCard";
+import Section from "../components/Section";
 
-const HomePage:React.FunctionComponent = () => {
-  const user = useRecoilValue<userInfo>(userState);
-  const navigate = useNavigate()
+const HomePage: React.FunctionComponent = () => {
+  const user = useRecoilValue(userState);
+  const navigate = useNavigate();
+
   return (
-    <Page  className="page">
-    <div className="section-container">
-      <UserCard user={user}/> 
-    </div>
-    <div className="section-container">
-    <List >
-      <List.Item suffix={<Icon icon="zi-arrow-right"/>}>
-        <div  onClick={()=>navigate('/about')}>About</div>
-      </List.Item>
-      <List.Item suffix={<Icon icon="zi-arrow-right"/>}>
-        <div onClick={()=>navigate('/user')}>User</div>
-      </List.Item>
-    </List>
-    </div>
-  </Page>
+    <Page className="page">
+      <Section>
+        <UserCard user={user} />
+      </Section>
+      <Section>
+        <List>
+          <List.Item suffix={<Icon icon="zi-arrow-right" />}>
+            <div onClick={() => navigate("/plp")}>Product List</div>
+          </List.Item>
+        </List>
+      </Section>
+    </Page>
   );
-}
+};
 
 export default HomePage;
