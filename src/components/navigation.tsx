@@ -6,7 +6,7 @@ import { BottomNavigation, Icon } from "zmp-ui";
 import { CartIcon } from "./cart-icon";
 
 const tabs: Record<string, MenuItem> = {
-  "/": {
+  "/plp": {
     label: "Trang chủ",
     icon: <Icon icon="zi-home" />,
   },
