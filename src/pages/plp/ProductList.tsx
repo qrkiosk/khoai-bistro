@@ -8,7 +8,8 @@ import ProductItem from "../../components/ProductItem";
 import { Product } from "../../types/product";
 import { ProductItemSkeleton } from "../../components/skeletons";
 
-const PRODUCTS_API_URL = "https://api.example.com/products";
+const PRODUCTS_API_URL =
+  "https://run.mocky.io/v3/1f094713-6105-488d-a5b4-e699912ce8ff";
 
 export const ProductListContent = ({ products }: { products: Product[] }) => {
   return (
@@ -38,10 +39,9 @@ export const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // axios.get(PRODUCTS_API_URL).then((response) => {
-    //  setProducts(response.data as Product[]);
-    // });
-    setProducts(sampleProducts.slice(0, 6) as Product[]);
+    axios.get(PRODUCTS_API_URL).then((response) => {
+      setProducts(response.data as Product[]);
+    });
   }, []);
 
   return (
