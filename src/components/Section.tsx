@@ -7,7 +7,7 @@ const Section = ({ children }) => (
     mb={6}
     style={{
       padding: 16,
-      background: "#FFFFFF",
+      background: "var(--zmp-background-white)",
       borderRadius: 8,
       marginBottom: 24,
     }}
