@@ -14,12 +14,16 @@ const img = {
 
 const ProductListPage: React.FC = () => {
   return (
-    <Page className="relative flex-1 flex flex-col bg-white">
+    <Page
+      style={{ minHeight: "unset" }}
+      className="relative flex-1 flex flex-col bg-white"
+    >
       <PlpHeader />
       <div className="flex-1 overflow-auto">
         <Banner />
         <Divider />
         <ProductList />
+        <Divider />
       </div>
     </Page>
   );
