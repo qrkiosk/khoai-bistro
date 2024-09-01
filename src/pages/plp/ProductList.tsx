@@ -8,6 +8,7 @@ import ProductItem from "../../components/ProductItem";
 import { Product } from "../../types/product";
 import { ProductItemSkeleton } from "../../components/skeletons";
 
+// to delete this mock api, call this endpoint: https://designer.mocky.io/manage/delete/1f094713-6105-488d-a5b4-e699912ce8ff/<github_password>
 const PRODUCTS_API_URL =
   "https://run.mocky.io/v3/1f094713-6105-488d-a5b4-e699912ce8ff";
 
