@@ -9,7 +9,7 @@ import "./css/app.css";
 
 // Import App Component
 import appConfig from "../app-config.json";
-import App from "./components/MyApp";
+import App from "./components/App";
 
 if (!window.APP_CONFIG) {
   window.APP_CONFIG = appConfig;
