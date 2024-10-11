@@ -2,9 +2,9 @@ import React, { useCallback } from "react";
 import { useSetAtom } from "jotai";
 import { Box, Heading, Text, RadioGroup, Radio, Stack } from "@chakra-ui/react";
 
-import { setVariantSelectedDetailAtom } from "../../../state";
-import { DisplayPrice } from "../../../components/display/price";
-import { OptionWithSelectedDetail } from "../../../types/product";
+import { setVariantSelectedDetailAtom } from "../state";
+import { DisplayPrice } from "./display/price";
+import { OptionWithSelectedDetail } from "../types/product";
 
 const MandatoryOption = ({ option }: { option: OptionWithSelectedDetail }) => {
   const setVariantSelectedDetail = useSetAtom(setVariantSelectedDetailAtom);

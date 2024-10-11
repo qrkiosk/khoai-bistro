@@ -19,11 +19,9 @@ import ProductDrawer from "./ProductDrawer";
 const CategoriesDrawer = ({
   isOpen,
   onClose,
-  categories,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  categories: any[];
 }) => {
   return (
     <Drawer placement="bottom" isOpen={isOpen} onClose={onClose}>
@@ -59,11 +57,10 @@ const ProductListPage = () => {
       <MainContent />
       <ProductDrawer />
       <CartDrawer />
-      {/* <CategoriesDrawer
+      <CategoriesDrawer
         isOpen={isCategoriesDrawerOpen}
         onClose={onCloseCategoriesDrawer}
-        categories={[]}
-      /> */}
+      />
     </Page>
   );
 };

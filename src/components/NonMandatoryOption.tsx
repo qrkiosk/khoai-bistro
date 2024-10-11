@@ -9,9 +9,9 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 
-import { setVariantSelectedDetailsAtom } from "../../../state";
-import { OptionWithSelectedDetail } from "../../../types/product";
-import { DisplayPrice } from "../../../components/display/price";
+import { setVariantSelectedDetailsAtom } from "../state";
+import { OptionWithSelectedDetail } from "../types/product";
+import { DisplayPrice } from "./display/price";
 
 const NonMandatoryOption = ({
   option,

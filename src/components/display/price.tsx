@@ -1,4 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
+
+import { Product } from "../../types/product";
+import { SelectedOptions } from "../../types/cart";
+import { calcFinalPrice } from "../../utils/product";
 
 const CURRENCY_SYMBOL = "đ";
 
@@ -9,4 +13,16 @@ export const DisplayPrice: FC<{ children: number }> = ({ children }) => {
       {children.toLocaleString()}
     </>
   );
+};
+
+export const FinalPrice: FC<{
+  children: Product;
+  options?: SelectedOptions;
+}> = ({ children, options }) => {
+  const finalPrice = useMemo(
+    () => calcFinalPrice(children, options),
+    [children, options]
+  );
+
+  return <DisplayPrice>{finalPrice}</DisplayPrice>;
 };

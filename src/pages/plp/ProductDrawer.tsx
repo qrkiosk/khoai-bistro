@@ -26,12 +26,12 @@ import {
   productVariantPriceAtom,
   prepareProductVariantAtom,
   updateProductVariantQtyAtom,
-} from "../../../state";
-import Divider from "../../../components/Divider";
-import { DisplayPrice } from "../../../components/display/price";
-import MandatoryOption from "./MandatoryOption";
-import NonMandatoryOption from "./NonMandatoryOption";
-import SkeletonContent from "./SkeletonContent";
+} from "../../state";
+import Divider from "../../components/Divider";
+import { SkeletonContent } from "./../../components/skeletons";
+import { DisplayPrice } from "../../components/display/price";
+import MandatoryOption from "../../components/MandatoryOption";
+import NonMandatoryOption from "../../components/NonMandatoryOption";
 
 const isProductDrawerOpenAtom = atom(false);
 

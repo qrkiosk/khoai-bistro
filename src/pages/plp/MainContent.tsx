@@ -8,15 +8,14 @@ import { storeProductsByCategoryAtom } from "../../state";
 import Divider from "../../components/Divider";
 import Banner from "./Banner";
 import ProductList from "./ProductList";
+import { SkeletonContent } from "../../components/skeletons";
 
 const MainContent = () => {
   const { data: categories, isLoading } = useAtomValue(
     storeProductsByCategoryAtom
   );
 
-  if (isLoading || isEmpty(categories)) {
-    return <Text fontSize={14}>Đang tải danh sách sản phẩm...</Text>;
-  }
+  if (isLoading || isEmpty(categories)) return <SkeletonContent />;
 
   return (
     <Box className="flex-1 overflow-auto">

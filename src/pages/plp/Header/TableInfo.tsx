@@ -1,21 +1,13 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useAtomValue } from "jotai";
 import { Icon } from "zmp-ui";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Spinner, Text } from "@chakra-ui/react";
 
 import { tableInfoAtom } from "../../../state";
 
 const TableInfo = () => {
   const { data: tableInfo, isLoading } = useAtomValue(tableInfoAtom);
-  const tableName = tableInfo?.name;
-
-  const displayTableName = useMemo(() => {
-    if (isLoading) return "Đang tải thông tin bàn...";
-    if (!tableName) return "Bàn: Ko xác định";
-    return `Bàn: ${tableName}`;
-  }, [tableName, isLoading]);
-
   return (
     <Box
       w="100%"
@@ -24,10 +16,16 @@ const TableInfo = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <Icon size={20} icon="zi-location-solid" />
-      <Text fontSize={14} ml={2}>
-        {displayTableName}
-      </Text>
+      {isLoading || tableInfo == null ? (
+        <Spinner />
+      ) : (
+        <>
+          <Icon size={20} icon="zi-location-solid" />
+          <Text fontSize={14} ml={2}>
+            {`Bàn: ${tableInfo.name}`}
+          </Text>
+        </>
+      )}
     </Box>
   );
 };

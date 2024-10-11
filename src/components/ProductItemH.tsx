@@ -4,7 +4,7 @@ import { useSetAtom } from "jotai";
 
 import { selectedProductIdAtom } from "../state";
 import { Product } from "../types/product";
-import { FinalPrice } from "./display/final-price";
+import { FinalPrice } from "./display/price";
 
 const ProductItemH = ({ product }: { product: Product }) => {
   const setSelectedProductId = useSetAtom(selectedProductIdAtom);
