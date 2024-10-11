@@ -3,7 +3,7 @@ import { useSetAtom } from "jotai";
 import { Box, Heading, Text, RadioGroup, Radio, Stack } from "@chakra-ui/react";
 
 import { setVariantSelectedDetailAtom } from "../state";
-import { DisplayPrice } from "./display/price";
+import { DisplayPrice } from "./prices";
 import { OptionWithSelectedDetail } from "../types/product";
 
 const MandatoryOption = ({ option }: { option: OptionWithSelectedDetail }) => {

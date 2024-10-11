@@ -29,7 +29,7 @@ import {
 } from "../../state";
 import Divider from "../../components/Divider";
 import { SkeletonContent } from "./../../components/skeletons";
-import { DisplayPrice } from "../../components/display/price";
+import { DisplayPrice } from "../../components/prices";
 import MandatoryOption from "../../components/MandatoryOption";
 import NonMandatoryOption from "../../components/NonMandatoryOption";
 

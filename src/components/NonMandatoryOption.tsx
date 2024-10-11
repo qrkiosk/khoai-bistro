@@ -11,7 +11,7 @@ import {
 
 import { setVariantSelectedDetailsAtom } from "../state";
 import { OptionWithSelectedDetail } from "../types/product";
-import { DisplayPrice } from "./display/price";
+import { DisplayPrice } from "./prices";
 
 const NonMandatoryOption = ({
   option,

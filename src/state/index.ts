@@ -24,7 +24,7 @@ export const tableIdQuery = atom(null, (_, set) => {
   const searchParams = new URLSearchParams(window.location.search);
   const tableId = searchParams.get("tableId");
 
-  set(tableIdAtom, tableId ? +tableId : 4 /* null */);
+  set(tableIdAtom, tableId ? +tableId : null);
 });
 
 export const tableInfoAtom = atomWithQuery<
@@ -49,7 +49,7 @@ export const storeIdQuery = atom(null, (_get, set) => {
   const searchParams = new URLSearchParams(window.location.search);
   const storeId = searchParams.get("storeId");
 
-  set(storeIdAtom, storeId ? +storeId : 2 /* null */);
+  set(storeIdAtom, storeId ? +storeId : null);
 });
 
 export const companyIdAtom = atom<number | null>(null);
@@ -58,7 +58,7 @@ export const companyIdQuery = atom(null, (_get, set) => {
   const searchParams = new URLSearchParams(window.location.search);
   const companyId = searchParams.get("companyId");
 
-  set(companyIdAtom, companyId ? +companyId : 1 /* null */);
+  set(companyIdAtom, companyId ? +companyId : null);
 });
 
 export const storeProductsAtom = atomWithQuery<

@@ -6,7 +6,7 @@ import {
   CategoryWithProducts,
 } from "../types/product";
 import { Response } from "./types";
-import { BASE_URL } from "./constant";
+import { BASE_URL } from "./constants";
 
 export const getStoreProducts = ({ storeId }: { storeId: number }) => {
   return axios.post<Response<Product[]>>(`${BASE_URL}/product`, {

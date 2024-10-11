@@ -32,7 +32,7 @@ import {
   CartProductVariant,
   OptionWithSelectedDetail,
 } from "../../types/product";
-import { DisplayPrice } from "../../components/display/price";
+import { DisplayPrice } from "../../components/prices";
 import Divider from "../../components/Divider";
 
 const calcItemTotalAmount = (item: CartProductVariant) => {
