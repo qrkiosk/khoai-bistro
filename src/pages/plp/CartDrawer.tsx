@@ -164,7 +164,7 @@ const CartDrawer = () => {
 
                   {cart.items.map((item) => (
                     <>
-                      <GridItem colSpan={1}>
+                      <GridItem key={`${item.uniqIdentifier}--1`} colSpan={1}>
                         <Box h="100%" display="flex" mt={5}>
                           <Button
                             colorScheme="blue"
@@ -220,7 +220,7 @@ const CartDrawer = () => {
                           </Box>
                         </Box>
                       </GridItem>
-                      <GridItem colSpan={1}>
+                      <GridItem key={`${item.uniqIdentifier}--2`} colSpan={1}>
                         <Text fontSize="sm" textAlign="right" mt={5}>
                           <DisplayPrice>
                             {calcItemTotalAmount(item)}

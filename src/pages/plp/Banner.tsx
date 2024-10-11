@@ -10,7 +10,7 @@ const Banner = ({ category }: { category: CategoryWithProducts }) => {
     <ProductListSection title={category.name}>
       <Swiper dots={false}>
         {category.products.map((product) => (
-          <Swiper.Slide>
+          <Swiper.Slide key={product.id}>
             <ProductItemH product={product} />
           </Swiper.Slide>
         ))}

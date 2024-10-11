@@ -20,11 +20,10 @@ const NonMandatoryOption = ({
 }) => {
   const setVariantSelectedDetails = useSetAtom(setVariantSelectedDetailsAtom);
 
-  const selectedDetailsSet = useMemo(
-    () => new Set(option.selectedDetails.map((d) => d.id)),
+  const selectedDetails = useMemo(
+    () => option.selectedDetails.map((detail) => detail.id),
     [option.selectedDetails]
   );
-
   const setSelectedDetails = useCallback(
     (checkedDetailIds: string[]) => {
       setVariantSelectedDetails(option.id, checkedDetailIds);
@@ -37,7 +36,7 @@ const NonMandatoryOption = ({
       <Heading size="sm" mb={2}>
         {option.name}
       </Heading>
-      <CheckboxGroup onChange={setSelectedDetails}>
+      <CheckboxGroup value={selectedDetails} onChange={setSelectedDetails}>
         <Stack>
           {option.details.map((detail) => (
             <Box
@@ -47,12 +46,7 @@ const NonMandatoryOption = ({
               alignItems="center"
               mt={2}
             >
-              <Checkbox
-                value={detail.id}
-                checked={selectedDetailsSet.has(detail.id)}
-              >
-                {detail.name}
-              </Checkbox>
+              <Checkbox value={detail.id}>{detail.name}</Checkbox>
               <Text>
                 {detail.price > 0 && "+ "}
                 <DisplayPrice>{detail.price}</DisplayPrice>
