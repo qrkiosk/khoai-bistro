@@ -1,11 +1,9 @@
-import { Product } from "./product";
+import { CartProductVariant } from "./product";
 
 export type SelectedOptions = Record<string, string | string[]>;
 
-export interface CartItem {
-  product: Product;
-  options: SelectedOptions;
-  quantity: number;
-}
-
-export type Cart = CartItem[];
+export type Cart = {
+  items: CartProductVariant[];
+  shippingInfo: Record<string, string> | null;
+  paymentMethod: string | null;
+};

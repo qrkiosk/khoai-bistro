@@ -2,13 +2,13 @@
   "app": {
     "title": "Khoai Bistro",
     "headerColor": "",
-    "textColor": "#000000",
-    "statusBarColor": "#ffffff",
-    "leftButton": "none",
+    "textColor": "black",
     "statusBar": "transparent",
+    "statusBarColor": "",
+    "leftButton": "none",
     "actionBarHidden": true,
-    "hideAndroidBottomNavigationBar": false,
-    "hideIOSSafeAreaBottom": false
+    "hideIOSSafeAreaBottom": true,
+    "hideAndroidBottomNavigationBar": false
   },
   "template": {
     "primaryColor": "#006af5",

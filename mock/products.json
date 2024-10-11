@@ -4,7 +4,7 @@
     "name": "Caramel Latte",
     "price": 35000,
     "image": "https://stc-zmp.zadn.vn/templates/zaui-coffee/dummy/product-square-1.webp",
-    "description": "There is a set of mock banners available <u>here</u> in three colours and in a range of standard banner sizes",
+    "description": "There is a set of mock banners available here in three colours and in a range of standard banner sizes",
     "categoryId": ["coffee", "drinks"],
     "variantId": ["size", "topping"]
   },

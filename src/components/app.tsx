@@ -1,48 +1,42 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import { App, ZMPRouter, SnackbarProvider, Box } from "zmp-ui";
-import { RecoilRoot } from "recoil";
+import React, { ReactNode } from "react";
+import { Provider as JotaiProvider } from "jotai";
+import { useHydrateAtoms } from "jotai/react/utils";
+import { queryClientAtom } from "jotai-tanstack-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ChakraProvider } from "@chakra-ui/react";
+import { App as ZApp, ZMPRouter, SnackbarProvider } from "zmp-ui";
 
-import { getConfig } from "../utils/config";
-import { ConfigProvider } from "./config-provider";
-import { Navigation } from "./navigation";
-import HomePage from "../pages";
-import ProductListPage from "../pages/plp";
+import ConfigProvider from "./ConfigProvider";
+import Layout from "./Layout";
 
-const cssVariables = {
-  "--zmp-primary-color": getConfig((c) => c.template.primaryColor),
-  "--zmp-background-color": "#f4f5f6",
-  "--zmp-background-white": "#ffffff",
+const queryClient = new QueryClient();
+
+const HydrateAtoms = ({ children }: { children: ReactNode }) => {
+  useHydrateAtoms([[queryClientAtom, queryClient]]);
+
+  return <>{children}</>;
 };
 
-const Layout = () => {
+const App = () => {
   return (
-    <Box flex flexDirection="column" className="h-screen">
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/plp" element={<ProductListPage />}></Route>
-        </Routes>
-      </div>
-      <Navigation />
-    </Box>
+    <QueryClientProvider client={queryClient}>
+      <JotaiProvider>
+        <HydrateAtoms>
+          <ChakraProvider>
+            <ConfigProvider>
+              <ZApp>
+                <SnackbarProvider>
+                  <ZMPRouter>
+                    <Layout />
+                  </ZMPRouter>
+                </SnackbarProvider>
+              </ZApp>
+            </ConfigProvider>
+          </ChakraProvider>
+        </HydrateAtoms>
+      </JotaiProvider>
+    </QueryClientProvider>
   );
 };
 
-const MyApp = () => {
-  return (
-    <RecoilRoot>
-      <ConfigProvider cssVariables={cssVariables}>
-        <App>
-          <SnackbarProvider>
-            <ZMPRouter>
-              <Layout />
-            </ZMPRouter>
-          </SnackbarProvider>
-        </App>
-      </ConfigProvider>
-    </RecoilRoot>
-  );
-};
-
-export default MyApp;
+export default App;

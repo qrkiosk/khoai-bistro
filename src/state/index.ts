@@ -1,309 +1,297 @@
-import { atom, selector, selectorFamily } from "recoil";
-import { getLocation, getPhoneNumber, getUserInfo } from "zmp-sdk";
-import logo from "../static/icons/logo.png";
-import { Category } from "../types/category";
-import { Product, Variant } from "../types/product";
+import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
+import { atomWithQuery } from "jotai-tanstack-query";
+
+import { StoreTable } from "../types/company";
+import { getStoreTableById } from "../api/table";
+import {
+  getProductById,
+  getStoreProducts,
+  getStoreProductsByCategory,
+} from "../api/product";
 import { Cart } from "../types/cart";
-import { Notification } from "../types/notification";
-import { calculateDistance } from "../utils/location";
-import { Store } from "../types/delivery";
-import { calcFinalPrice } from "../utils/product";
-import { wait } from "../utils/async";
-import categories from "../../mock/categories.json";
+import {
+  CategoryWithProducts,
+  OptionDetail,
+  Product,
+  CartProductVariant,
+  ProductWithOptions,
+} from "../types/product";
 
-export const userState = selector({
-  key: "user",
-  get: async () => {
-    try {
-      const { userInfo } = await getUserInfo({ autoRequestPermission: true });
-      return userInfo;
-    } catch (error) {
-      return {
-        id: "",
-        avatar: "",
-        name: "Người dùng Zalo",
-      };
-    }
+export const tableIdAtom = atom<number | null>(null);
+
+export const tableIdQuery = atom(null, (_, set) => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const tableId = searchParams.get("tableId");
+
+  set(tableIdAtom, tableId ? +tableId : 4);
+});
+
+export const tableInfoAtom = atomWithQuery<
+  StoreTable | null,
+  Error,
+  StoreTable | null,
+  [string, number | null]
+>((get) => ({
+  initialData: null,
+  queryKey: ["table", get(tableIdAtom)],
+  queryFn: async ({ queryKey: [, tableId] }) => {
+    if (!tableId) return null;
+
+    const response = await getStoreTableById(tableId);
+    return response.data.data;
   },
+}));
+
+export const storeIdAtom = atom<number | null>(null);
+
+export const storeIdQuery = atom(null, (_get, set) => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const storeId = searchParams.get("storeId");
+
+  set(storeIdAtom, storeId ? +storeId : 2);
 });
 
-export const categoriesState = selector<Category[]>({
-  key: "categories",
-  get: () => categories,
+export const companyIdAtom = atom<number | null>(null);
+
+export const companyIdQuery = atom(null, (_get, set) => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const companyId = searchParams.get("companyId");
+
+  set(companyIdAtom, companyId ? +companyId : 1);
 });
 
-export const productsState = selector<Product[]>({
-  key: "products",
-  get: async () => {
-    await wait(2000);
-    const products = await import("../../mock/products.json");
-    const variants = (await import("../../mock/variants.json"))
-      .default as Variant[];
-    return products.map(
-      (product) =>
-        ({
-          ...product,
-          variants: variants.filter((variant) =>
-            product.variantId.includes(variant.id),
-          ),
-        }) as Product,
+export const storeProductsAtom = atomWithQuery<
+  Product[],
+  Error,
+  Product[],
+  [string, number | null]
+>((get) => ({
+  initialData: [],
+  queryKey: ["product", get(storeIdAtom)],
+  queryFn: async ({ queryKey: [, storeId] }) => {
+    if (!storeId) return [];
+
+    const response = await getStoreProducts({ storeId });
+    return response.data.data;
+  },
+}));
+
+export const storeProductsByCategoryAtom = atomWithQuery<
+  CategoryWithProducts[],
+  Error,
+  CategoryWithProducts[],
+  [string, number | null]
+>((get) => ({
+  initialData: [],
+  queryKey: ["product/category", get(storeIdAtom)],
+  queryFn: async ({ queryKey: [, storeId] }) => {
+    if (!storeId) return [];
+
+    const response = await getStoreProductsByCategory({ storeId });
+    return response.data.data;
+  },
+}));
+
+export const selectedProductIdAtom = atom<string | null>(null);
+
+export const isEditingCartItemAtom = atom(false);
+
+export const productDetailsAtom = atomWithQuery<
+  ProductWithOptions | null,
+  Error,
+  ProductWithOptions | null,
+  [string, string | null]
+>((get) => ({
+  initialData: null,
+  queryKey: ["productDetails", get(selectedProductIdAtom)],
+  queryFn: async ({ queryKey: [, selectedProductId] }) => {
+    if (!selectedProductId) return null;
+
+    const response = await getProductById(selectedProductId);
+
+    return {
+      ...response.data.data,
+      options: response.data.data.options.map((option) => ({
+        ...option,
+        details: option.details.map((detail, idx) => ({
+          ...detail,
+          id: `${detail.id}--${idx}`,
+        })),
+      })),
+    };
+
+    return response.data.data;
+  },
+}));
+
+export const productVariantAtom = atom<CartProductVariant | null>(null);
+
+export const productVariantQtyAtom = atom(
+  (get) => get(productVariantAtom)?.quantity
+);
+
+export const productVariantPriceAtom = atom((get) => {
+  const productVariant = get(productVariantAtom);
+  if (productVariant == null) return 0;
+
+  const quantity = productVariant.quantity;
+  const basePrice = productVariant.price;
+  const optionsPrice = productVariant.options.reduce((acc, opt) => {
+    const selectedDetailPrice = opt.selectedDetail?.price ?? 0;
+    const selectedDetailsTotalAmount = opt.selectedDetails.reduce(
+      (a, d) => a + d.price,
+      0
     );
-  },
+    return acc + selectedDetailPrice + selectedDetailsTotalAmount;
+  }, 0);
+
+  return (basePrice + optionsPrice) * quantity;
 });
 
-export const recommendProductsState = selector<Product[]>({
-  key: "recommendProducts",
-  get: ({ get }) => {
-    const products = get(productsState);
-    return products.filter((p) => p.sale);
-  },
-});
+export const prepareProductVariantAtom = atom(
+  null,
+  (get, set, productDetails: ProductWithOptions) => {
+    const productVariant = get(productVariantAtom);
+    if (productVariant != null) return;
 
-export const selectedCategoryIdState = atom({
-  key: "selectedCategoryId",
-  default: "coffee",
-});
+    set(productVariantAtom, {
+      ...productDetails,
+      uniqIdentifier: `${productDetails.id}--${Date.now()}`,
+      options: productDetails.options.map((opt) =>
+        opt.isMandatory
+          ? {
+              ...opt,
+              selectedDetail: opt.details[0],
+              selectedDetails: [],
+            }
+          : {
+              ...opt,
+              selectedDetail: null,
+              selectedDetails: [],
+            }
+      ),
+      quantity: 1,
+    });
+  }
+);
 
-export const productsByCategoryState = selectorFamily<Product[], string>({
-  key: "productsByCategory",
-  get:
-    (categoryId) =>
-    ({ get }) => {
-      const allProducts = get(productsState);
-      return allProducts.filter((product) =>
-        product.categoryId.includes(categoryId),
-      );
-    },
-});
+export const updateProductVariantQtyAtom = atom(
+  null,
+  (get, set, action: "INC" | "DEC") => {
+    const productVariant = get(productVariantAtom);
+    if (productVariant == null) return;
 
-export const cartState = atom<Cart>({
-  key: "cart",
-  default: [],
-});
-
-export const totalQuantityState = selector({
-  key: "totalQuantity",
-  get: ({ get }) => {
-    const cart = get(cartState);
-    return cart.reduce((total, item) => total + item.quantity, 0);
-  },
-});
-
-export const totalPriceState = selector({
-  key: "totalPrice",
-  get: ({ get }) => {
-    const cart = get(cartState);
-    return cart.reduce(
-      (total, item) =>
-        total + item.quantity * calcFinalPrice(item.product, item.options),
-      0,
-    );
-  },
-});
-
-export const notificationsState = atom<Notification[]>({
-  key: "notifications",
-  default: [
-    {
-      id: 1,
-      image: logo,
-      title: "Chào bạn mới",
-      content:
-        "Cảm ơn đã sử dụng ZaUI Coffee, bạn có thể dùng ứng dụng này để tiết kiệm thời gian xây dựng",
-    },
-    {
-      id: 2,
-      image: logo,
-      title: "Giảm 50% lần đầu mua hàng",
-      content: "Nhập WELCOME để được giảm 50% giá trị đơn hàng đầu tiên order",
-    },
-  ],
-});
-
-export const keywordState = atom({
-  key: "keyword",
-  default: "",
-});
-
-export const resultState = selector<Product[]>({
-  key: "result",
-  get: async ({ get }) => {
-    const keyword = get(keywordState);
-    if (!keyword.trim()) {
-      return [];
-    }
-    const products = get(productsState);
-    await wait(500);
-    return products.filter((product) =>
-      product.name.trim().toLowerCase().includes(keyword.trim().toLowerCase()),
-    );
-  },
-});
-
-export const storesState = atom<Store[]>({
-  key: "stores",
-  default: [
-    {
-      id: 1,
-      name: "VNG Campus Store",
-      address:
-        "Khu chế xuất Tân Thuận, Z06, Số 13, Tân Thuận Đông, Quận 7, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 10.741639,
-      long: 106.714632,
-    },
-    {
-      id: 2,
-      name: "The Independence Palace",
-      address:
-        "135 Nam Kỳ Khởi Nghĩa, Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 10.779159,
-      long: 106.695271,
-    },
-    {
-      id: 3,
-      name: "Saigon Notre-Dame Cathedral Basilica",
-      address:
-        "1 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 10.779738,
-      long: 106.699092,
-    },
-    {
-      id: 4,
-      name: "Bình Quới Tourist Village",
-      address:
-        "1147 Bình Quới, phường 28, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 10.831098,
-      long: 106.733128,
-    },
-    {
-      id: 5,
-      name: "Củ Chi Tunnels",
-      address: "Phú Hiệp, Củ Chi, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 11.051655,
-      long: 106.494249,
-    },
-  ],
-});
-
-export const nearbyStoresState = selector({
-  key: "nearbyStores",
-  get: ({ get }) => {
-    // Get the current location from the locationState atom
-    const location = get(locationState);
-
-    // Get the list of stores from the storesState atom
-    const stores = get(storesState);
-
-    // Calculate the distance of each store from the current location
-    if (location) {
-      const storesWithDistance = stores.map((store) => ({
-        ...store,
-        distance: calculateDistance(
-          location.latitude,
-          location.longitude,
-          store.lat,
-          store.long,
-        ),
-      }));
-
-      // Sort the stores by distance from the current location
-      const nearbyStores = storesWithDistance.sort(
-        (a, b) => a.distance - b.distance,
-      );
-
-      return nearbyStores;
-    }
-    return [];
-  },
-});
-
-export const selectedStoreIndexState = atom({
-  key: "selectedStoreIndex",
-  default: 0,
-});
-
-export const selectedStoreState = selector({
-  key: "selectedStore",
-  get: ({ get }) => {
-    const index = get(selectedStoreIndexState);
-    const stores = get(nearbyStoresState);
-    return stores[index];
-  },
-});
-
-export const selectedDeliveryTimeState = atom({
-  key: "selectedDeliveryTime",
-  default: +new Date(),
-});
-
-export const requestLocationTriesState = atom({
-  key: "requestLocationTries",
-  default: 0,
-});
-
-export const requestPhoneTriesState = atom({
-  key: "requestPhoneTries",
-  default: 0,
-});
-
-export const locationState = selector<
-  { latitude: string; longitude: string } | false
->({
-  key: "location",
-  get: async ({ get }) => {
-    const requested = get(requestLocationTriesState);
-    if (requested) {
-      const { latitude, longitude, token } = await getLocation({
-        fail: console.warn,
+    if (action === "INC") {
+      set(productVariantAtom, {
+        ...productVariant,
+        quantity: productVariant.quantity + 1,
       });
-      if (latitude && longitude) {
-        return { latitude, longitude };
-      }
-      if (token) {
-        console.warn(
-          "Sử dụng token này để truy xuất vị trí chính xác của người dùng",
-          token,
-        );
-        console.warn(
-          "Chi tiết tham khảo: ",
-          "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app",
-        );
-        console.warn("Giả lập vị trí mặc định: VNG Campus");
-        return {
-          latitude: "10.7287",
-          longitude: "106.7317",
-        };
-      }
+    } else if (action === "DEC") {
+      set(productVariantAtom, {
+        ...productVariant,
+        quantity: Math.max(1, productVariant.quantity - 1),
+      });
     }
-    return false;
-  },
+  }
+);
+
+export const setVariantSelectedDetailAtom = atom(
+  null,
+  (get, set, targetOptionId: string, targetOptionDetailId: string) => {
+    const productVariant = get(productVariantAtom);
+    if (productVariant == null) return;
+
+    const options = productVariant.options;
+    const targetOption = options.find((opt) => opt.id === targetOptionId);
+    if (targetOption == null) return;
+
+    const newSelectedDetail = targetOption.details.find(
+      (detail) => detail.id === targetOptionDetailId
+    );
+    if (newSelectedDetail == null) return;
+
+    const newOptions = options.map((opt) =>
+      opt.id === targetOptionId
+        ? {
+            ...opt,
+            selectedDetail: { ...newSelectedDetail },
+            selectedDetails: [],
+          }
+        : opt
+    );
+    set(productVariantAtom, { ...productVariant, options: newOptions });
+  }
+);
+
+export const setVariantSelectedDetailsAtom = atom(
+  null,
+  (get, set, targetOptionId: string, targetOptionDetailIds: string[]) => {
+    const productVariant = get(productVariantAtom);
+    if (productVariant == null) return;
+
+    const options = productVariant.options;
+    const targetOption = options.find((opt) => opt.id === targetOptionId);
+    if (targetOption == null) return;
+
+    const targetOptionDetailIdsSet = new Set(targetOptionDetailIds);
+
+    const newSelectedDetails = targetOption.details.reduce<OptionDetail[]>(
+      (acc, detail) =>
+        targetOptionDetailIdsSet.has(detail.id) ? [...acc, detail] : acc,
+      []
+    );
+    const newOptions = productVariant.options.map((opt) =>
+      opt.id === targetOptionId
+        ? {
+            ...opt,
+            selectedDetail: null,
+            selectedDetails: newSelectedDetails,
+          }
+        : opt
+    );
+    set(productVariantAtom, { ...productVariant, options: newOptions });
+  }
+);
+
+export const cartAtom = atomWithStorage<Cart>(
+  "cachedCart",
+  { items: [], shippingInfo: null, paymentMethod: null },
+  undefined,
+  { getOnInit: true }
+);
+
+export const cartSubtotalAtom = atom((get) => {
+  const cart = get(cartAtom);
+
+  return cart.items.reduce((total, item) => {
+    const quantity = item.quantity;
+    const baseItemPrice = item.price;
+    const optionsPrice = item.options.reduce((acc, opt) => {
+      const selectedDetailPrice = opt.selectedDetail?.price ?? 0;
+      const selectedDetailsTotalAmount = opt.selectedDetails.reduce(
+        (a, d) => a + d.price,
+        0
+      );
+
+      return acc + selectedDetailPrice + selectedDetailsTotalAmount;
+    }, 0);
+    const itemPrice = (baseItemPrice + optionsPrice) * quantity;
+
+    return total + itemPrice;
+  }, 0);
 });
 
-export const phoneState = selector<string | boolean>({
-  key: "phone",
-  get: async ({ get }) => {
-    const requested = get(requestPhoneTriesState);
-    if (requested) {
-      const { number, token } = await getPhoneNumber({ fail: console.warn });
-      if (number) {
-        return number;
-      }
-      console.warn(
-        "Sử dụng token này để truy xuất số điện thoại của người dùng",
-        token,
-      );
-      console.warn(
-        "Chi tiết tham khảo: ",
-        "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app",
-      );
-      console.warn("Giả lập số điện thoại mặc định: 0337076898");
-      return "0337076898";
-    }
-    return false;
-  },
-});
+export const removeCartItemAtom = atom(
+  null,
+  (get, set, uniqIdentifier: string) => {
+    const cart = get(cartAtom);
 
-export const orderNoteState = atom({
-  key: "orderNote",
-  default: "",
-});
+    set(cartAtom, {
+      ...cart,
+      items: cart.items.filter(
+        (item) => item.uniqIdentifier !== uniqIdentifier
+      ),
+    });
+  }
+);

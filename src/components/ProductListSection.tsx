@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { FC } from "react";
-import { Box, Text } from "zmp-ui";
+import { Text } from "zmp-ui";
 import { BoxProps } from "zmp-ui/box";
 
 export interface ProductListSectionProps extends BoxProps {

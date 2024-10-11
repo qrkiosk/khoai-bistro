@@ -1,12 +1,15 @@
+.page {
+  padding: 16px 16px 96px 16px;
+}
 
-    .page {
-      padding: 16px 16px 96px 16px;
-    }
+.page-content {
+  padding-top: var(--zaui-safe-area-inset-top, 16px);
+  padding-bottom: var(--zaui-safe-area-inset-bottom, 16px);
+}
 
-    .section-container {
-      padding: 16px;
-      background: #ffffff;
-      border-radius: 8px;
-      margin-bottom: 24px;
-    }
-    
+.section-container {
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}

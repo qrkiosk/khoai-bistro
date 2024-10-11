@@ -1,30 +1,69 @@
 import React from "react";
-import { Box, Header, Text, Page } from "zmp-ui";
-import { useRecoilValueLoadable } from "recoil";
+import { Page } from "zmp-ui";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
 
-import PlpHeader from "./PlpHeader";
-import Banner from "./Banner";
-import Divider from "../../components/Divider";
-import ProductList from "./ProductList";
+import { useQueryDataFromUrl } from "../../hooks";
+import Header from "./Header";
+import MainContent from "./MainContent";
+import CartDrawer from "./CartDrawer";
+import ProductDrawer from "./ProductDrawer";
 
-const img = {
-  src: "https://img.freepik.com/free-vector/black-white-coffee-shop-background_125540-817.jpg",
-  alt: "plp-banner",
+const CategoriesDrawer = ({
+  isOpen,
+  onClose,
+  categories,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  categories: any[];
+}) => {
+  return (
+    <Drawer placement="bottom" isOpen={isOpen} onClose={onClose}>
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerCloseButton />
+        <DrawerHeader>Tất cả danh mục</DrawerHeader>
+        <DrawerBody>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  );
 };
 
-const ProductListPage: React.FC = () => {
+const ProductListPage = () => {
+  useQueryDataFromUrl(); // Get storeId and tableId from URL upon PLP page load
+
+  const {
+    isOpen: isCategoriesDrawerOpen,
+    onOpen: onOpenCategoriesDrawer,
+    onClose: onCloseCategoriesDrawer,
+  } = useDisclosure();
+
   return (
     <Page
       style={{ minHeight: "unset" }}
       className="relative flex-1 flex flex-col bg-white"
     >
-      <PlpHeader />
-      <div className="flex-1 overflow-auto">
-        <Banner />
-        <Divider />
-        <ProductList />
-        <Divider />
-      </div>
+      <Header onOpen={onOpenCategoriesDrawer} />
+      <MainContent />
+      <ProductDrawer />
+      <CartDrawer />
+      {/* <CategoriesDrawer
+        isOpen={isCategoriesDrawerOpen}
+        onClose={onCloseCategoriesDrawer}
+        categories={[]}
+      /> */}
     </Page>
   );
 };

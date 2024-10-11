@@ -1,46 +1,64 @@
-export interface PercentSale {
-  type: "percent";
-  percent: number;
-}
+import { Base } from "./common";
 
-export interface FixedSale {
-  amount: number;
-  type: "fixed";
-}
-
-export type Sale = PercentSale | FixedSale;
-
-export interface Option {
+export interface OptionDetail extends Base {
   id: string;
-  label?: string;
-  priceChange?: Sale;
+  name: string;
+  price: number;
+  isActive: boolean;
+  productOptionId: string;
+  productVariantId: string;
 }
 
-export interface BaseVariant {
+export interface Option extends Base {
   id: string;
-  label?: string;
+  name: string;
+  seq: number;
+  isMandatory: boolean;
+  isMany: boolean;
+  isActive: boolean;
+  details: OptionDetail[];
+}
+
+export interface OptionWithSelectedDetail extends Option {
+  selectedDetail: OptionDetail | null;
+  selectedDetails: OptionDetail[];
+}
+
+export interface Product extends Base {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  seq: number;
+  url: string;
+  isActive: boolean;
+  categoryId: string;
+  productTypeId: string;
+  options: Option[];
+  ptName: string;
+  cname: string;
+}
+
+export interface Category extends Base {
+  id: string;
+  name: string;
+  seq: number;
+  isActive: boolean;
+}
+
+export interface CategoryWithProducts extends Category {
+  products: Product[];
+}
+
+export interface ProductWithOptions extends Product {
   options: Option[];
 }
 
-export interface SingleOptionVariant extends BaseVariant {
-  type: "single";
-  default?: string;
+export interface BaseProductVariant extends Product {
+  options: OptionWithSelectedDetail[];
 }
 
-export interface MultipleOptionVariant extends BaseVariant {
-  type: "multiple";
-  default?: string[];
-}
-
-export type Variant = SingleOptionVariant | MultipleOptionVariant;
-
-export interface Product {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  categoryId: string[];
-  description?: string;
-  sale?: Sale;
-  variants?: Variant[];
+export interface CartProductVariant extends BaseProductVariant {
+  uniqIdentifier: string;
+  quantity: number;
 }

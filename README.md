@@ -20,11 +20,10 @@ ZMP app created with following options:
     "fillBars": false
   },
   "customBuild": false,
-  "stateManagement": "recoil"
 }
 ```
 
 ## NPM Scripts
 
-* 🔥 `start` - run development server
-* 🙏 `deploy` - deploy mini app for production
+- 🔥 `start` - run development server
+- 🙏 `deploy` - deploy mini app for production

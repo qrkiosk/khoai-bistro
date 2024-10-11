@@ -1,20 +1,20 @@
 import React from "react";
-import { Pagination } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Box } from "zmp-ui";
+import { Swiper } from "zmp-ui";
 
-function getDummyImage(filename: string) {
-  return `https://stc-zmp.zadn.vn/templates/zaui-coffee/dummy/${filename}`;
-}
+import ProductListSection from "../../components/ProductListSection";
+import ProductItemH from "../../components/ProductItemH";
 
-const Banner = () => {
+const Banner = ({ products }) => {
   return (
-    <Box className="bg-white" p={3}>
-      <img
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        src={getDummyImage("banner-1.webp")}
-      />
-    </Box>
+    <ProductListSection title="Ưu đãi hôm nay">
+      <Swiper dots={false}>
+        {products.slice(0, 3).map((product) => (
+          <Swiper.Slide>
+            <ProductItemH product={product} />
+          </Swiper.Slide>
+        ))}
+      </Swiper>
+    </ProductListSection>
   );
 };
 
