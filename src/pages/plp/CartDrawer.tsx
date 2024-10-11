@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { authorize } from "zmp-sdk";
 import { Icon } from "zmp-ui";
@@ -26,6 +26,7 @@ import {
   productVariantAtom,
   cartSubtotalAtom,
   removeCartItemAtom,
+  tableInfoAtom,
 } from "../../state";
 import { DisplayPrice } from "../../components/display/price";
 import Divider from "../../components/Divider";
@@ -34,7 +35,7 @@ const CartDrawer = () => {
   const cart = useAtomValue(cartAtom);
   const subtotal = useAtomValue(cartSubtotalAtom);
   const removeCartItem = useSetAtom(removeCartItemAtom);
-
+  const { data: tableInfo } = useAtomValue(tableInfoAtom);
   const setProductVariant = useSetAtom(productVariantAtom);
   const setIsEditingCartItem = useSetAtom(isEditingCartItemAtom);
   const isCartEmpty = isEmpty(cart.items);
@@ -45,7 +46,7 @@ const CartDrawer = () => {
     onClose: onCloseCartDrawer,
   } = useDisclosure();
 
-  const onClickPlaceOrder = async () => {
+  const onClickPlaceOrder = useCallback(async () => {
     try {
       const authResult = await authorize({
         scopes: ["scope.userInfo", "scope.userPhonenumber"],
@@ -54,7 +55,7 @@ const CartDrawer = () => {
     } catch (error) {
       console.error("placeOrder error", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isCartEmpty) onCloseCartDrawer();
@@ -181,7 +182,6 @@ const CartDrawer = () => {
                                 onClick={() => {
                                   setProductVariant(item);
                                   setIsEditingCartItem(true);
-                                  // setTimeout(onCloseCartDrawer, 500);
                                 }}
                               >
                                 Chỉnh sửa
@@ -286,7 +286,7 @@ const CartDrawer = () => {
                       textAlign="right"
                       mt={3}
                     >
-                      Khách bàn A12
+                      Khách bàn {tableInfo?.name ?? "Không xác định"}
                     </Text>
                   </GridItem>
 

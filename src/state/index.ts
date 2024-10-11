@@ -109,18 +109,6 @@ export const productDetailsAtom = atomWithQuery<
     if (!selectedProductId) return null;
 
     const response = await getProductById(selectedProductId);
-
-    return {
-      ...response.data.data,
-      options: response.data.data.options.map((option) => ({
-        ...option,
-        details: option.details.map((detail, idx) => ({
-          ...detail,
-          id: `${detail.id}--${idx}`,
-        })),
-      })),
-    };
-
     return response.data.data;
   },
 }));
