@@ -24,7 +24,7 @@ export const tableIdQuery = atom(null, (_, set) => {
   const searchParams = new URLSearchParams(window.location.search);
   const tableId = searchParams.get("tableId");
 
-  set(tableIdAtom, tableId ? +tableId : 4);
+  set(tableIdAtom, tableId ? +tableId : 4 /* null */);
 });
 
 export const tableInfoAtom = atomWithQuery<
@@ -49,7 +49,7 @@ export const storeIdQuery = atom(null, (_get, set) => {
   const searchParams = new URLSearchParams(window.location.search);
   const storeId = searchParams.get("storeId");
 
-  set(storeIdAtom, storeId ? +storeId : 2);
+  set(storeIdAtom, storeId ? +storeId : 2 /* null */);
 });
 
 export const companyIdAtom = atom<number | null>(null);
@@ -58,7 +58,7 @@ export const companyIdQuery = atom(null, (_get, set) => {
   const searchParams = new URLSearchParams(window.location.search);
   const companyId = searchParams.get("companyId");
 
-  set(companyIdAtom, companyId ? +companyId : 1);
+  set(companyIdAtom, companyId ? +companyId : 1 /* null */);
 });
 
 export const storeProductsAtom = atomWithQuery<
@@ -283,3 +283,27 @@ export const removeCartItemAtom = atom(
     });
   }
 );
+
+export const addToCartAtom = atom(null, (get, set) => {
+  const productVariant = get(productVariantAtom);
+  if (productVariant == null) return;
+
+  const cart = get(cartAtom);
+  const isEditingCartItem = get(isEditingCartItemAtom);
+
+  if (isEditingCartItem) {
+    set(cartAtom, {
+      ...cart,
+      items: cart.items.map((item) =>
+        item.uniqIdentifier === productVariant.uniqIdentifier
+          ? { ...productVariant }
+          : item
+      ),
+    });
+  } else {
+    set(cartAtom, {
+      ...cart,
+      items: cart.items.concat({ ...productVariant }),
+    });
+  }
+});

@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Icon } from "zmp-ui";
 import {
   Box,
   Drawer,
   DrawerContent,
   DrawerOverlay,
-  useDisclosure,
   Image,
   IconButton,
   Heading,
@@ -18,12 +17,13 @@ import {
 } from "@chakra-ui/react";
 
 import {
-  cartAtom,
+  addToCartAtom,
   isEditingCartItemAtom,
   productDetailsAtom,
   productVariantQtyAtom,
   selectedProductIdAtom,
   productVariantAtom,
+  productVariantPriceAtom,
   prepareProductVariantAtom,
   updateProductVariantQtyAtom,
 } from "../../../state";
@@ -32,10 +32,46 @@ import { DisplayPrice } from "../../../components/display/price";
 import MandatoryOption from "./MandatoryOption";
 import NonMandatoryOption from "./NonMandatoryOption";
 import SkeletonContent from "./SkeletonContent";
-import { productVariantPriceAtom } from "../../../state/index";
 
-const ProductDetailsContent = ({ onClose }: { onClose: () => void }) => {
-  const setCart = useSetAtom(cartAtom);
+const isProductDrawerOpenAtom = atom(false);
+
+const useProductDrawer = () => {
+  const [isProductDrawerOpen, setIsProductDrawerOpen] = useAtom(
+    isProductDrawerOpenAtom
+  );
+  const onOpenProductDrawer = useCallback(() => {
+    setIsProductDrawerOpen(true);
+  }, []);
+  const onCloseProductDrawer = useCallback(() => {
+    setIsProductDrawerOpen(false);
+  }, []);
+
+  const setSelectedProductId = useSetAtom(selectedProductIdAtom);
+  const setIsEditingCartItem = useSetAtom(isEditingCartItemAtom);
+  const setProductVariant = useSetAtom(productVariantAtom);
+
+  const resetState = useCallback(() => {
+    setSelectedProductId(null);
+    setIsEditingCartItem(false);
+    setProductVariant(null);
+  }, []);
+
+  const onCloseProductDrawerAndResetState = useCallback(() => {
+    resetState();
+    onCloseProductDrawer();
+  }, []);
+
+  return {
+    isProductDrawerOpen,
+    onOpenProductDrawer,
+    onCloseProductDrawerAndResetState,
+    resetState,
+  };
+};
+
+const ProductDetailsContent = () => {
+  const { onCloseProductDrawerAndResetState } = useProductDrawer();
+  const addToCart = useSetAtom(addToCartAtom);
   const isEditingCartItem = useAtomValue(isEditingCartItemAtom);
   const { data: productDetails, isLoading } = useAtomValue(productDetailsAtom);
 
@@ -54,7 +90,7 @@ const ProductDetailsContent = ({ onClose }: { onClose: () => void }) => {
   if (isLoading || productVariant == null) return <SkeletonContent />;
 
   return (
-    <Box display="flex" flexDirection="column" h="100%">
+    <Box h="100%" display="flex" flexDirection="column">
       <Box bgColor="var(--zmp-background-color)" flexGrow={1}>
         <Image
           src={productVariant.url}
@@ -82,20 +118,18 @@ const ProductDetailsContent = ({ onClose }: { onClose: () => void }) => {
         </Box>
         <Divider />
 
-        {productVariant.options.map((option) => {
-          return (
-            <>
-              <Box key={option.id} p={4} bgColor="var(--zmp-background-white)">
-                {option.isMandatory ? (
-                  <MandatoryOption option={option} />
-                ) : (
-                  <NonMandatoryOption option={option} />
-                )}
-              </Box>
-              <Divider />
-            </>
-          );
-        })}
+        {productVariant.options.map((option) => (
+          <>
+            <Box key={option.id} p={4} bgColor="var(--zmp-background-white)">
+              {option.isMandatory ? (
+                <MandatoryOption option={option} />
+              ) : (
+                <NonMandatoryOption option={option} />
+              )}
+            </Box>
+            <Divider />
+          </>
+        ))}
 
         <Box
           display="flex"
@@ -129,7 +163,6 @@ const ProductDetailsContent = ({ onClose }: { onClose: () => void }) => {
         bottom={0}
         bgColor="var(--zmp-background-white)"
         p={3}
-        onClick={onClose}
       >
         <Button
           variant="solid"
@@ -138,25 +171,8 @@ const ProductDetailsContent = ({ onClose }: { onClose: () => void }) => {
           textAlign="left"
           size="md"
           onClick={() => {
-            setCart((currentState) => {
-              if (isEditingCartItem) {
-                return {
-                  ...currentState,
-                  items: currentState.items.map((item) =>
-                    item.uniqIdentifier === productVariant.uniqIdentifier
-                      ? { ...productVariant }
-                      : item
-                  ),
-                };
-              }
-
-              return {
-                ...currentState,
-                items: currentState.items.concat({ ...productVariant }),
-              };
-            });
-
-            onClose();
+            addToCart();
+            onCloseProductDrawerAndResetState();
           }}
         >
           <Box w="100%" display="flex" justifyContent="space-between">
@@ -172,39 +188,28 @@ const ProductDetailsContent = ({ onClose }: { onClose: () => void }) => {
 };
 
 const ProductDrawer = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedProductId, setSelectedProductId] = useAtom(
-    selectedProductIdAtom
-  );
-  const [isEditingCartItem, setIsEditingCartItem] = useAtom(
-    isEditingCartItemAtom
-  );
-  const setProductVariant = useSetAtom(productVariantAtom);
-
-  const resetGlobalState = useCallback(() => {
-    setSelectedProductId(null);
-    setIsEditingCartItem(false);
-    setProductVariant(null);
-  }, []);
-
-  const onCloseProductDrawer = useCallback(() => {
-    resetGlobalState();
-    onClose();
-  }, []);
+  const selectedProductId = useAtomValue(selectedProductIdAtom);
+  const isEditingCartItem = useAtomValue(isEditingCartItemAtom);
+  const {
+    isProductDrawerOpen,
+    onOpenProductDrawer,
+    onCloseProductDrawerAndResetState,
+    resetState,
+  } = useProductDrawer();
 
   useEffect(() => {
-    if (selectedProductId != null || isEditingCartItem) onOpen();
+    if (selectedProductId != null || isEditingCartItem) onOpenProductDrawer();
   }, [selectedProductId, isEditingCartItem]);
 
-  useEffect(() => resetGlobalState, []); // reset on unmount
+  useEffect(() => () => resetState(), []);
 
   return (
     <Drawer
       size="full"
       placement="bottom"
       blockScrollOnMount={false}
-      isOpen={isOpen}
-      onClose={onCloseProductDrawer}
+      isOpen={isProductDrawerOpen}
+      onClose={onCloseProductDrawerAndResetState}
     >
       <DrawerOverlay />
       <DrawerContent h="100%" overflowY="auto">
@@ -219,12 +224,12 @@ const ProductDrawer = () => {
           fontSize="16px"
           zIndex={999}
           icon={<Icon icon="zi-close" />}
-          onClick={onCloseProductDrawer}
+          onClick={onCloseProductDrawerAndResetState}
         />
         <ErrorBoundary
           fallback={<Text fontSize={14}>Lỗi: Không thể tải sản phẩm...</Text>}
         >
-          <ProductDetailsContent onClose={onCloseProductDrawer} />
+          <ProductDetailsContent />
         </ErrorBoundary>
       </DrawerContent>
     </Drawer>

@@ -1,14 +1,15 @@
 import React from "react";
 import { Swiper } from "zmp-ui";
 
+import { CategoryWithProducts } from "../../types/product";
 import ProductListSection from "../../components/ProductListSection";
 import ProductItemH from "../../components/ProductItemH";
 
-const Banner = ({ products }) => {
+const Banner = ({ category }: { category: CategoryWithProducts }) => {
   return (
-    <ProductListSection title="Ưu đãi hôm nay">
+    <ProductListSection title={category.name}>
       <Swiper dots={false}>
-        {products.slice(0, 3).map((product) => (
+        {category.products.map((product) => (
           <Swiper.Slide>
             <ProductItemH product={product} />
           </Swiper.Slide>

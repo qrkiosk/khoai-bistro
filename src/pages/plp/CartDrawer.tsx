@@ -28,8 +28,30 @@ import {
   removeCartItemAtom,
   tableInfoAtom,
 } from "../../state";
+import {
+  CartProductVariant,
+  OptionWithSelectedDetail,
+} from "../../types/product";
 import { DisplayPrice } from "../../components/display/price";
 import Divider from "../../components/Divider";
+
+const calcItemTotalAmount = (item: CartProductVariant) => {
+  const quantity = item.quantity;
+  const baseItemPrice = item.price;
+  const optionsPrice = item.options.reduce((acc, opt) => {
+    const selectedDetailPrice = opt.selectedDetail?.price ?? 0;
+    const selectedDetailsTotalPrice = opt.selectedDetails.reduce(
+      (a, d) => a + d.price,
+      0
+    );
+    return acc + selectedDetailPrice + selectedDetailsTotalPrice;
+  }, 0);
+
+  return (baseItemPrice + optionsPrice) * quantity;
+};
+
+const genMultiChoiceOptionDisplayText = (option: OptionWithSelectedDetail) =>
+  `${option.name}: ${option.selectedDetails.map((d) => d.name).join(",")}`;
 
 const CartDrawer = () => {
   const cart = useAtomValue(cartAtom);
@@ -157,18 +179,16 @@ const CartDrawer = () => {
                               {item.name}
                             </Heading>
                             <Stack>
-                              {item.options.map((option) => (
+                              {item.options.map((opt) => (
                                 <>
-                                  {option.selectedDetail && (
-                                    <Text key={option.id} fontSize="xs" pl={2}>
-                                      {option.selectedDetail.name}
+                                  {opt.selectedDetail && (
+                                    <Text key={opt.id} fontSize="xs" pl={2}>
+                                      {opt.selectedDetail.name}
                                     </Text>
                                   )}
-                                  {!isEmpty(option.selectedDetails) && (
-                                    <Text key={option.id} fontSize="xs" pl={2}>
-                                      {`${option.name}: ${option.selectedDetails
-                                        .map((d) => d.name)
-                                        .join(",")}`}
+                                  {!isEmpty(opt.selectedDetails) && (
+                                    <Text key={opt.id} fontSize="xs" pl={2}>
+                                      {genMultiChoiceOptionDisplayText(opt)}
                                     </Text>
                                   )}
                                 </>
@@ -203,29 +223,7 @@ const CartDrawer = () => {
                       <GridItem colSpan={1}>
                         <Text fontSize="sm" textAlign="right" mt={5}>
                           <DisplayPrice>
-                            {(() => {
-                              const baseItemPrice = item.price;
-                              const optionsPrice = item.options.reduce(
-                                (acc, opt) => {
-                                  const selectedDetailPrice =
-                                    opt.selectedDetail?.price ?? 0;
-                                  const selectedDetailsTotalPrice =
-                                    opt.selectedDetails.reduce(
-                                      (a, d) => a + d.price,
-                                      0
-                                    );
-
-                                  return (
-                                    acc +
-                                    selectedDetailPrice +
-                                    selectedDetailsTotalPrice
-                                  );
-                                },
-                                0
-                              );
-
-                              return baseItemPrice + optionsPrice;
-                            })()}
+                            {calcItemTotalAmount(item)}
                           </DisplayPrice>
                         </Text>
                       </GridItem>
@@ -327,7 +325,6 @@ const CartDrawer = () => {
               bottom={0}
               bgColor="var(--zmp-background-white)"
               p={3}
-              onClick={onClickPlaceOrder}
             >
               <Button
                 variant="solid"
@@ -335,6 +332,7 @@ const CartDrawer = () => {
                 w="100%"
                 textAlign="left"
                 size="md"
+                onClick={onClickPlaceOrder}
               >
                 Xác nhận đặt đơn
               </Button>

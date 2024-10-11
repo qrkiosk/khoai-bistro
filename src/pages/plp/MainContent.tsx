@@ -23,12 +23,12 @@ const MainContent = () => {
       {categories.map((category, index) =>
         index === 0 ? (
           <>
-            <Banner key={category.id} products={category.products} />
+            <Banner key={category.id} category={category} />
             <Divider />
           </>
         ) : (
           <>
-            <ProductList key={category.id} products={category.products} />
+            <ProductList key={category.id} category={category} />
             <Divider />
           </>
         )
