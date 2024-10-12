@@ -20,4 +20,4 @@ export const calcItemTotalAmount = (item: CartProductVariant) => {
 
 export const genMultiChoiceOptionDisplayText = (
   option: OptionWithSelectedDetail
-) => `${option.name}: ${option.selectedDetails.map((d) => d.name).join(",")}`;
+) => option.selectedDetails.map((d) => d.name).join(",");

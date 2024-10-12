@@ -19,6 +19,7 @@ import {
   productVariantPriceAtom,
   prepareProductVariantAtom,
   updateProductVariantQtyAtom,
+  removeCartItemAtom,
 } from "../../../state";
 import Divider from "../../../components/Divider";
 import { SkeletonContent } from "../../../components/skeletons";
@@ -38,6 +39,10 @@ const ProductDetails = () => {
   const productVariantPrice = useAtomValue(productVariantPriceAtom);
   const prepareProductVariant = useSetAtom(prepareProductVariantAtom);
   const updateProductVariantQty = useSetAtom(updateProductVariantQtyAtom);
+  const minQty = isEditingCartItem ? 0 : 1;
+
+  const removeFromCart = useSetAtom(removeCartItemAtom);
+  const shouldRemoveFromCart = productVariantQty === 0;
 
   useEffect(() => {
     if (productDetails != null && !isEditingCartItem) {
@@ -96,7 +101,10 @@ const ProductDetails = () => {
           bgColor="var(--zmp-background-white)"
         >
           <HStack maxW="180px">
-            <Button onClick={() => updateProductVariantQty("DEC")}>
+            <Button
+              isDisabled={productVariantQty === minQty}
+              onClick={() => updateProductVariantQty("DEC", minQty)}
+            >
               <Text fontSize={20}>–</Text>
             </Button>
             <Input
@@ -122,24 +130,42 @@ const ProductDetails = () => {
         bgColor="var(--zmp-background-white)"
         p={3}
       >
-        <Button
-          variant="solid"
-          colorScheme="green"
-          w="100%"
-          textAlign="left"
-          size="md"
-          onClick={() => {
-            addToCart();
-            onClose();
-          }}
-        >
-          <Box w="100%" display="flex" justifyContent="space-between">
-            <Text>{isEditingCartItem ? "Cập nhật" : "Thêm vào"} giỏ hàng</Text>
-            <Text>
-              <DisplayPrice>{productVariantPrice}</DisplayPrice>
-            </Text>
-          </Box>
-        </Button>
+        {shouldRemoveFromCart ? (
+          <Button
+            variant="solid"
+            colorScheme="red"
+            w="100%"
+            textAlign="left"
+            size="md"
+            onClick={() => {
+              removeFromCart(productVariant.uniqIdentifier);
+              onClose();
+            }}
+          >
+            Xoá khỏi giỏ hàng
+          </Button>
+        ) : (
+          <Button
+            variant="solid"
+            colorScheme="green"
+            w="100%"
+            textAlign="left"
+            size="md"
+            onClick={() => {
+              addToCart();
+              onClose();
+            }}
+          >
+            <Box w="100%" display="flex" justifyContent="space-between">
+              <Text>
+                {isEditingCartItem ? "Cập nhật" : "Thêm vào"} giỏ hàng
+              </Text>
+              <Text>
+                <DisplayPrice>{productVariantPrice}</DisplayPrice>
+              </Text>
+            </Box>
+          </Button>
+        )}
       </Box>
     </Box>
   );

@@ -166,7 +166,7 @@ export const prepareProductVariantAtom = atom(
 
 export const updateProductVariantQtyAtom = atom(
   null,
-  (get, set, action: "INC" | "DEC") => {
+  (get, set, action: "INC" | "DEC", minQty?: 0 | 1) => {
     const productVariant = get(productVariantAtom);
     if (productVariant == null) return;
 
@@ -178,7 +178,7 @@ export const updateProductVariantQtyAtom = atom(
     } else if (action === "DEC") {
       set(productVariantAtom, {
         ...productVariant,
-        quantity: Math.max(1, productVariant.quantity - 1),
+        quantity: Math.max(minQty ?? 1, productVariant.quantity - 1),
       });
     }
   }

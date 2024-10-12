@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAtomValue } from "jotai";
 import { Icon } from "zmp-ui";
 import isEmpty from "lodash/isEmpty";
@@ -8,6 +8,7 @@ import {
   Drawer,
   DrawerContent,
   DrawerOverlay,
+  Heading,
   IconButton,
   Text,
 } from "@chakra-ui/react";
@@ -23,37 +24,34 @@ const CartDrawer = () => {
   const subtotal = useAtomValue(cartSubtotalAtom);
   const isCartEmpty = isEmpty(cart.items);
 
-  useEffect(() => {
-    if (isCartEmpty) onClose();
-  }, [isCartEmpty]);
-
   return (
     <>
-      <Box
-        display={isCartEmpty ? "none" : "block"}
-        position="sticky"
-        left={0}
-        right={0}
-        bottom={0}
-        bgColor="var(--zmp-background-white)"
-        p={3}
-        onClick={onOpen}
-      >
-        <Button
-          variant="solid"
-          colorScheme="green"
-          w="100%"
-          textAlign="left"
-          size="md"
+      {!isCartEmpty && (
+        <Box
+          position="sticky"
+          left={0}
+          right={0}
+          bottom={0}
+          bgColor="var(--zmp-background-white)"
+          p={3}
+          onClick={onOpen}
         >
-          <Box w="100%" display="flex" justifyContent="space-between">
-            <Text>Giỏ hàng • {cart.items.length} món</Text>
-            <Text>
-              <DisplayPrice>{subtotal}</DisplayPrice>
-            </Text>
-          </Box>
-        </Button>
-      </Box>
+          <Button
+            variant="solid"
+            colorScheme="green"
+            w="100%"
+            textAlign="left"
+            size="md"
+          >
+            <Box w="100%" display="flex" justifyContent="space-between">
+              <Text>Giỏ hàng • {cart.items.length} món</Text>
+              <Text>
+                <DisplayPrice>{subtotal}</DisplayPrice>
+              </Text>
+            </Box>
+          </Button>
+        </Box>
+      )}
       <Drawer
         size="full"
         placement="bottom"
@@ -75,7 +73,26 @@ const CartDrawer = () => {
               onClick={onClose}
             />
           </Box>
-          <CartDetails />
+          {isCartEmpty ? (
+            <Box
+              h="80%"
+              p={4}
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Heading size="md">Giỏ hàng của bạn đang trống</Heading>
+              <Text color="GrayText" fontSize="sm" mt={3} mb={5}>
+                Hãy thêm gì đó vào đây để làm mình vui nhé!
+              </Text>
+              <Button colorScheme="green" mt={5} onClick={onClose}>
+                Tiếp tục mua sắm
+              </Button>
+            </Box>
+          ) : (
+            <CartDetails />
+          )}
         </DrawerContent>
       </Drawer>
     </>
