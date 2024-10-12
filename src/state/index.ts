@@ -270,20 +270,6 @@ export const cartSubtotalAtom = atom((get) => {
   }, 0);
 });
 
-export const removeCartItemAtom = atom(
-  null,
-  (get, set, uniqIdentifier: string) => {
-    const cart = get(cartAtom);
-
-    set(cartAtom, {
-      ...cart,
-      items: cart.items.filter(
-        (item) => item.uniqIdentifier !== uniqIdentifier
-      ),
-    });
-  }
-);
-
 export const addToCartAtom = atom(null, (get, set) => {
   const productVariant = get(productVariantAtom);
   if (productVariant == null) return;
@@ -303,7 +289,26 @@ export const addToCartAtom = atom(null, (get, set) => {
   } else {
     set(cartAtom, {
       ...cart,
-      items: cart.items.concat({ ...productVariant }),
+      items: cart.items.concat({
+        ...productVariant,
+        uniqIdentifier:
+          productVariant.uniqIdentifier ??
+          `${productVariant.id}--${Date.now()}`,
+      }),
     });
   }
 });
+
+export const removeCartItemAtom = atom(
+  null,
+  (get, set, uniqIdentifier: string) => {
+    const cart = get(cartAtom);
+
+    set(cartAtom, {
+      ...cart,
+      items: cart.items.filter(
+        (item) => item.uniqIdentifier !== uniqIdentifier
+      ),
+    });
+  }
+);

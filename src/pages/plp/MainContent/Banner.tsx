@@ -1,9 +1,9 @@
 import React from "react";
 import { Swiper } from "zmp-ui";
 
-import { CategoryWithProducts } from "../../types/product";
-import ProductListSection from "../../components/ProductListSection";
-import ProductItemH from "../../components/ProductItemH";
+import { CategoryWithProducts } from "../../../types/product";
+import ProductListSection from "../../../components/ProductListSection";
+import ProductItemH from "../../../components/ProductItemH";
 
 const Banner = ({ category }: { category: CategoryWithProducts }) => {
   return (

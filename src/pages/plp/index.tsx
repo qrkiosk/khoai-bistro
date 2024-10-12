@@ -13,8 +13,8 @@ import {
 import { useQueryDataFromUrl } from "../../hooks";
 import Header from "./Header";
 import MainContent from "./MainContent";
-import CartDrawer from "./CartDrawer";
 import ProductDrawer from "./ProductDrawer";
+import CartDrawer from "./CartDrawer";
 
 const CategoriesDrawer = ({
   isOpen,

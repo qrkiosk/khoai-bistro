@@ -4,11 +4,11 @@ import { useAtomValue } from "jotai";
 import { Box, Text } from "@chakra-ui/react";
 import isEmpty from "lodash/isEmpty";
 
-import { storeProductsByCategoryAtom } from "../../state";
-import Divider from "../../components/Divider";
+import { storeProductsByCategoryAtom } from "../../../state";
+import { SkeletonContent } from "../../../components/skeletons";
+import Divider from "../../../components/Divider";
 import Banner from "./Banner";
 import ProductList from "./ProductList";
-import { SkeletonContent } from "../../components/skeletons";
 
 const MainContent = () => {
   const { data: categories, isLoading } = useAtomValue(

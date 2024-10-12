@@ -1,14 +1,8 @@
-import React, { useCallback, useEffect } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { Icon } from "zmp-ui";
+import React, { useEffect } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
   Image,
-  IconButton,
   Heading,
   Text,
   Button,
@@ -21,56 +15,20 @@ import {
   isEditingCartItemAtom,
   productDetailsAtom,
   productVariantQtyAtom,
-  selectedProductIdAtom,
   productVariantAtom,
   productVariantPriceAtom,
   prepareProductVariantAtom,
   updateProductVariantQtyAtom,
-} from "../../state";
-import Divider from "../../components/Divider";
-import { SkeletonContent } from "./../../components/skeletons";
-import { DisplayPrice } from "../../components/prices";
-import MandatoryOption from "../../components/MandatoryOption";
-import NonMandatoryOption from "../../components/NonMandatoryOption";
+} from "../../../state";
+import Divider from "../../../components/Divider";
+import { SkeletonContent } from "../../../components/skeletons";
+import { DisplayPrice } from "../../../components/prices";
+import MandatoryOption from "../../../components/MandatoryOption";
+import NonMandatoryOption from "../../../components/NonMandatoryOption";
+import { useProductDrawer } from "./localState";
 
-const isProductDrawerOpenAtom = atom(false);
-
-const useProductDrawer = () => {
-  const [isProductDrawerOpen, setIsProductDrawerOpen] = useAtom(
-    isProductDrawerOpenAtom
-  );
-  const onOpenProductDrawer = useCallback(() => {
-    setIsProductDrawerOpen(true);
-  }, []);
-  const onCloseProductDrawer = useCallback(() => {
-    setIsProductDrawerOpen(false);
-  }, []);
-
-  const setSelectedProductId = useSetAtom(selectedProductIdAtom);
-  const setIsEditingCartItem = useSetAtom(isEditingCartItemAtom);
-  const setProductVariant = useSetAtom(productVariantAtom);
-
-  const resetState = useCallback(() => {
-    setSelectedProductId(null);
-    setIsEditingCartItem(false);
-    setProductVariant(null);
-  }, []);
-
-  const onCloseProductDrawerAndResetState = useCallback(() => {
-    resetState();
-    onCloseProductDrawer();
-  }, []);
-
-  return {
-    isProductDrawerOpen,
-    onOpenProductDrawer,
-    onCloseProductDrawerAndResetState,
-    resetState,
-  };
-};
-
-const ProductDetailsContent = () => {
-  const { onCloseProductDrawerAndResetState } = useProductDrawer();
+const ProductDetails = () => {
+  const { onClose } = useProductDrawer();
   const addToCart = useSetAtom(addToCartAtom);
   const isEditingCartItem = useAtomValue(isEditingCartItemAtom);
   const { data: productDetails, isLoading } = useAtomValue(productDetailsAtom);
@@ -172,7 +130,7 @@ const ProductDetailsContent = () => {
           size="md"
           onClick={() => {
             addToCart();
-            onCloseProductDrawerAndResetState();
+            onClose();
           }}
         >
           <Box w="100%" display="flex" justifyContent="space-between">
@@ -187,53 +145,4 @@ const ProductDetailsContent = () => {
   );
 };
 
-const ProductDrawer = () => {
-  const selectedProductId = useAtomValue(selectedProductIdAtom);
-  const isEditingCartItem = useAtomValue(isEditingCartItemAtom);
-  const {
-    isProductDrawerOpen,
-    onOpenProductDrawer,
-    onCloseProductDrawerAndResetState,
-    resetState,
-  } = useProductDrawer();
-
-  useEffect(() => {
-    if (selectedProductId != null || isEditingCartItem) onOpenProductDrawer();
-  }, [selectedProductId, isEditingCartItem]);
-
-  useEffect(() => () => resetState(), []);
-
-  return (
-    <Drawer
-      size="full"
-      placement="bottom"
-      blockScrollOnMount={false}
-      isOpen={isProductDrawerOpen}
-      onClose={onCloseProductDrawerAndResetState}
-    >
-      <DrawerOverlay />
-      <DrawerContent h="100%" overflowY="auto">
-        <IconButton
-          isRound={true}
-          position="absolute"
-          top="var(--zaui-safe-area-inset-top, 16px)"
-          left={3}
-          variant="outline"
-          aria-label="Close"
-          bgColor="var(--zmp-background-white)"
-          fontSize="16px"
-          zIndex={999}
-          icon={<Icon icon="zi-close" />}
-          onClick={onCloseProductDrawerAndResetState}
-        />
-        <ErrorBoundary
-          fallback={<Text fontSize={14}>Lỗi: Không thể tải sản phẩm...</Text>}
-        >
-          <ProductDetailsContent />
-        </ErrorBoundary>
-      </DrawerContent>
-    </Drawer>
-  );
-};
-
-export default ProductDrawer;
+export default ProductDetails;
