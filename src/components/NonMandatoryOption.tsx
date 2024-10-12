@@ -33,7 +33,7 @@ const NonMandatoryOption = ({
 
   return (
     <Box>
-      <Heading size="sm" mb={2}>
+      <Heading size="sm" mb={3}>
         {option.name}
       </Heading>
       <CheckboxGroup value={selectedDetails} onChange={setSelectedDetails}>

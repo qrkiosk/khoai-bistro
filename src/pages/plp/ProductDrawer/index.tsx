@@ -43,13 +43,17 @@ const ProductDrawer = () => {
           variant="outline"
           aria-label="Close"
           bgColor="var(--zmp-background-white)"
-          fontSize="16px"
+          fontSize="md"
           zIndex={999}
           icon={<Icon icon="zi-close" />}
           onClick={onClose}
         />
         <ErrorBoundary
-          fallback={<Text fontSize={14}>Lỗi: Không thể tải sản phẩm...</Text>}
+          fallback={
+            <Text as="p" textAlign="center" fontSize="sm" p={4}>
+              Lỗi: Không thể tải sản phẩm
+            </Text>
+          }
         >
           <ProductDetails />
         </ErrorBoundary>

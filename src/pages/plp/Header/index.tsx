@@ -32,7 +32,7 @@ const Header = ({ onOpen }: { onOpen: () => void }) => {
                 <img className="w-8 h-8 rounded-lg border-inset" src={logo} />
                 <Box>
                   <Heading size="xs">Khoai Bistro</Heading>
-                  <Text fontSize={12}>Xin chào quý khách!</Text>
+                  <Text fontSize="xs">Xin chào quý khách!</Text>
                 </Box>
               </Box>
             </GridItem>

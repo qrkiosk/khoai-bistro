@@ -68,7 +68,7 @@ const CartDrawer = () => {
               variant="outline"
               aria-label="Close"
               bgColor="var(--zmp-background-white)"
-              fontSize="16px"
+              fontSize="md"
               icon={<Icon icon="zi-close" />}
               onClick={onClose}
             />

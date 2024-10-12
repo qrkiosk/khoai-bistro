@@ -39,7 +39,11 @@ const MainContent = () => {
 const EnhancedMainContent = () => {
   return (
     <ErrorBoundary
-      fallback={<Text fontSize={14}>Lỗi: Không thể tải sản phẩm...</Text>}
+      fallback={
+        <Text as="p" textAlign="center" fontSize="sm" p={4}>
+          Lỗi: Không thể tải sản phẩm
+        </Text>
+      }
     >
       <MainContent />
     </ErrorBoundary>

@@ -21,7 +21,7 @@ const TableInfo = () => {
       ) : (
         <>
           <Icon size={20} icon="zi-location-solid" />
-          <Text fontSize={14} ml={2}>
+          <Text fontSize="sm" ml={2}>
             {`Bàn: ${tableInfo.name}`}
           </Text>
         </>
@@ -34,7 +34,7 @@ const EnhancedTableInfo = () => {
   return (
     <ErrorBoundary
       fallback={
-        <Text fontSize={12} fontWeight="light">
+        <Text fontSize="xs" fontWeight="light">
           Lỗi: Ko thể lấy thông tin bàn
         </Text>
       }

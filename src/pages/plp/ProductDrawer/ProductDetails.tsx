@@ -96,26 +96,30 @@ const ProductDetails = () => {
 
         <Box
           display="flex"
-          justifyContent="center"
+          flexDirection="column"
+          alignItems="center"
           p={4}
           bgColor="var(--zmp-background-white)"
         >
+          <Box w="100%" mb={1}>
+            <Heading size="sm">Số lượng</Heading>
+          </Box>
           <HStack maxW="180px">
             <Button
               isDisabled={productVariantQty === minQty}
               onClick={() => updateProductVariantQty("DEC", minQty)}
             >
-              <Text fontSize={20}>–</Text>
+              <Text fontSize="xl">–</Text>
             </Button>
             <Input
               readOnly
               value={productVariantQty}
               textAlign="center"
               fontWeight="semibold"
-              fontSize={20}
+              fontSize="xl"
             />
             <Button onClick={() => updateProductVariantQty("INC")}>
-              <Text fontSize={20}>+</Text>
+              <Text fontSize="xl">+</Text>
             </Button>
           </HStack>
         </Box>
