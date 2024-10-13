@@ -3,6 +3,7 @@ import { atomWithStorage } from "jotai/utils";
 import { atomWithQuery } from "jotai-tanstack-query";
 
 import { StoreTable } from "../types/company";
+import { FuseWithDataSet, getFuseInstance } from "../utils/fuse";
 import { getStoreTableById } from "../api/table";
 import {
   getProductById,
@@ -10,6 +11,7 @@ import {
   getStoreProductsByCategory,
 } from "../api/product";
 import { Cart } from "../types/cart";
+import isEmpty from "lodash/isEmpty";
 import {
   CategoryWithProducts,
   OptionDetail,
@@ -36,7 +38,7 @@ export const tableInfoAtom = atomWithQuery<
   initialData: null,
   queryKey: ["table", get(tableIdAtom)],
   queryFn: async ({ queryKey: [, tableId] }) => {
-    if (!tableId) return null;
+    if (tableId == null) return null;
 
     const response = await getStoreTableById(tableId);
     return response.data.data;
@@ -70,7 +72,7 @@ export const storeProductsAtom = atomWithQuery<
   initialData: [],
   queryKey: ["product", get(storeIdAtom)],
   queryFn: async ({ queryKey: [, storeId] }) => {
-    if (!storeId) return [];
+    if (storeId == null) return [];
 
     const response = await getStoreProducts({ storeId });
     return response.data.data;
@@ -86,10 +88,12 @@ export const storeProductsByCategoryAtom = atomWithQuery<
   initialData: [],
   queryKey: ["product/category", get(storeIdAtom)],
   queryFn: async ({ queryKey: [, storeId] }) => {
-    if (!storeId) return [];
+    if (storeId == null) return [];
 
     const response = await getStoreProductsByCategory({ storeId });
-    return response.data.data;
+    return response.data.data.filter(
+      (category) => category.products.length > 0
+    );
   },
 }));
 
@@ -312,3 +316,51 @@ export const removeCartItemAtom = atom(
     });
   }
 );
+
+export const searchQueryAtom = atom<string>("");
+
+export const isSearchQueryEmptyAtom = atom((get) => !get(searchQueryAtom));
+
+export const searchResultsAsyncAtom = atomWithQuery<
+  CategoryWithProducts[],
+  Error,
+  CategoryWithProducts[],
+  [string, number | null, string]
+>((get) => ({
+  initialData: [],
+  queryKey: ["searchResults", get(storeIdAtom), get(searchQueryAtom)],
+  queryFn: async ({ queryKey: [, storeId, searchQuery] }) => {
+    if (storeId == null || !searchQuery) return [];
+
+    const response = await getStoreProductsByCategory({
+      storeId,
+      name: searchQuery,
+    });
+    return response.data.data.filter(
+      (category) => category.products.length > 0
+    );
+  },
+}));
+
+export const fuseInstanceAtom = atomWithQuery<
+  FuseWithDataSet | null,
+  Error,
+  FuseWithDataSet | null,
+  [string, CategoryWithProducts[]]
+>((get) => ({
+  initialData: null,
+  queryKey: ["fuseInstance", get(storeProductsByCategoryAtom).data],
+  queryFn: ({ queryKey: [, dataSet] }) =>
+    !isEmpty(dataSet) ? getFuseInstance(dataSet) : null,
+}));
+
+export const searchResultSyncAtom = atom<CategoryWithProducts[]>((get) => {
+  const searchQuery = get(searchQueryAtom);
+  const storeProducts = get(storeProductsByCategoryAtom).data;
+  const fuse = get(fuseInstanceAtom).data;
+
+  if (fuse == null || !searchQuery) return storeProducts;
+
+  const searchResult = fuse.search(searchQuery);
+  return searchResult.map((item) => item.item);
+});

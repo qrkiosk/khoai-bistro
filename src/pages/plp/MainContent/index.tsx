@@ -4,7 +4,11 @@ import { useAtomValue } from "jotai";
 import { Box, Text } from "@chakra-ui/react";
 import isEmpty from "lodash/isEmpty";
 
-import { storeProductsByCategoryAtom } from "../../../state";
+import {
+  searchResultSyncAtom,
+  isSearchQueryEmptyAtom,
+  storeProductsByCategoryAtom,
+} from "../../../state";
 import { SkeletonContent } from "../../../components/skeletons";
 import Divider from "../../../components/Divider";
 import Banner from "./Banner";
@@ -14,13 +18,24 @@ const MainContent = () => {
   const { data: categories, isLoading } = useAtomValue(
     storeProductsByCategoryAtom
   );
+  const searchResult = useAtomValue(searchResultSyncAtom);
+  const isSearchQueryEmpty = useAtomValue(isSearchQueryEmptyAtom);
 
-  if (isLoading || isEmpty(categories)) return <SkeletonContent />;
+  if (isLoading || isEmpty(categories)) {
+    return (
+      <Box
+        className="flex-1 overflow-auto"
+        bgColor="var(--zmp-background-white)"
+      >
+        <SkeletonContent />
+      </Box>
+    );
+  }
 
   return (
-    <Box className="flex-1 overflow-auto">
-      {categories.map((category, index) =>
-        index === 0 ? (
+    <Box className="flex-1 overflow-auto" bgColor="var(--zmp-background-color)">
+      {searchResult.map((category, index) =>
+        isSearchQueryEmpty && index === 0 ? (
           <>
             <Banner key={category.id} category={category} />
             <Divider />

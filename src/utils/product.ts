@@ -1,6 +1,8 @@
 import { createOrder } from "zmp-sdk";
+
 import { Option, Product } from "../types/product";
 import { SelectedOptions } from "../types/cart";
+import { getConfig } from "./config";
 
 export function calcFinalPrice(product: Product, options?: SelectedOptions) {
   let finalPrice = product.price;
@@ -25,7 +27,7 @@ export function calcFinalPrice(product: Product, options?: SelectedOptions) {
           }
         } else {
           const selecteds = variant.options.filter((o) =>
-            currentOption.includes(o.id),
+            currentOption.includes(o.id)
           );
           selectedOptions.push(...selecteds);
         }
@@ -51,7 +53,7 @@ export function getDummyImage(filename: string) {
 
 export function isIdentical(
   option1: SelectedOptions,
-  option2: SelectedOptions,
+  option2: SelectedOptions
 ) {
   const option1Keys = Object.keys(option1);
   const option2Keys = Object.keys(option2);
@@ -78,19 +80,13 @@ export function isIdentical(
   return true;
 }
 
-// const pay = (amount: number, description?: string) =>
-//   createOrder({
-//     desc:
-//       description ??
-//       `Thanh toán cho ${getConfig((config) => config.app.title)}`,
-//     item: [],
-//     amount: amount,
-//     success: (data) => {
-//       console.log("Payment success: ", data);
-//     },
-//     fail: (err) => {
-//       console.log("Payment error: ", err);
-//     },
-//   });
-
-// export default pay;
+export const pay = (amount: number, description?: string) =>
+  createOrder({
+    desc:
+      description ??
+      `Thanh toán cho ${getConfig((config) => config.app.title)}`,
+    item: [],
+    amount: amount,
+    success: (data) => {},
+    fail: (err) => {},
+  });

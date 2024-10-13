@@ -16,6 +16,7 @@ const ProductListSection: FC<PropsWithChildren<ProductListSectionProps>> = ({
 }) => {
   return (
     <div
+      style={{ backgroundColor: "var(--zmp-background-white)" }}
       className={`bg-background ${padding === "all" ? "p-4 space-y-4" : ""} ${
         padding === "title-only" ? "py-4 space-y-4" : ""
       }`}

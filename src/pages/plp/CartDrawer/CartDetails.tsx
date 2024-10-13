@@ -39,10 +39,7 @@ const CartDetails = () => {
       const authResult = await authorize({
         scopes: ["scope.userInfo", "scope.userPhonenumber"],
       });
-      console.log("placeOrder response", authResult);
-    } catch (error) {
-      console.error("placeOrder error", error);
-    }
+    } catch (error) {}
   }, []);
 
   return (

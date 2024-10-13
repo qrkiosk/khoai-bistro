@@ -19,13 +19,18 @@ export const getStoreProducts = ({ storeId }: { storeId: number }) => {
 
 export const getStoreProductsByCategory = ({
   storeId,
+  name,
 }: {
   storeId: number;
+  name?: string;
 }) => {
   return axios.post<Response<CategoryWithProducts[]>>(
     `${BASE_URL}/product/category`,
     {
-      filtered: [{ id: "storeId", value: storeId }],
+      filtered: [
+        { id: "storeId", value: storeId },
+        { id: "name", value: name ?? "" },
+      ],
       sorted: [{ id: "seq", asc: true }],
       pageSize: 10,
       page: 0,
