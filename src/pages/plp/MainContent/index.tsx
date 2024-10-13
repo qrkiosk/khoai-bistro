@@ -10,18 +10,18 @@ import {
   storeProductsByCategoryAtom,
 } from "../../../state";
 import { SkeletonContent } from "../../../components/skeletons";
-import Divider from "../../../components/Divider";
-import Banner from "./Banner";
-import ProductList from "./ProductList";
+import CategoryItem from "./CategoryItem";
+import { usePlpMainContentAreaRef } from "./localState";
 
 const MainContent = () => {
-  const { data: categories, isLoading } = useAtomValue(
+  const ref = usePlpMainContentAreaRef();
+  const { data: categories, isLoading: isFetchingCategories } = useAtomValue(
     storeProductsByCategoryAtom
   );
   const searchResult = useAtomValue(searchResultSyncAtom);
   const isSearchQueryEmpty = useAtomValue(isSearchQueryEmptyAtom);
 
-  if (isLoading || isEmpty(categories)) {
+  if (isFetchingCategories || isEmpty(categories)) {
     return (
       <Box
         className="flex-1 overflow-auto"
@@ -33,20 +33,17 @@ const MainContent = () => {
   }
 
   return (
-    <Box className="flex-1 overflow-auto" bgColor="var(--zmp-background-color)">
-      {searchResult.map((category, index) =>
-        isSearchQueryEmpty && index === 0 ? (
-          <>
-            <Banner key={category.id} category={category} />
-            <Divider />
-          </>
-        ) : (
-          <>
-            <ProductList key={category.id} category={category} />
-            <Divider />
-          </>
-        )
-      )}
+    <Box
+      ref={ref}
+      className="flex-1 overflow-auto"
+      bgColor="var(--zmp-background-color)"
+    >
+      {searchResult.map((category, index) => (
+        <CategoryItem
+          category={category}
+          shouldShowBanner={isSearchQueryEmpty && index === 0}
+        />
+      ))}
     </Box>
   );
 };

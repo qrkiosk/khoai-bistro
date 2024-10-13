@@ -1,3 +1,4 @@
+import { RefObject } from "react";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { atomWithQuery } from "jotai-tanstack-query";
@@ -363,4 +364,27 @@ export const searchResultSyncAtom = atom<CategoryWithProducts[]>((get) => {
 
   const searchResult = fuse.search(searchQuery);
   return searchResult.map((item) => item.item);
+});
+
+export const categoryRefsMapAtom = atom<Map<string, RefObject<HTMLDivElement>>>(
+  new Map()
+);
+
+export const setCategoryRefsMapAtom = atom(
+  null,
+  (get, _set, key: string, val: RefObject<HTMLDivElement>) => {
+    const refsMap = get(categoryRefsMapAtom);
+    refsMap.set(key, val);
+  }
+);
+
+export const categoryIdInViewAtom = atom<string | null>(null);
+
+export const categoryNameInViewAtom = atom<string | null>((get) => {
+  const storeProducts = get(storeProductsByCategoryAtom).data;
+  const categoryIdInView = get(categoryIdInViewAtom);
+  const category = storeProducts.find(
+    (category) => category.id === categoryIdInView
+  );
+  return category?.name ?? null;
 });

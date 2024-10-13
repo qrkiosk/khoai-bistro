@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { useAtom, useAtomValue } from "jotai";
 import { Header as ZHeader, Icon } from "zmp-ui";
 import {
   Box,
@@ -15,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 
 import logo from "../../../static/icons/logo.png";
+import { categoryNameInViewAtom } from "../../../state";
 import { useCategoryDrawer } from "../localState";
 import {
   inputAtom,
@@ -22,7 +24,6 @@ import {
   useDebouncedSearchQueryUpdate,
 } from "./localState";
 import TableInfo from "./TableInfo";
-import { useAtom } from "jotai";
 
 const HeaderContent = () => {
   const { onOpen } = useCategoryDrawer();
@@ -32,6 +33,7 @@ const HeaderContent = () => {
     onEnter: onEnterSearchMode,
     onExit,
   } = useSearchMode();
+  const categoryNameInView = useAtomValue(categoryNameInViewAtom);
 
   const onChangeInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value),
@@ -41,7 +43,6 @@ const HeaderContent = () => {
     onExit();
     setInput("");
   }, []);
-
   useDebouncedSearchQueryUpdate();
 
   return (
@@ -94,15 +95,13 @@ const HeaderContent = () => {
               <Button
                 variant="outline"
                 size="sm"
-                style={{
-                  width: "100%",
-                  padding: "0 8px",
-                  justifyContent: "space-between",
-                }}
+                w="100%"
+                p="0 8px"
+                justifyContent="space-between"
                 rightIcon={<Icon icon="zi-chevron-down" size={20} />}
                 onClick={onOpen}
               >
-                Tất cả danh mục
+                {categoryNameInView ?? "Tất cả danh mục"}
               </Button>
             </Box>
             <Button
