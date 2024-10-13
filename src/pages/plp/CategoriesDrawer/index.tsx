@@ -3,7 +3,6 @@ import { useAtomValue } from "jotai";
 import {
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerOverlay,
   UnorderedList,
@@ -29,7 +28,6 @@ const CategoriesDrawer = () => {
     <Drawer placement="bottom" isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton />
         <DrawerBody p={3}>
           <UnorderedList listStyleType="none" p={0} m={0}>
             {categories.map((category) => (
@@ -43,7 +41,12 @@ const CategoriesDrawer = () => {
                   }
                   justifyContent="flex-start"
                   onClick={() => {
-                    if (!categoryRefsMap.has(category.id)) return;
+                    if (
+                      category.id === categoryIdInView ||
+                      !categoryRefsMap.has(category.id)
+                    ) {
+                      return;
+                    }
 
                     const ref = categoryRefsMap.get(category.id)!;
                     ref.current?.scrollIntoView({ behavior: "instant" });
