@@ -137,6 +137,7 @@ const ProductDetails = () => {
         {shouldRemoveFromCart ? (
           <Button
             variant="solid"
+            autoFocus={false}
             colorScheme="red"
             w="100%"
             textAlign="left"
@@ -151,6 +152,7 @@ const ProductDetails = () => {
         ) : (
           <Button
             variant="solid"
+            autoFocus={false}
             colorScheme="green"
             w="100%"
             textAlign="left"

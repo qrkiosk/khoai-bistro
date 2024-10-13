@@ -30,35 +30,35 @@ const CategoriesDrawer = () => {
       <DrawerContent>
         <DrawerBody p={3}>
           <UnorderedList listStyleType="none" p={0} m={0}>
-            {categories.map((category) => (
-              <ListItem key={category.id} my={1}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  w="100%"
-                  colorScheme={
-                    category.id === categoryIdInView ? "green" : undefined
-                  }
-                  justifyContent="flex-start"
-                  onClick={() => {
-                    if (
-                      category.id === categoryIdInView ||
-                      !categoryRefsMap.has(category.id)
-                    ) {
-                      return;
-                    }
+            {categories.map((category) => {
+              const alreadyInView = category.id === categoryIdInView;
 
-                    const ref = categoryRefsMap.get(category.id)!;
-                    ref.current?.scrollIntoView({ behavior: "instant" });
-                    onClose();
-                  }}
-                >
-                  <Text fontSize="sm" fontWeight="semibold">
-                    {category.name}
-                  </Text>
-                </Button>
-              </ListItem>
-            ))}
+              return (
+                <ListItem key={category.id} my={1}>
+                  <Button
+                    variant="ghost"
+                    autoFocus={false}
+                    size="sm"
+                    w="100%"
+                    colorScheme={alreadyInView ? "green" : undefined}
+                    justifyContent="flex-start"
+                    onClick={() => {
+                      if (alreadyInView || !categoryRefsMap.has(category.id)) {
+                        return;
+                      }
+
+                      const ref = categoryRefsMap.get(category.id)!;
+                      ref.current?.scrollIntoView({ behavior: "instant" });
+                      onClose();
+                    }}
+                  >
+                    <Text fontSize="sm" fontWeight="semibold">
+                      {category.name}
+                    </Text>
+                  </Button>
+                </ListItem>
+              );
+            })}
           </UnorderedList>
         </DrawerBody>
       </DrawerContent>

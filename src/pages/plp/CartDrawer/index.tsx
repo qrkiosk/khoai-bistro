@@ -34,14 +34,15 @@ const CartDrawer = () => {
           bottom={0}
           bgColor="var(--zmp-background-white)"
           p={3}
-          onClick={onOpen}
         >
           <Button
             variant="solid"
+            autoFocus={false}
             colorScheme="green"
             w="100%"
             textAlign="left"
             size="md"
+            onClick={onOpen}
           >
             <Box w="100%" display="flex" justifyContent="space-between">
               <Text>Giỏ hàng • {cart.items.length} món</Text>
@@ -65,6 +66,7 @@ const CartDrawer = () => {
             <IconButton
               ml={3}
               isRound={true}
+              autoFocus={false}
               variant="outline"
               aria-label="Close"
               bgColor="var(--zmp-background-white)"

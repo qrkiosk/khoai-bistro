@@ -37,6 +37,7 @@ const ProductDrawer = () => {
       <DrawerContent h="100%" overflowY="auto">
         <IconButton
           isRound={true}
+          autoFocus={false}
           position="absolute"
           top="var(--zaui-safe-area-inset-top, 16px)"
           left={3}

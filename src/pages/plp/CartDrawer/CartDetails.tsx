@@ -215,6 +215,7 @@ const CartDetails = () => {
       >
         <Button
           variant="solid"
+          autoFocus={false}
           colorScheme="green"
           w="100%"
           textAlign="left"
