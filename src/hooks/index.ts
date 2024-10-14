@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { matchStatusBarColor } from "../utils/device";
-import { EventName, events, Payment } from "zmp-sdk";
+import { EventName, events } from "zmp-sdk";
 import { useNavigate, useSnackbar } from "zmp-ui";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 
-import { cartAtom, companyIdQuery, storeIdQuery, tableIdQuery } from "../state";
+import { cartAtom } from "../state";
 import { Cart } from "../types/cart";
 
 export function useMatchStatusTextColor(visible?: boolean) {
@@ -89,16 +89,4 @@ export function useLocalStorageCart() {
   useEffect(() => {
     window.localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-}
-
-export function useQueryDataFromUrl() {
-  const queryTableId = useSetAtom(tableIdQuery);
-  const queryStoreId = useSetAtom(storeIdQuery);
-  const queryCompanyId = useSetAtom(companyIdQuery);
-
-  useEffect(() => {
-    queryTableId();
-    queryStoreId();
-    queryCompanyId();
-  }, []);
 }

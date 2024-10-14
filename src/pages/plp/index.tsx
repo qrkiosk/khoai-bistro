@@ -1,7 +1,8 @@
 import React from "react";
+import { useAtom } from "jotai";
 import { Page } from "zmp-ui";
 
-import { useQueryDataFromUrl } from "../../hooks";
+import { searchParamIdsQueryEffect } from "../../state/effects";
 import Header from "./Header";
 import MainContent from "./MainContent";
 import CategoriesDrawer from "./CategoriesDrawer";
@@ -9,7 +10,7 @@ import ProductDrawer from "./ProductDrawer";
 import CartDrawer from "./CartDrawer";
 
 const ProductListPage = () => {
-  useQueryDataFromUrl(); // Get storeId, tableId, companyId from URL upon PLP page load
+  useAtom(searchParamIdsQueryEffect);
   return (
     <Page
       style={{ minHeight: "unset" }}

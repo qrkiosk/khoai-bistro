@@ -22,13 +22,8 @@ import {
 } from "../types/product";
 
 export const tableIdAtom = atom<number | null>(null);
-
-export const tableIdQuery = atom(null, (_, set) => {
-  const searchParams = new URLSearchParams(window.location.search);
-  const tableId = searchParams.get("tableId");
-
-  set(tableIdAtom, tableId ? +tableId : null);
-});
+export const companyIdAtom = atom<number | null>(null);
+export const storeIdAtom = atom<number | null>(null);
 
 export const tableInfoAtom = atomWithQuery<
   StoreTable | null,
@@ -45,24 +40,6 @@ export const tableInfoAtom = atomWithQuery<
     return response.data.data;
   },
 }));
-
-export const storeIdAtom = atom<number | null>(null);
-
-export const storeIdQuery = atom(null, (_get, set) => {
-  const searchParams = new URLSearchParams(window.location.search);
-  const storeId = searchParams.get("storeId");
-
-  set(storeIdAtom, storeId ? +storeId : null);
-});
-
-export const companyIdAtom = atom<number | null>(null);
-
-export const companyIdQuery = atom(null, (_get, set) => {
-  const searchParams = new URLSearchParams(window.location.search);
-  const companyId = searchParams.get("companyId");
-
-  set(companyIdAtom, companyId ? +companyId : null);
-});
 
 export const storeProductsAtom = atomWithQuery<
   Product[],
@@ -372,7 +349,7 @@ export const categoryRefsMapAtom = atom<Map<string, RefObject<HTMLDivElement>>>(
 
 export const setCategoryRefsMapAtom = atom(
   null,
-  (get, _set, key: string, val: RefObject<HTMLDivElement>) => {
+  (get, _, key: string, val: RefObject<HTMLDivElement>) => {
     const refsMap = get(categoryRefsMapAtom);
     refsMap.set(key, val);
   }
