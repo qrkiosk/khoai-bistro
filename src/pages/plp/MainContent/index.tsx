@@ -1,31 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useAtomValue } from "jotai";
 import { Box, Text } from "@chakra-ui/react";
 import isEmpty from "lodash/isEmpty";
 
-import {
-  searchResultSyncAtom,
-  isSearchQueryEmptyAtom,
-  storeProductsByCategoryAtom,
-  searchQueryAtom,
-} from "../../../state";
+import { storeProductsByCategoryAtom } from "../../../state";
 import { SkeletonContent } from "../../../components/skeletons";
-import CategoryItem from "./CategoryItem";
 import { usePlpMainContentAreaRef } from "./localState";
+import CategoryItem from "./CategoryItem";
+import SearchResult from "./SearchResult";
 
 const MainContent = () => {
   const ref = usePlpMainContentAreaRef();
   const { data: categories, isLoading: isFetchingCategories } = useAtomValue(
     storeProductsByCategoryAtom
   );
-  const searchResult = useAtomValue(searchResultSyncAtom);
-  const isSearchQueryEmpty = useAtomValue(isSearchQueryEmptyAtom);
-  const searchQuery = useAtomValue(searchQueryAtom);
-
-  useEffect(() => {
-    ref.current?.scrollTo({ top: 0, behavior: "instant" });
-  }, [searchQuery]);
 
   if (isFetchingCategories || isEmpty(categories)) {
     return (
@@ -43,13 +32,12 @@ const MainContent = () => {
       ref={ref}
       className="flex-1 overflow-auto"
       bgColor="var(--zmp-background-color)"
+      position="relative"
     >
-      {searchResult.map((category, index) => (
-        <CategoryItem
-          category={category}
-          shouldShowBanner={isSearchQueryEmpty && index === 0}
-        />
+      {categories.map((category, index) => (
+        <CategoryItem category={category} shouldShowBanner={index === 0} />
       ))}
+      <SearchResult />
     </Box>
   );
 };

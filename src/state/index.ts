@@ -297,8 +297,6 @@ export const removeCartItemAtom = atom(
 
 export const searchQueryAtom = atom<string>("");
 
-export const isSearchQueryEmptyAtom = atom((get) => !get(searchQueryAtom));
-
 /* export const searchResultsAsyncAtom = atomWithQuery<
   CategoryWithProducts[],
   Error,
@@ -337,7 +335,7 @@ export const searchResultSyncAtom = atom<CategoryWithProducts[]>((get) => {
   const storeProducts = get(storeProductsByCategoryAtom).data;
   const fuse = get(fuseInstanceAtom).data;
 
-  if (fuse == null || !searchQuery) return storeProducts;
+  if (!searchQuery || fuse == null) return storeProducts;
 
   const searchResult = fuse.search(searchQuery);
   return searchResult.map((item) => item.item);

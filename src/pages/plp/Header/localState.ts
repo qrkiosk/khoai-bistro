@@ -19,7 +19,7 @@ export const useDebouncedSearchQueryUpdate = () => {
   const input = useAtomValue(inputAtom);
   const setSearchQuery = useSetAtom(searchQueryAtom);
   const setSearchQueryDebounced = useMemo(
-    () => debounce(setSearchQuery, 500),
+    () => debounce(setSearchQuery, 400),
     []
   );
 

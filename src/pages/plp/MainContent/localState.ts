@@ -1,16 +1,14 @@
 import { RefObject, useEffect, useRef } from "react";
 import { atom, useSetAtom } from "jotai";
 
-export const plpMainContentAreaRefAtom = atom<RefObject<HTMLDivElement> | null>(
-  null
-);
+export const mainContentRefAtom = atom<RefObject<HTMLDivElement> | null>(null);
 
 export const usePlpMainContentAreaRef = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const setPlpMainContentAreaRef = useSetAtom(plpMainContentAreaRefAtom);
+  const setMainContentRef = useSetAtom(mainContentRefAtom);
 
   useEffect(() => {
-    setPlpMainContentAreaRef(ref);
+    setMainContentRef(ref);
   }, [ref]);
 
   return ref;
