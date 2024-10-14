@@ -80,15 +80,15 @@ export const selectedProductIdAtom = atom<string | null>(null);
 export const isEditingCartItemAtom = atom(false);
 
 export const productDetailsAtom = atomWithQuery<
-  ProductWithOptions | null,
+  ProductWithOptions | undefined,
   Error,
-  ProductWithOptions | null,
+  ProductWithOptions,
   [string, string | null]
 >((get) => ({
-  initialData: null,
+  staleTime: Infinity,
   queryKey: ["productDetails", get(selectedProductIdAtom)],
   queryFn: async ({ queryKey: [, selectedProductId] }) => {
-    if (!selectedProductId) return null;
+    if (selectedProductId == null) return undefined;
 
     const response = await getProductById(selectedProductId);
     return response.data.data;
@@ -299,7 +299,7 @@ export const searchQueryAtom = atom<string>("");
 
 export const isSearchQueryEmptyAtom = atom((get) => !get(searchQueryAtom));
 
-export const searchResultsAsyncAtom = atomWithQuery<
+/* export const searchResultsAsyncAtom = atomWithQuery<
   CategoryWithProducts[],
   Error,
   CategoryWithProducts[],
@@ -318,18 +318,18 @@ export const searchResultsAsyncAtom = atomWithQuery<
       (category) => category.products.length > 0
     );
   },
-}));
+})); */
 
 export const fuseInstanceAtom = atomWithQuery<
-  FuseWithDataSet | null,
+  FuseWithDataSet | undefined,
   Error,
-  FuseWithDataSet | null,
+  FuseWithDataSet,
   [string, CategoryWithProducts[]]
 >((get) => ({
-  initialData: null,
+  staleTime: Infinity,
   queryKey: ["fuseInstance", get(storeProductsByCategoryAtom).data],
   queryFn: ({ queryKey: [, dataSet] }) =>
-    !isEmpty(dataSet) ? getFuseInstance(dataSet) : null,
+    !isEmpty(dataSet) ? getFuseInstance(dataSet) : undefined,
 }));
 
 export const searchResultSyncAtom = atom<CategoryWithProducts[]>((get) => {
