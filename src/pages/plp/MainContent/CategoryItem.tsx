@@ -2,11 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { Box } from "@chakra-ui/react";
 
-import {
-  categoryIdInViewAtom,
-  isSearchingAtom,
-  setCategoryRefsMapAtom,
-} from "../../../state";
+import { categoryIdInViewAtom, setCategoryRefsMapAtom } from "../../../state";
 import { CategoryWithProducts } from "../../../types/product";
 import Divider from "../../../components/Divider";
 import { plpMainContentAreaRefAtom } from "./localState";
@@ -22,25 +18,19 @@ const CategoryItem = ({
 }) => {
   const scrollIntoViewRef = useRef<HTMLDivElement>(null);
   const observeIntersectionRef = useRef<HTMLDivElement>(null);
-
-  const isSearching = useAtomValue(isSearchingAtom);
   const setCategoryRefsMap = useSetAtom(setCategoryRefsMapAtom);
   const plpMainContentAreaRef = useAtomValue(plpMainContentAreaRefAtom);
   const setCategoryIdInView = useSetAtom(categoryIdInViewAtom);
 
   useEffect(() => {
-    if (!isSearching) setCategoryRefsMap(category.id, scrollIntoViewRef);
+    setCategoryRefsMap(category.id, scrollIntoViewRef);
   }, [scrollIntoViewRef]);
-
-  useEffect(() => () => setCategoryRefsMap(category.id, null), []);
 
   useEffect(() => {
     const categoryElement = observeIntersectionRef.current;
     const plpMainContentArea = plpMainContentAreaRef?.current;
 
-    if (isSearching || categoryElement == null || plpMainContentArea == null) {
-      return;
-    }
+    if (categoryElement == null || plpMainContentArea == null) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -49,8 +39,6 @@ const CategoryItem = ({
       { root: plpMainContentArea, rootMargin: "0px 0px -100% 0px" }
     );
     observer.observe(categoryElement);
-
-    return () => observer.disconnect();
   }, []);
 
   return (

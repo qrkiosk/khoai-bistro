@@ -355,12 +355,6 @@ export const fuseInstanceAtom = atomWithQuery<
     !isEmpty(dataSet) ? getFuseInstance(dataSet) : null,
 }));
 
-export const isInSearchModeAtom = atom(false);
-
-export const isSearchingAtom = atom(
-  (get) => get(isInSearchModeAtom) && !get(isSearchQueryEmptyAtom)
-);
-
 export const searchResultSyncAtom = atom<CategoryWithProducts[]>((get) => {
   const searchQuery = get(searchQueryAtom);
   const storeProducts = get(storeProductsByCategoryAtom).data;
@@ -378,14 +372,9 @@ export const categoryRefsMapAtom = atom<Map<string, RefObject<HTMLDivElement>>>(
 
 export const setCategoryRefsMapAtom = atom(
   null,
-  (get, _set, key: string, val: RefObject<HTMLDivElement> | null) => {
+  (get, _set, key: string, val: RefObject<HTMLDivElement>) => {
     const refsMap = get(categoryRefsMapAtom);
-
-    if (val == null) {
-      refsMap.delete(key);
-    } else {
-      refsMap.set(key, val);
-    }
+    refsMap.set(key, val);
   }
 );
 
