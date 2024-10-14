@@ -14,8 +14,8 @@ const Layout = () => {
     >
       <Box className="flex-1 flex flex-col overflow-hidden">
         <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/plp" element={<ProductListPage />}></Route>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/plp" element={<ProductListPage />} />
         </Routes>
       </Box>
     </Box>

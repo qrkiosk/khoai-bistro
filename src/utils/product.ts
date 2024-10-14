@@ -47,39 +47,6 @@ export function calcFinalPrice(product: Product, options?: SelectedOptions) {
   return finalPrice;
 }
 
-export function getDummyImage(filename: string) {
-  return `https://stc-zmp.zadn.vn/templates/zaui-coffee/dummy/${filename}`;
-}
-
-export function isIdentical(
-  option1: SelectedOptions,
-  option2: SelectedOptions
-) {
-  const option1Keys = Object.keys(option1);
-  const option2Keys = Object.keys(option2);
-
-  if (option1Keys.length !== option2Keys.length) {
-    return false;
-  }
-
-  for (const key of option1Keys) {
-    const option1Value = option1[key];
-    const option2Value = option2[key];
-
-    const areEqual =
-      Array.isArray(option1Value) &&
-      Array.isArray(option2Value) &&
-      [...option1Value].sort().toString() ===
-        [...option2Value].sort().toString();
-
-    if (option1Value !== option2Value && !areEqual) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 export const pay = (amount: number, description?: string) =>
   createOrder({
     desc:
@@ -90,3 +57,13 @@ export const pay = (amount: number, description?: string) =>
     success: (data) => {},
     fail: (err) => {},
   });
+
+export const getTestSearchParams = () => {
+  const searchParams = new URLSearchParams({
+    tableId: "4",
+    storeId: "2",
+    companyId: "1",
+  });
+
+  return searchParams.toString();
+};

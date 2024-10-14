@@ -1,16 +1,22 @@
-import React from "react";
-import { List, Page, Icon, useNavigate } from "zmp-ui";
+import React, { useEffect } from "react";
+import { Box, Spinner } from "@chakra-ui/react";
+import { Page, useNavigate } from "zmp-ui";
 
-const HomePage: React.FunctionComponent = () => {
+import { getTestSearchParams } from "../utils/product";
+
+const HomePage = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const search = getTestSearchParams();
+    setTimeout(() => navigate({ pathname: "/plp", search }), 500);
+  }, []);
 
   return (
     <Page className="page">
-      <List>
-        <List.Item suffix={<Icon icon="zi-arrow-right" />}>
-          <div onClick={() => navigate("/plp")}>Product List</div>
-        </List.Item>
-      </List>
+      <Box h="100%" display="flex" alignItems="center" justifyContent="center">
+        <Spinner size="lg" />
+      </Box>
     </Page>
   );
 };

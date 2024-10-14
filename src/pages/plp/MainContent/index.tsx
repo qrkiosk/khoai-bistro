@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useAtomValue } from "jotai";
 import { Box, Text } from "@chakra-ui/react";
@@ -8,6 +8,7 @@ import {
   searchResultSyncAtom,
   isSearchQueryEmptyAtom,
   storeProductsByCategoryAtom,
+  searchQueryAtom,
 } from "../../../state";
 import { SkeletonContent } from "../../../components/skeletons";
 import CategoryItem from "./CategoryItem";
@@ -20,6 +21,11 @@ const MainContent = () => {
   );
   const searchResult = useAtomValue(searchResultSyncAtom);
   const isSearchQueryEmpty = useAtomValue(isSearchQueryEmptyAtom);
+  const searchQuery = useAtomValue(searchQueryAtom);
+
+  useEffect(() => {
+    ref.current?.scrollTo({ top: 0, behavior: "instant" });
+  }, [searchQuery]);
 
   if (isFetchingCategories || isEmpty(categories)) {
     return (

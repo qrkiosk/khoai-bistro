@@ -2,9 +2,8 @@ import { useCallback, useEffect, useMemo } from "react";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import debounce from "lodash/debounce";
 
-import { searchQueryAtom } from "../../../state";
+import { searchQueryAtom, isInSearchModeAtom } from "../../../state";
 
-const isInSearchModeAtom = atom(false);
 export const inputAtom = atom("");
 
 export const useSearchMode = () => {
