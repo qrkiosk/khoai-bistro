@@ -3,6 +3,7 @@ import { useAtomValue } from "jotai";
 import { Box } from "@chakra-ui/react";
 
 import { searchQueryAtom, searchResultSyncAtom } from "../../../state";
+import Divider from "../../../components/Divider";
 import { mainContentRefAtom } from "./localState";
 import ProductList from "./ProductList";
 
@@ -17,7 +18,7 @@ const SearchResult = () => {
 
   return (
     <Box
-      visibility={searchQuery ? "visible" : "hidden"}
+      display={searchQuery ? undefined : "none"}
       bgColor="var(--zmp-background-color)"
       position="absolute"
       top={0}
@@ -26,7 +27,10 @@ const SearchResult = () => {
       left={0}
     >
       {searchResult.map((category) => (
-        <ProductList key={category.id} category={category} />
+        <Box key={category.id}>
+          <ProductList category={category} />
+          <Divider />
+        </Box>
       ))}
     </Box>
   );

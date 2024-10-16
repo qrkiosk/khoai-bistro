@@ -4,7 +4,10 @@ import { useAtomValue } from "jotai";
 import { Box, Text } from "@chakra-ui/react";
 import isEmpty from "lodash/isEmpty";
 
-import { storeProductsByCategoryAtom } from "../../../state";
+import {
+  isSearchQueryEmptyAtom,
+  storeProductsByCategoryAtom,
+} from "../../../state";
 import { SkeletonContent } from "../../../components/skeletons";
 import { usePlpMainContentAreaRef } from "./localState";
 import CategoryItem from "./CategoryItem";
@@ -12,6 +15,7 @@ import SearchResult from "./SearchResult";
 
 const MainContent = () => {
   const ref = usePlpMainContentAreaRef();
+  const isSearchQueryEmpty = useAtomValue(isSearchQueryEmptyAtom);
   const { data: categories, isLoading: isFetchingCategories } = useAtomValue(
     storeProductsByCategoryAtom
   );
@@ -34,9 +38,15 @@ const MainContent = () => {
       bgColor="var(--zmp-background-color)"
       position="relative"
     >
-      {categories.map((category, index) => (
-        <CategoryItem category={category} shouldShowBanner={index === 0} />
-      ))}
+      <Box display={isSearchQueryEmpty ? undefined : "none"}>
+        {categories.map((category, index) => (
+          <CategoryItem
+            key={category.id}
+            category={category}
+            shouldShowBanner={index === 0}
+          />
+        ))}
+      </Box>
       <SearchResult />
     </Box>
   );

@@ -296,6 +296,7 @@ export const removeCartItemAtom = atom(
 );
 
 export const searchQueryAtom = atom<string>("");
+export const isSearchQueryEmptyAtom = atom((get) => !get(searchQueryAtom));
 
 /* export const searchResultsAsyncAtom = atomWithQuery<
   CategoryWithProducts[],
