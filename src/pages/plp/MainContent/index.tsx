@@ -36,9 +36,12 @@ const MainContent = () => {
       ref={ref}
       className="flex-1 overflow-auto"
       bgColor="var(--zmp-background-color)"
-      position="relative"
     >
-      <Box display={isSearchQueryEmpty ? undefined : "none"}>
+      <Box
+        display={isSearchQueryEmpty ? "block" : "none"}
+        overflowY="auto"
+        h="100%"
+      >
         {categories.map((category, index) => (
           <CategoryItem
             key={category.id}
