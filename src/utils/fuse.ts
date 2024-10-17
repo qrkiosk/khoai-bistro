@@ -8,11 +8,10 @@ const SEARCH_OPTIONS = {
   includeScore: true,
   includeMatches: true,
   shouldSort: true,
-  threshold: 0.4,
+  threshold: 0.3,
   keys: [
-    { name: "products.name", weight: 3 },
-    { name: "name", weight: 2 },
-    { name: "products.description", weight: 1 },
+    { name: "products.name", weight: 2 },
+    { name: "name", weight: 1 },
   ],
 };
 
