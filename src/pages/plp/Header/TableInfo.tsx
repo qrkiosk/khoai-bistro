@@ -14,14 +14,14 @@ const TableInfo = () => {
       h="100%"
       display="flex"
       alignItems="center"
-      justifyContent="center"
+      justifyContent="flex-end"
     >
       {isLoading || tableInfo == null ? (
         <Spinner />
       ) : (
         <>
           <Icon size={20} icon="zi-location-solid" />
-          <Text fontSize="sm" ml={2}>
+          <Text fontSize="sm" fontWeight="normal" ml={1}>
             {`Bàn: ${tableInfo.name}`}
           </Text>
         </>
@@ -34,9 +34,26 @@ const EnhancedTableInfo = () => {
   return (
     <ErrorBoundary
       fallback={
-        <Text fontSize="xs" fontWeight="light">
-          Lỗi: Ko thể lấy thông tin bàn
-        </Text>
+        <Box
+          w="100%"
+          h="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <Icon size={20} icon="zi-warning-solid" />
+          <Text
+            as="span"
+            fontSize="sm"
+            fontWeight="light"
+            lineHeight={1.2}
+            ml={1}
+          >
+            Ko thể lấy
+            <br />
+            th.tin bàn
+          </Text>
+        </Box>
       }
     >
       <TableInfo />

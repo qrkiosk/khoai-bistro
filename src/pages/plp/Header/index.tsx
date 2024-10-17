@@ -9,6 +9,7 @@ import {
   Grid,
   GridItem,
   Heading,
+  Image,
   Input,
   InputGroup,
   InputRightElement,
@@ -48,22 +49,30 @@ const HeaderContent = () => {
   return (
     <Grid
       templateRows={`repeat(3, 1fr)`}
-      templateColumns="repeat(2, 1fr)"
+      templateColumns="repeat(3, 1fr)"
       rowGap={2}
     >
-      <GridItem colSpan={1}>
-        <Box display="flex" alignItems="center" className="space-x-2">
-          <img className="w-8 h-8 rounded-lg border-inset" src={logo} />
-          <Box>
-            <Heading size="xs">Khoai Bistro</Heading>
-            <Text fontSize="xs">Xin chào quý khách!</Text>
+      <GridItem colSpan={2}>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box display="flex" alignItems="center" className="space-x-2">
+            <Image className="w-8 h-8 rounded-lg border-inset" src={logo} />
+            <Box>
+              <Heading size="xs" fontWeight="semibold">
+                Khoai Bistro
+              </Heading>
+              <Text fontSize="xs" fontWeight="normal">
+                Xin chào quý khách!
+              </Text>
+            </Box>
           </Box>
+          <TableInfo />
         </Box>
       </GridItem>
       <GridItem colSpan={1}>
-        <TableInfo />
+        {/* This col is for the mini app minimize button */}
       </GridItem>
-      <GridItem colSpan={2}>
+
+      <GridItem colSpan={3}>
         <Box display="flex" alignItems="center" justifyContent="center">
           <ButtonGroup size="sm" isAttached variant="outline">
             <Button>Gọi nhân viên</Button>
@@ -75,7 +84,7 @@ const HeaderContent = () => {
         </Box>
       </GridItem>
 
-      <GridItem colSpan={2}>
+      <GridItem colSpan={3}>
         {isInSearchMode ? (
           <InputGroup size="sm">
             <Input
