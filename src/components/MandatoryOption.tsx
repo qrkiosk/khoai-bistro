@@ -34,10 +34,11 @@ const MandatoryOption = ({ option }: { option: OptionWithSelectedDetail }) => {
               justifyContent="space-between"
             >
               <Radio value={detail.id}>{detail.name}</Radio>
-              <Text>
-                {detail.price > 0 && "+ "}
-                <DisplayPrice>{detail.price}</DisplayPrice>
-              </Text>
+              {detail.price > 0 && (
+                <Text>
+                  +<DisplayPrice>{detail.price}</DisplayPrice>
+                </Text>
+              )}
             </Box>
           ))}
         </Stack>

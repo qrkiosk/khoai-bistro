@@ -4,7 +4,7 @@ import { Product } from "../../types/product";
 import { SelectedOptions } from "../../types/cart";
 import { calcFinalPrice } from "../../utils/product";
 
-const CURRENCY_SYMBOL = "đ";
+const CURRENCY_SYMBOL = "";
 
 export const DisplayPrice: FC<{ children: number }> = ({ children }) => {
   return (

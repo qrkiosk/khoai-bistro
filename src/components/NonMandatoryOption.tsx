@@ -47,10 +47,11 @@ const NonMandatoryOption = ({
               mt={2}
             >
               <Checkbox value={detail.id}>{detail.name}</Checkbox>
-              <Text>
-                {detail.price > 0 && "+ "}
-                <DisplayPrice>{detail.price}</DisplayPrice>
-              </Text>
+              {detail.price > 0 && (
+                <Text>
+                  +<DisplayPrice>{detail.price}</DisplayPrice>
+                </Text>
+              )}
             </Box>
           ))}
         </Stack>
