@@ -156,12 +156,12 @@ const CartDetails = () => {
         <Box p={4} bgColor="var(--zmp-background-white)">
           <Grid templateColumns="repeat(2, 1fr)">
             <GridItem colSpan={2}>
-              <Heading size="sm">Thông tin nhận hàng</Heading>
+              <Heading size="sm">Thông tin đơn hàng</Heading>
             </GridItem>
 
             <GridItem colSpan={1}>
               <Text fontSize="sm" mt={3}>
-                Tên người nhận
+                Tên khách hàng
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
