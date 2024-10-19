@@ -102,7 +102,11 @@ const HeaderContent = () => {
               onChange={onChangeInput}
             />
             <InputRightElement>
-              <CloseButton size="sm" onClick={onExitSearchMode} />
+              <CloseButton
+                size="sm"
+                _hover={{ bg: "none" }}
+                onClick={onExitSearchMode}
+              />
             </InputRightElement>
           </InputGroup>
         ) : (

@@ -25,8 +25,10 @@ import {
 import { DisplayPrice } from "../../../components/prices";
 import Divider from "../../../components/Divider";
 import { calcItemTotalAmount, genMultiChoiceOptionDisplayText } from "./utils";
+import { useCartDrawer } from "./localState";
 
 const CartDetails = () => {
+  const { onClose } = useCartDrawer();
   const cart = useAtomValue(cartAtom);
   const subtotal = useAtomValue(cartSubtotalAtom);
   const removeCartItem = useSetAtom(removeCartItemAtom);
@@ -41,78 +43,112 @@ const CartDetails = () => {
     <Box display="flex" flexDirection="column" h="100%">
       <Box bgColor="var(--zmp-background-color)" flexGrow={1}>
         <Box p={4} bgColor="var(--zmp-background-white)">
-          <Grid templateColumns="repeat(2, 1fr)">
+          <Grid templateColumns="repeat(3, 1fr)">
             <GridItem colSpan={2}>
               <Box h="100%" display="flex" alignItems="center">
                 <Heading size="sm">Tóm tắt đơn hàng</Heading>
               </Box>
             </GridItem>
+            <GridItem colSpan={1}>
+              <Box
+                h="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-end"
+              >
+                <Button
+                  p={0}
+                  colorScheme="blue"
+                  variant="ghost"
+                  size="xs"
+                  onClick={onClose}
+                >
+                  Thêm món
+                </Button>
+              </Box>
+            </GridItem>
 
-            {cart.items.map((item) => (
-              <>
-                <GridItem key={`${item.uniqIdentifier}--col1`} colSpan={1}>
-                  <Box h="100%" display="flex" mt={5}>
-                    <Button
-                      colorScheme="blue"
-                      variant="outline"
-                      size="sm"
-                      p={0}
-                    >
-                      {item.quantity}x
-                    </Button>
-                    <Box flexGrow={1} ml={1}>
-                      <Heading size="xs" pl={2} mb={2}>
-                        {item.name}
-                      </Heading>
-                      <Stack>
-                        {item.options.map((opt) => (
-                          <>
-                            {opt.selectedDetail && (
-                              <Text key={opt.id} fontSize="xs" pl={2}>
-                                {opt.selectedDetail.name}
-                              </Text>
-                            )}
-                            {!isEmpty(opt.selectedDetails) && (
-                              <Text key={opt.id} fontSize="xs" pl={2}>
-                                {genMultiChoiceOptionDisplayText(opt)}
-                              </Text>
-                            )}
-                          </>
-                        ))}
-                      </Stack>
-                      <Box mt={2} display="flex" alignItems="flex-start">
+            {cart.items.map((item) => {
+              const onClickEditItem = () => {
+                setProductVariant(item);
+                setIsEditingCartItem(true);
+              };
+              const onClickRemoveItem = () =>
+                removeCartItem(item.uniqIdentifier);
+
+              return (
+                <>
+                  <GridItem key={`${item.uniqIdentifier}--col1`} colSpan={2}>
+                    <Box h="100%" display="flex" mt={5}>
+                      <Box onClick={onClickEditItem}>
                         <Button
                           colorScheme="blue"
-                          variant="ghost"
-                          size="xs"
-                          onClick={() => {
-                            setProductVariant(item);
-                            setIsEditingCartItem(true);
-                          }}
+                          variant="outline"
+                          size="sm"
+                          p={0}
                         >
-                          Chỉnh sửa
-                        </Button>
-                        <Button
-                          colorScheme="blue"
-                          variant="ghost"
-                          size="xs"
-                          onClick={() => removeCartItem(item.uniqIdentifier)}
-                        >
-                          Xóa
+                          {item.quantity}x
                         </Button>
                       </Box>
+                      <Box>
+                        <Box flexGrow={1} ml={2} onClick={onClickEditItem}>
+                          <Heading size="xs" mb={2}>
+                            {item.name}
+                          </Heading>
+                          <Stack>
+                            {item.options.map((opt) => (
+                              <>
+                                {opt.selectedDetail && (
+                                  <Text key={opt.id} fontSize="xs">
+                                    {opt.selectedDetail.name}
+                                  </Text>
+                                )}
+                                {!isEmpty(opt.selectedDetails) && (
+                                  <Text key={opt.id} fontSize="xs">
+                                    {genMultiChoiceOptionDisplayText(opt)}
+                                  </Text>
+                                )}
+                              </>
+                            ))}
+                          </Stack>
+                        </Box>
+                        <Box mt={2} display="flex" alignItems="flex-start">
+                          <Button
+                            colorScheme="blue"
+                            variant="ghost"
+                            size="xs"
+                            _hover={{ bg: "none" }}
+                            onClick={onClickEditItem}
+                          >
+                            Chỉnh sửa
+                          </Button>
+                          <Button
+                            colorScheme="blue"
+                            variant="ghost"
+                            size="xs"
+                            _hover={{ bg: "none" }}
+                            onClick={onClickRemoveItem}
+                          >
+                            Xóa
+                          </Button>
+                        </Box>
+                      </Box>
                     </Box>
-                  </Box>
-                </GridItem>
-                <GridItem key={`${item.uniqIdentifier}--col2`} colSpan={1}>
-                  <Text fontSize="sm" textAlign="right" mt={5}>
-                    <DisplayPrice>{calcItemTotalAmount(item)}</DisplayPrice>
-                  </Text>
-                </GridItem>
-              </>
-            ))}
+                  </GridItem>
+                  <GridItem
+                    key={`${item.uniqIdentifier}--col2`}
+                    colSpan={1}
+                    onClick={onClickEditItem}
+                  >
+                    <Text fontSize="sm" textAlign="right" mt={5}>
+                      <DisplayPrice>{calcItemTotalAmount(item)}</DisplayPrice>
+                    </Text>
+                  </GridItem>
+                </>
+              );
+            })}
 
-            <GridItem colSpan={1}>
+            <GridItem colSpan={2}>
               <Text fontSize="sm" mt={5}>
                 Tổng tạm tính
               </Text>
@@ -123,7 +159,7 @@ const CartDetails = () => {
               </Text>
             </GridItem>
 
-            <GridItem colSpan={1}>
+            <GridItem colSpan={2}>
               <Text fontSize="sm" mt={1}>
                 Giảm giá
               </Text>
@@ -134,7 +170,7 @@ const CartDetails = () => {
               </Text>
             </GridItem>
 
-            <GridItem colSpan={1}>
+            <GridItem colSpan={2}>
               <Text fontSize="sm" mt={1}>
                 Tổng thanh toán
               </Text>
@@ -166,7 +202,7 @@ const CartDetails = () => {
                 textAlign="right"
                 mt={3}
               >
-                {userName || `Khách bàn ${tableInfo?.name || "Ko xác định"}`}
+                {userName || "Guest"}
               </Text>
             </GridItem>
 
@@ -182,7 +218,7 @@ const CartDetails = () => {
                 textAlign="right"
                 mt={1}
               >
-                Tại cửa hàng
+                Tại bàn {tableInfo?.name || "Ko xác định"}
               </Text>
             </GridItem>
           </Grid>
