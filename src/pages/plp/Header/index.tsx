@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { RESET } from "jotai/utils";
 import { Header as ZHeader, Icon } from "zmp-ui";
 import {
   Box,
@@ -17,7 +18,11 @@ import {
 } from "@chakra-ui/react";
 
 import logo from "../../../static/icons/logo.png";
-import { categoryNameInViewAtom, userNameAtom } from "../../../state";
+import {
+  categoryNameInViewAtom,
+  userInfoAtom,
+  userNameAtom,
+} from "../../../state";
 import { useCategoryDrawer } from "../localState";
 import {
   inputAtom,
@@ -46,6 +51,7 @@ const HeaderContent = () => {
     setInput("");
   }, []);
   useDebouncedSearchQueryUpdate();
+  const setUserInfo = useSetAtom(userInfoAtom);
 
   return (
     <Grid
@@ -76,7 +82,7 @@ const HeaderContent = () => {
       <GridItem colSpan={3}>
         <Box display="flex" alignItems="center" justifyContent="center">
           <ButtonGroup size="sm" isAttached variant="outline">
-            <Button>Gọi nhân viên</Button>
+            <Button onClick={() => setUserInfo(RESET)}>Gọi nhân viên</Button>
             <Button>Gọi thanh toán</Button>
             <Button variant="solid" colorScheme="green">
               Nhắn tin Zalo
