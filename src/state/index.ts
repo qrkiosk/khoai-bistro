@@ -2,17 +2,11 @@ import { RefObject } from "react";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { atomWithQuery } from "jotai-tanstack-query";
-
-import { StoreTable } from "../types/company";
-import { FuseWithDataSet, getFuseInstance } from "../utils/fuse";
-import { getStoreTableById } from "../api/table";
-import {
-  getProductById,
-  getStoreProducts,
-  getStoreProductsByCategory,
-} from "../api/product";
-import { Cart } from "../types/cart";
 import isEmpty from "lodash/isEmpty";
+
+import { UserInfo } from "../types/user";
+import { StoreTable } from "../types/company";
+import { Cart } from "../types/cart";
 import {
   CategoryWithProducts,
   OptionDetail,
@@ -20,6 +14,24 @@ import {
   CartProductVariant,
   ProductWithOptions,
 } from "../types/product";
+import { FuseWithDataSet, getFuseInstance } from "../utils/fuse";
+import { getStoreTableById } from "../api/table";
+import {
+  getProductById,
+  getStoreProducts,
+  getStoreProductsByCategory,
+} from "../api/product";
+
+export const userInfoAtom = atomWithStorage<UserInfo | null>(
+  "cachedUserInfo",
+  null,
+  undefined,
+  { getOnInit: true }
+);
+export const isUserAuthorizedAtom = atom<boolean>(
+  (get) => get(userInfoAtom) != null
+);
+export const userNameAtom = atom((get) => get(userInfoAtom)?.name);
 
 export const tableIdAtom = atom<number | null>(null);
 export const companyIdAtom = atom<number | null>(null);

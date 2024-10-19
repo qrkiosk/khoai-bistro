@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 
 import logo from "../../../static/icons/logo.png";
-import { categoryNameInViewAtom } from "../../../state";
+import { categoryNameInViewAtom, userNameAtom } from "../../../state";
 import { useCategoryDrawer } from "../localState";
 import {
   inputAtom,
@@ -35,6 +35,7 @@ const HeaderContent = () => {
     onExit,
   } = useSearchMode();
   const categoryNameInView = useAtomValue(categoryNameInViewAtom);
+  const userName = useAtomValue(userNameAtom);
 
   const onChangeInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value),
@@ -61,7 +62,7 @@ const HeaderContent = () => {
                 Khoai Bistro
               </Heading>
               <Text fontSize="xs" fontWeight="normal">
-                Xin chào quý khách!
+                Xin chào {userName || "quý khách"}!
               </Text>
             </Box>
           </Box>

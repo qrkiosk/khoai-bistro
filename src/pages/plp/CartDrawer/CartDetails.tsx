@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { authorize } from "zmp-sdk";
 import isEmpty from "lodash/isEmpty";
 import {
   Box,
@@ -21,6 +20,7 @@ import {
   cartSubtotalAtom,
   removeCartItemAtom,
   tableInfoAtom,
+  userNameAtom,
 } from "../../../state";
 import { DisplayPrice } from "../../../components/prices";
 import Divider from "../../../components/Divider";
@@ -31,16 +31,11 @@ const CartDetails = () => {
   const subtotal = useAtomValue(cartSubtotalAtom);
   const removeCartItem = useSetAtom(removeCartItemAtom);
   const { data: tableInfo } = useAtomValue(tableInfoAtom);
+  const userName = useAtomValue(userNameAtom);
   const setProductVariant = useSetAtom(productVariantAtom);
   const setIsEditingCartItem = useSetAtom(isEditingCartItemAtom);
 
-  const onClickPlaceOrder = useCallback(async () => {
-    try {
-      const authResult = await authorize({
-        scopes: ["scope.userInfo", "scope.userPhonenumber"],
-      });
-    } catch (error) {}
-  }, []);
+  const onClickPlaceOrder = useCallback(async () => {}, []);
 
   return (
     <Box display="flex" flexDirection="column" h="100%">
@@ -171,7 +166,7 @@ const CartDetails = () => {
                 textAlign="right"
                 mt={3}
               >
-                Khách bàn {tableInfo?.name ?? "Không xác định"}
+                {userName || `Khách bàn ${tableInfo?.name || "Ko xác định"}`}
               </Text>
             </GridItem>
 

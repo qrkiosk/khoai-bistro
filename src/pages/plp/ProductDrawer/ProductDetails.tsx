@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
+import { authorize, getUserInfo } from "zmp-sdk";
 import {
   Box,
   Image,
@@ -20,6 +21,8 @@ import {
   prepareProductVariantAtom,
   updateProductVariantQtyAtom,
   removeCartItemAtom,
+  userInfoAtom,
+  isUserAuthorizedAtom,
 } from "../../../state";
 import Divider from "../../../components/Divider";
 import { SkeletonContent } from "../../../components/skeletons";
@@ -31,6 +34,11 @@ import { useProductDrawer } from "./localState";
 const ProductDetails = () => {
   const { onClose } = useProductDrawer();
   const addToCart = useSetAtom(addToCartAtom);
+  const addToCartAndClose = useCallback(() => {
+    addToCart();
+    onClose();
+  }, []);
+
   const isEditingCartItem = useAtomValue(isEditingCartItemAtom);
   const { data: productDetails, isLoading } = useAtomValue(productDetailsAtom);
 
@@ -43,6 +51,29 @@ const ProductDetails = () => {
 
   const removeFromCart = useSetAtom(removeCartItemAtom);
   const shouldRemoveFromCart = productVariantQty === 0;
+
+  const isUserAuthorized = useAtomValue(isUserAuthorizedAtom);
+  const setUserInfo = useSetAtom(userInfoAtom);
+  const addToCartWithAuthInquiry = async () => {
+    try {
+      if (isUserAuthorized) {
+        addToCartAndClose();
+        return;
+      }
+
+      const authResult = await authorize({
+        scopes: ["scope.userInfo" /*, "scope.userPhonenumber" */],
+      });
+
+      if (!authResult["scope.userInfo"]) return;
+
+      const getUserInfoResult = await getUserInfo();
+      setUserInfo(getUserInfoResult.userInfo);
+      addToCartAndClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (productDetails != null && !isEditingCartItem) {
@@ -157,10 +188,7 @@ const ProductDetails = () => {
             w="100%"
             textAlign="left"
             size="md"
-            onClick={() => {
-              addToCart();
-              onClose();
-            }}
+            onClick={addToCartWithAuthInquiry}
           >
             <Box w="100%" display="flex" justifyContent="space-between">
               <Text>
