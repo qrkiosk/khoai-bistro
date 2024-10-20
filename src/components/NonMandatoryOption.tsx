@@ -7,6 +7,7 @@ import {
   Stack,
   CheckboxGroup,
   Checkbox,
+  Divider as LineDivider,
 } from "@chakra-ui/react";
 
 import { setVariantSelectedDetailsAtom } from "../state";
@@ -37,23 +38,35 @@ const NonMandatoryOption = ({
         {option.name}
       </Heading>
       <CheckboxGroup value={selectedDetails} onChange={setSelectedDetails}>
-        <Stack>
-          {option.details.map((detail) => (
-            <Box
-              key={detail.id}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mt={2}
-            >
-              <Checkbox value={detail.id}>{detail.name}</Checkbox>
-              {detail.price > 0 && (
-                <Text>
-                  +<DisplayPrice>{detail.price}</DisplayPrice>
-                </Text>
-              )}
-            </Box>
-          ))}
+        <Stack rowGap={2}>
+          {option.details.map((detail, idx) => {
+            const isLast = idx === option.details.length - 1;
+
+            return (
+              <Box key={detail.id}>
+                <Box
+                  as="label"
+                  htmlFor={detail.id}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Box display="flex">
+                    <Checkbox id={detail.id} value={detail.id} />
+                    <Text as="span" ml={3}>
+                      {detail.name}
+                    </Text>
+                  </Box>
+                  {detail.price > 0 && (
+                    <Text as="span">
+                      +<DisplayPrice>{detail.price}</DisplayPrice>
+                    </Text>
+                  )}
+                </Box>
+                {!isLast && <LineDivider mt={2} />}
+              </Box>
+            );
+          })}
         </Stack>
       </CheckboxGroup>
     </Box>

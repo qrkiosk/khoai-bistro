@@ -1,6 +1,14 @@
 import React, { useCallback } from "react";
 import { useSetAtom } from "jotai";
-import { Box, Heading, Text, RadioGroup, Radio, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  RadioGroup,
+  Radio,
+  Stack,
+  Divider as LineDivider,
+} from "@chakra-ui/react";
 
 import { setVariantSelectedDetailAtom } from "../state";
 import { DisplayPrice } from "./prices";
@@ -22,25 +30,38 @@ const MandatoryOption = ({ option }: { option: OptionWithSelectedDetail }) => {
         {option.name}
       </Heading>
       <RadioGroup
-        onChange={setSelectedDetail}
         value={option.selectedDetail?.id}
+        onChange={setSelectedDetail}
       >
-        <Stack>
-          {option.details.map((detail) => (
-            <Box
-              key={detail.id}
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Radio value={detail.id}>{detail.name}</Radio>
-              {detail.price > 0 && (
-                <Text>
-                  +<DisplayPrice>{detail.price}</DisplayPrice>
-                </Text>
-              )}
-            </Box>
-          ))}
+        <Stack rowGap={2}>
+          {option.details.map((detail, idx) => {
+            const isLast = idx === option.details.length - 1;
+
+            return (
+              <Box key={detail.id}>
+                <Box
+                  as="label"
+                  htmlFor={detail.id}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Box display="flex">
+                    <Radio id={detail.id} value={detail.id} />
+                    <Text as="span" ml={3}>
+                      {detail.name}
+                    </Text>
+                  </Box>
+                  {detail.price > 0 && (
+                    <Text as="span">
+                      +<DisplayPrice>{detail.price}</DisplayPrice>
+                    </Text>
+                  )}
+                </Box>
+                {!isLast && <LineDivider mt={2} />}
+              </Box>
+            );
+          })}
         </Stack>
       </RadioGroup>
     </Box>
