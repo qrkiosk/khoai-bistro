@@ -49,7 +49,7 @@ const ProductDetails = () => {
   const setUserInfo = useSetAtom(userInfoAtom);
   const addToCartWithAuthInquiry = async () => {
     try {
-      if (isUserAuthorized || true) {
+      if (isUserAuthorized) {
         addToCartAndClose();
         return;
       }
