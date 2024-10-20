@@ -42,7 +42,7 @@ const CategoryItem = ({
   }, []);
 
   return (
-    <Box ref={observeIntersectionRef} key={category.id}>
+    <Box key={category.id} ref={observeIntersectionRef}>
       {shouldShowBanner ? (
         <Banner ref={scrollIntoViewRef} category={category} />
       ) : (

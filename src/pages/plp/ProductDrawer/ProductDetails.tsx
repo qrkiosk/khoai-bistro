@@ -88,7 +88,7 @@ const ProductDetails = () => {
           maxHeight="250px"
         />
 
-        <Box p={5} bgColor="var(--zmp-background-white)">
+        <Box p={4} bgColor="var(--zmp-background-white)">
           <Box display="flex" justifyContent="space-between">
             <Heading size="sm">{productVariant.name}</Heading>
             <Box textAlign="right">
@@ -108,7 +108,7 @@ const ProductDetails = () => {
 
         {productVariant.options.map((option) => (
           <>
-            <Box key={option.id} p={5} bgColor="var(--zmp-background-white)">
+            <Box key={option.id} p={4} bgColor="var(--zmp-background-white)">
               {option.isMandatory ? (
                 <MandatoryOption option={option} />
               ) : (
@@ -120,7 +120,7 @@ const ProductDetails = () => {
         ))}
 
         <Box
-          p={5}
+          p={4}
           bgColor="var(--zmp-background-white)"
           display="flex"
           flexDir="column"

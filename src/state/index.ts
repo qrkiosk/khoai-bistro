@@ -3,6 +3,7 @@ import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { atomWithQuery } from "jotai-tanstack-query";
 import isEmpty from "lodash/isEmpty";
+import sortBy from "lodash/sortBy";
 
 import { UserInfo } from "../types/user";
 import { StoreTable } from "../types/company";
@@ -361,8 +362,8 @@ export const searchResultSyncAtom = atom<CategoryWithProducts[]>((get) => {
 
   if (!searchQuery || fuse == null) return storeProducts;
 
-  const searchResult = fuse.search(searchQuery);
-  return searchResult.map((item) => item.item);
+  const searchResults = fuse.search(searchQuery).map((result) => result.item);
+  return sortBy(searchResults, "seq");
 });
 
 export const categoryRefsMapAtom = atom<Map<string, RefObject<HTMLDivElement>>>(
