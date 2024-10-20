@@ -28,11 +28,7 @@ const Layout = () => {
   }, []);
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      className="h-screen page-content"
-    >
+    <Box display="flex" flexDir="column" className="h-screen page-content">
       <Box className="flex-1 flex flex-col overflow-hidden">
         <Routes>
           <Route path="/" element={<HomePage />} />

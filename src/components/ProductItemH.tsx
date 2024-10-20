@@ -29,7 +29,7 @@ const ProductItemH = ({ product }: { product: Product }) => {
           objectFit="cover"
           maxW="100px"
         />
-        <Box display="flex" flexDirection="column" ml={2} w="calc(67%)">
+        <Box display="flex" flexDir="column" ml={2} w="calc(67%)">
           <Box flexGrow={1}>
             <Text>{product.name}</Text>
             <Box overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">

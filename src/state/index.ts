@@ -92,7 +92,7 @@ export const selectedProductIdAtom = atom<string | null>(null);
 export const isEditingCartItemAtom = atom(false);
 
 export const productDetailsAtom = atomWithQuery<
-  ProductWithOptions | undefined,
+  ProductWithOptions | null,
   Error,
   ProductWithOptions,
   [string, string | null]
@@ -100,7 +100,7 @@ export const productDetailsAtom = atomWithQuery<
   staleTime: Infinity,
   queryKey: ["productDetails", get(selectedProductIdAtom)],
   queryFn: async ({ queryKey: [, selectedProductId] }) => {
-    if (selectedProductId == null) return undefined;
+    if (selectedProductId == null) return null;
 
     const response = await getProductById(selectedProductId);
     return response.data.data;
@@ -111,6 +111,10 @@ export const productVariantAtom = atom<CartProductVariant | null>(null);
 
 export const productVariantQtyAtom = atom(
   (get) => get(productVariantAtom)?.quantity
+);
+
+export const productVariantNoteAtom = atom(
+  (get) => get(productVariantAtom)?.note
 );
 
 export const productVariantPriceAtom = atom((get) => {
@@ -236,6 +240,13 @@ export const setVariantSelectedDetailsAtom = atom(
   }
 );
 
+export const setVariantNoteAtom = atom(null, (get, set, note: string) => {
+  const productVariant = get(productVariantAtom);
+  if (productVariant == null) return;
+
+  set(productVariantAtom, { ...productVariant, note });
+});
+
 export const cartAtom = atomWithStorage<Cart>(
   "cachedCart",
   { items: [], shippingInfo: null, paymentMethod: null },
@@ -332,7 +343,7 @@ export const isSearchQueryEmptyAtom = atom((get) => !get(searchQueryAtom));
 })); */
 
 export const fuseInstanceAtom = atomWithQuery<
-  FuseWithDataSet | undefined,
+  FuseWithDataSet | null,
   Error,
   FuseWithDataSet,
   [string, CategoryWithProducts[]]
@@ -340,7 +351,7 @@ export const fuseInstanceAtom = atomWithQuery<
   staleTime: Infinity,
   queryKey: ["fuseInstance", get(storeProductsByCategoryAtom).data],
   queryFn: ({ queryKey: [, dataSet] }) =>
-    !isEmpty(dataSet) ? getFuseInstance(dataSet) : undefined,
+    !isEmpty(dataSet) ? getFuseInstance(dataSet) : null,
 }));
 
 export const searchResultSyncAtom = atom<CategoryWithProducts[]>((get) => {

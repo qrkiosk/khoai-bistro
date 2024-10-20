@@ -1,15 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { authorize, getUserInfo } from "zmp-sdk";
-import {
-  Box,
-  Image,
-  Heading,
-  Text,
-  Button,
-  HStack,
-  Input,
-} from "@chakra-ui/react";
+import { Box, Image, Heading, Text, Button, HStack } from "@chakra-ui/react";
 
 import {
   addToCartAtom,
@@ -30,6 +22,7 @@ import { DisplayPrice } from "../../../components/prices";
 import MandatoryOption from "../../../components/MandatoryOption";
 import NonMandatoryOption from "../../../components/NonMandatoryOption";
 import { useProductDrawer } from "./localState";
+import NoteTextarea from "./NoteTextarea";
 
 const ProductDetails = () => {
   const { onClose } = useProductDrawer();
@@ -56,7 +49,7 @@ const ProductDetails = () => {
   const setUserInfo = useSetAtom(userInfoAtom);
   const addToCartWithAuthInquiry = async () => {
     try {
-      if (isUserAuthorized) {
+      if (isUserAuthorized || true) {
         addToCartAndClose();
         return;
       }
@@ -84,7 +77,7 @@ const ProductDetails = () => {
   if (isLoading || productVariant == null) return <SkeletonContent />;
 
   return (
-    <Box h="100%" display="flex" flexDirection="column">
+    <Box h="100%" display="flex" flexDir="column">
       <Box bgColor="var(--zmp-background-color)" flexGrow={1}>
         <Image
           src={productVariant.url}
@@ -94,7 +87,7 @@ const ProductDetails = () => {
           maxHeight="250px"
         />
 
-        <Box p={4} bgColor="var(--zmp-background-white)">
+        <Box p={5} bgColor="var(--zmp-background-white)">
           <Box display="flex" justifyContent="space-between">
             <Heading size="sm">{productVariant.name}</Heading>
             <Box textAlign="right">
@@ -114,7 +107,7 @@ const ProductDetails = () => {
 
         {productVariant.options.map((option) => (
           <>
-            <Box key={option.id} p={4} bgColor="var(--zmp-background-white)">
+            <Box key={option.id} p={5} bgColor="var(--zmp-background-white)">
               {option.isMandatory ? (
                 <MandatoryOption option={option} />
               ) : (
@@ -126,31 +119,35 @@ const ProductDetails = () => {
         ))}
 
         <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          p={4}
+          p={5}
           bgColor="var(--zmp-background-white)"
+          display="flex"
+          flexDir="column"
+          alignItems="center"
         >
-          <Box w="100%" mb={1}>
-            <Heading size="sm">Số lượng</Heading>
+          <Box w="100%" mb={3} display="flex" alignItems="center">
+            <Heading size="sm">Thêm lưu ý cho quán</Heading>
+            <Text fontSize="xs" color="GrayText" ml={2}>
+              Không bắt buộc
+            </Text>
           </Box>
+          <NoteTextarea />
           <HStack maxW="180px">
             <Button
               isDisabled={productVariantQty === minQty}
               onClick={() => updateProductVariantQty("DEC", minQty)}
             >
-              <Text fontSize="xl">–</Text>
+              <Text fontSize="xl" color="green">
+                –
+              </Text>
             </Button>
-            <Input
-              readOnly
-              value={productVariantQty}
-              textAlign="center"
-              fontWeight="semibold"
-              fontSize="xl"
-            />
+            <Box minW="50px" textAlign="center">
+              <Heading fontSize="xl">{productVariantQty}</Heading>
+            </Box>
             <Button onClick={() => updateProductVariantQty("INC")}>
-              <Text fontSize="xl">+</Text>
+              <Text fontSize="xl" color="green">
+                ＋
+              </Text>
             </Button>
           </HStack>
         </Box>

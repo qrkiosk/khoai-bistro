@@ -40,7 +40,7 @@ const CartDetails = () => {
   const onClickPlaceOrder = useCallback(async () => {}, []);
 
   return (
-    <Box display="flex" flexDirection="column" h="100%">
+    <Box display="flex" flexDir="column" h="100%">
       <Box bgColor="var(--zmp-background-color)" flexGrow={1}>
         <Box p={4} bgColor="var(--zmp-background-white)">
           <Grid templateColumns="repeat(3, 1fr)">
@@ -92,24 +92,29 @@ const CartDetails = () => {
                       </Box>
                       <Box>
                         <Box flexGrow={1} ml={2} onClick={onClickEditItem}>
-                          <Heading size="xs" mb={2}>
+                          <Heading size="xs" mb={1}>
                             {item.name}
                           </Heading>
-                          <Stack>
+                          <Stack rowGap={1}>
                             {item.options.map((opt) => (
                               <>
                                 {opt.selectedDetail && (
-                                  <Text key={opt.id} fontSize="xs">
+                                  <Text key={opt.id} fontSize="sm">
                                     {opt.selectedDetail.name}
                                   </Text>
                                 )}
                                 {!isEmpty(opt.selectedDetails) && (
-                                  <Text key={opt.id} fontSize="xs">
+                                  <Text key={opt.id} fontSize="sm">
                                     {genMultiChoiceOptionDisplayText(opt)}
                                   </Text>
                                 )}
                               </>
                             ))}
+                            {item.note && (
+                              <Text fontSize="xs" color="GrayText">
+                                {item.note}
+                              </Text>
+                            )}
                           </Stack>
                         </Box>
                         <Box mt={2} display="flex" alignItems="flex-start">

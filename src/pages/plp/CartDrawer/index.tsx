@@ -80,7 +80,7 @@ const CartDrawer = () => {
               h="80%"
               p={4}
               display="flex"
-              flexDirection="column"
+              flexDir="column"
               justifyContent="center"
               alignItems="center"
             >
