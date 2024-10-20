@@ -22,6 +22,7 @@ import {
   tableInfoAtom,
   userNameAtom,
 } from "../../../state";
+import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { DisplayPrice } from "../../../components/prices";
 import Divider from "../../../components/Divider";
 import { calcItemTotalAmount, genMultiChoiceOptionDisplayText } from "./utils";
@@ -58,7 +59,7 @@ const CartDetails = () => {
               >
                 <Button
                   p={0}
-                  colorScheme="blue"
+                  colorScheme={APP_ACCENT_COLOR}
                   variant="ghost"
                   size="xs"
                   onClick={onClose}
@@ -82,7 +83,7 @@ const CartDetails = () => {
                     <Box h="100%" display="flex" mt={5}>
                       <Box onClick={onClickEditItem}>
                         <Button
-                          colorScheme="blue"
+                          colorScheme={APP_ACCENT_COLOR}
                           variant="outline"
                           size="sm"
                           p={0}
@@ -119,7 +120,7 @@ const CartDetails = () => {
                         </Box>
                         <Box mt={2} display="flex" alignItems="flex-start">
                           <Button
-                            colorScheme="blue"
+                            colorScheme={APP_ACCENT_COLOR}
                             variant="ghost"
                             size="xs"
                             _hover={{ bg: "none" }}
@@ -128,7 +129,7 @@ const CartDetails = () => {
                             Chỉnh sửa
                           </Button>
                           <Button
-                            colorScheme="blue"
+                            colorScheme={APP_ACCENT_COLOR}
                             variant="ghost"
                             size="xs"
                             _hover={{ bg: "none" }}
@@ -252,7 +253,7 @@ const CartDetails = () => {
         <Button
           variant="solid"
           autoFocus={false}
-          colorScheme="green"
+          colorScheme={APP_ACCENT_COLOR}
           w="100%"
           textAlign="left"
           size="md"

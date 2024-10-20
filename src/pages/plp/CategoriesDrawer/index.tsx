@@ -16,6 +16,7 @@ import {
   categoryIdInViewAtom,
   storeProductsByCategoryAtom,
 } from "../../../state";
+import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { useCategoryDrawer } from "../localState";
 
 const CategoriesDrawer = () => {
@@ -40,7 +41,7 @@ const CategoriesDrawer = () => {
                     autoFocus={false}
                     size="sm"
                     w="100%"
-                    colorScheme={alreadyInView ? "green" : undefined}
+                    colorScheme={alreadyInView ? APP_ACCENT_COLOR : undefined}
                     justifyContent="flex-start"
                     onClick={() => {
                       if (alreadyInView || !categoryRefsMap.has(category.id)) {

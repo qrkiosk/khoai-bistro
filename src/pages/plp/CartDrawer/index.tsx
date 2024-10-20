@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 
 import { cartAtom, cartSubtotalAtom } from "../../../state";
+import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { DisplayPrice } from "../../../components/prices";
 import { useCartDrawer } from "./localState";
 import CartDetails from "./CartDetails";
@@ -38,7 +39,7 @@ const CartDrawer = () => {
           <Button
             variant="solid"
             autoFocus={false}
-            colorScheme="green"
+            colorScheme={APP_ACCENT_COLOR}
             w="100%"
             textAlign="left"
             size="md"
@@ -88,7 +89,7 @@ const CartDrawer = () => {
               <Text color="GrayText" fontSize="sm" mt={3} mb={5}>
                 Hãy thêm gì đó vào đây để làm mình vui nhé!
               </Text>
-              <Button colorScheme="green" mt={5} onClick={onClose}>
+              <Button colorScheme={APP_ACCENT_COLOR} mt={5} onClick={onClose}>
                 Tiếp tục mua sắm
               </Button>
             </Box>

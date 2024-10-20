@@ -16,6 +16,7 @@ import {
   userInfoAtom,
   isUserAuthorizedAtom,
 } from "../../../state";
+import { APP_ACCENT_COLOR, APP_DANGER_COLOR } from "../../../utils/constants";
 import Divider from "../../../components/Divider";
 import { SkeletonContent } from "../../../components/skeletons";
 import { DisplayPrice } from "../../../components/prices";
@@ -137,7 +138,7 @@ const ProductDetails = () => {
               isDisabled={productVariantQty === minQty}
               onClick={() => updateProductVariantQty("DEC", minQty)}
             >
-              <Text fontSize="xl" color="green">
+              <Text fontSize="xl" color={APP_ACCENT_COLOR}>
                 –
               </Text>
             </Button>
@@ -145,7 +146,7 @@ const ProductDetails = () => {
               <Heading fontSize="xl">{productVariantQty}</Heading>
             </Box>
             <Button onClick={() => updateProductVariantQty("INC")}>
-              <Text fontSize="xl" color="green">
+              <Text fontSize="xl" color={APP_ACCENT_COLOR}>
                 ＋
               </Text>
             </Button>
@@ -166,7 +167,7 @@ const ProductDetails = () => {
           <Button
             variant="solid"
             autoFocus={false}
-            colorScheme="red"
+            colorScheme={APP_DANGER_COLOR}
             w="100%"
             textAlign="left"
             size="md"
@@ -181,7 +182,7 @@ const ProductDetails = () => {
           <Button
             variant="solid"
             autoFocus={false}
-            colorScheme="green"
+            colorScheme={APP_ACCENT_COLOR}
             w="100%"
             textAlign="left"
             size="md"

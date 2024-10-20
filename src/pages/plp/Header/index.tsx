@@ -23,6 +23,7 @@ import {
   userInfoAtom,
   userNameAtom,
 } from "../../../state";
+import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { useCategoryDrawer } from "../localState";
 import {
   inputAtom,
@@ -84,7 +85,7 @@ const HeaderContent = () => {
           <ButtonGroup size="sm" isAttached variant="outline">
             <Button onClick={() => setUserInfo(RESET)}>Gọi nhân viên</Button>
             <Button>Gọi thanh toán</Button>
-            <Button variant="solid" colorScheme="green">
+            <Button variant="solid" colorScheme={APP_ACCENT_COLOR}>
               Nhắn tin Zalo
             </Button>
           </ButtonGroup>
