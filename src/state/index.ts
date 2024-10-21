@@ -6,7 +6,7 @@ import isEmpty from "lodash/isEmpty";
 import sortBy from "lodash/sortBy";
 
 import { UserInfo } from "../types/user";
-import { StoreTable } from "../types/company";
+import { Store, StoreTable } from "../types/company";
 import { Cart } from "../types/cart";
 import {
   CategoryWithProducts,
@@ -16,7 +16,7 @@ import {
   ProductWithOptions,
 } from "../types/product";
 import { FuseWithDataSet, getFuseInstance } from "../utils/fuse";
-import { getStoreTableById } from "../api/table";
+import { getStoreTableById, getStoreById } from "../api/company";
 import {
   getProductById,
   getStoreProducts,
@@ -50,6 +50,22 @@ export const tableInfoAtom = atomWithQuery<
     if (tableId == null) return null;
 
     const response = await getStoreTableById(tableId);
+    return response.data.data;
+  },
+}));
+
+export const storeInfoAtom = atomWithQuery<
+  Store | null,
+  Error,
+  Store | null,
+  [string, number | null]
+>((get) => ({
+  initialData: null,
+  queryKey: ["store", get(storeIdAtom)],
+  queryFn: async ({ queryKey: [, storeId] }) => {
+    if (storeId == null) return null;
+
+    const response = await getStoreById(storeId);
     return response.data.data;
   },
 }));

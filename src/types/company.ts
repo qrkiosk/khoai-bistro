@@ -10,3 +10,19 @@ export interface StoreTable extends CreateUpdateTrace {
   seq: number;
   isActive: boolean;
 }
+
+export interface Store extends CreateUpdateTrace {
+  id: number;
+  companyId: number;
+  companyName: string;
+  name: string;
+  phone: string;
+  address: string;
+  provinceId: number;
+  provinceName: string;
+  districtId: number;
+  districtName: string;
+  wardId: number;
+  wardName: string;
+  isActive: boolean;
+}
