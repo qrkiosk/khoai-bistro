@@ -1,7 +1,5 @@
-import {
-  CartProductVariant,
-  OptionWithSelectedDetail,
-} from "../../../types/product";
+import { CartProductVariant } from "../types/cart";
+import { OptionWithSelectedDetail } from "../types/product";
 
 export const calcItemTotalAmount = (item: CartProductVariant) => {
   const quantity = item.quantity;

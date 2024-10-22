@@ -1,9 +1,21 @@
-import { CartProductVariant } from "./product";
+import { PaymentType } from "./payment";
+import { ShippingType } from "./shipping";
+import { BaseProductVariant } from "./product";
 
 export type SelectedOptions = Record<string, string | string[]>;
 
-export type Cart = {
+export interface CartProductVariant extends BaseProductVariant {
+  uniqIdentifier: string;
+  quantity: number;
+  note?: string;
+}
+
+export interface Cart {
   items: CartProductVariant[];
-  shippingInfo: Record<string, string> | null;
-  paymentMethod: string | null;
-};
+  payment: {
+    paymentType: PaymentType;
+  };
+  shipping: {
+    shippingType: ShippingType;
+  };
+}

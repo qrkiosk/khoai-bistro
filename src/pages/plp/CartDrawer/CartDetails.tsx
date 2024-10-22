@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import isEmpty from "lodash/isEmpty";
 import {
@@ -21,12 +21,18 @@ import {
   removeCartItemAtom,
   tableInfoAtom,
   userNameAtom,
+  setPaymentTypeAtom,
 } from "../../../state";
+import { PaymentType } from "../../../types/payment";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
+import {
+  calcItemTotalAmount,
+  genMultiChoiceOptionDisplayText,
+} from "../../../utils/cart";
 import { DisplayPrice } from "../../../components/prices";
 import Divider from "../../../components/Divider";
-import { calcItemTotalAmount, genMultiChoiceOptionDisplayText } from "./utils";
 import { useCartDrawer } from "./localState";
+import PlaceOrderButton from "./PlaceOrderButton";
 
 const CartDetails = () => {
   const { onClose } = useCartDrawer();
@@ -37,8 +43,7 @@ const CartDetails = () => {
   const userName = useAtomValue(userNameAtom);
   const setProductVariant = useSetAtom(productVariantAtom);
   const setIsEditingCartItem = useSetAtom(isEditingCartItemAtom);
-
-  const onClickPlaceOrder = useCallback(async () => {}, []);
+  const setPaymentType = useSetAtom(setPaymentTypeAtom);
 
   return (
     <Box display="flex" flexDir="column" h="100%">
@@ -224,7 +229,7 @@ const CartDetails = () => {
                 textAlign="right"
                 mt={1}
               >
-                Tại bàn {tableInfo?.name || "Ko xác định"}
+                {`Tại bàn ${tableInfo?.name || ""}`.trim()}
               </Text>
             </GridItem>
           </Grid>
@@ -234,34 +239,21 @@ const CartDetails = () => {
         <Box p={4} bgColor="var(--zmp-background-white)">
           <Heading size="sm">Phương thức thanh toán</Heading>
           <Box mt={3}>
-            <RadioGroup value="ON_SITE">
-              <Radio value="ON_SITE">Tại quầy</Radio>
+            <RadioGroup
+              value={cart.payment.paymentType}
+              onChange={setPaymentType}
+            >
+              <Stack rowGap={2}>
+                <Radio value={PaymentType.CASH}>Tiền mặt</Radio>
+                <Radio value={PaymentType.MOMO}>Ví MoMo</Radio>
+              </Stack>
             </RadioGroup>
           </Box>
         </Box>
         <Divider />
       </Box>
 
-      <Box
-        position="sticky"
-        left={0}
-        right={0}
-        bottom={0}
-        bgColor="var(--zmp-background-white)"
-        p={3}
-      >
-        <Button
-          variant="solid"
-          autoFocus={false}
-          colorScheme={APP_ACCENT_COLOR}
-          w="100%"
-          textAlign="left"
-          size="md"
-          onClick={onClickPlaceOrder}
-        >
-          Xác nhận đặt đơn
-        </Button>
-      </Box>
+      <PlaceOrderButton />
     </Box>
   );
 };

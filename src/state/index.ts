@@ -7,21 +7,17 @@ import sortBy from "lodash/sortBy";
 
 import { UserInfo } from "../types/user";
 import { Store, StoreTable } from "../types/company";
-import { Cart } from "../types/cart";
+import { Cart, CartProductVariant } from "../types/cart";
 import {
   CategoryWithProducts,
   OptionDetail,
-  Product,
-  CartProductVariant,
   ProductWithOptions,
 } from "../types/product";
+import { PaymentType } from "../types/payment";
+import { ShippingType } from "../types/shipping";
 import { FuseWithDataSet, getFuseInstance } from "../utils/fuse";
 import { getStoreTableById, getStoreById } from "../api/company";
-import {
-  getProductById,
-  getStoreProducts,
-  getStoreProductsByCategory,
-} from "../api/product";
+import { getProductById, getStoreProductsByCategory } from "../api/product";
 
 export const userInfoAtom = atomWithStorage<UserInfo | null>(
   "cachedUserInfo",
@@ -70,21 +66,21 @@ export const storeInfoAtom = atomWithQuery<
   },
 }));
 
-export const storeProductsAtom = atomWithQuery<
-  Product[],
-  Error,
-  Product[],
-  [string, number | null]
->((get) => ({
-  initialData: [],
-  queryKey: ["product", get(storeIdAtom)],
-  queryFn: async ({ queryKey: [, storeId] }) => {
-    if (storeId == null) return [];
+// export const storeProductsAtom = atomWithQuery<
+//   Product[],
+//   Error,
+//   Product[],
+//   [string, number | null]
+// >((get) => ({
+//   initialData: [],
+//   queryKey: ["product", get(storeIdAtom)],
+//   queryFn: async ({ queryKey: [, storeId] }) => {
+//     if (storeId == null) return [];
 
-    const response = await getStoreProducts({ storeId });
-    return response.data.data;
-  },
-}));
+//     const response = await getStoreProducts({ storeId });
+//     return response.data.data;
+//   },
+// }));
 
 export const storeProductsByCategoryAtom = atomWithQuery<
   CategoryWithProducts[],
@@ -266,7 +262,11 @@ export const setVariantNoteAtom = atom(null, (get, set, note: string) => {
 
 export const cartAtom = atomWithStorage<Cart>(
   "cachedCart",
-  { items: [], shippingInfo: null, paymentMethod: null },
+  {
+    items: [],
+    payment: { paymentType: PaymentType.MOMO },
+    shipping: { shippingType: ShippingType.ON_SITE },
+  },
   undefined,
   { getOnInit: true }
 );
@@ -331,6 +331,34 @@ export const removeCartItemAtom = atom(
       items: cart.items.filter(
         (item) => item.uniqIdentifier !== uniqIdentifier
       ),
+    });
+  }
+);
+
+export const setPaymentTypeAtom = atom(
+  null,
+  (get, set, paymentType: string | PaymentType) => {
+    const cart = get(cartAtom);
+    set(cartAtom, {
+      ...cart,
+      payment: {
+        ...cart.payment,
+        paymentType: paymentType as PaymentType,
+      },
+    });
+  }
+);
+
+export const setShippingTypeAtom = atom(
+  null,
+  (get, set, shippingType: string | ShippingType) => {
+    const cart = get(cartAtom);
+    set(cartAtom, {
+      ...cart,
+      shipping: {
+        ...cart.shipping,
+        shippingType: shippingType as ShippingType,
+      },
     });
   }
 );
