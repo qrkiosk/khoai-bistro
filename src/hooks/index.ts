@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { matchStatusBarColor } from "../utils/device";
-import { EventName, events } from "zmp-sdk";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { authorize, EventName, events, getUserInfo } from "zmp-sdk";
 import { useNavigate, useSnackbar } from "zmp-ui";
-import { useAtom } from "jotai";
 
-import { cartAtom } from "../state";
 import { Cart } from "../types/cart";
+import { matchStatusBarColor } from "../utils/device";
+import { cartAtom, isUserAuthorizedAtom, userInfoAtom } from "../state";
 
 export function useMatchStatusTextColor(visible?: boolean) {
   const changedRef = useRef(false);
@@ -38,28 +38,29 @@ export function useVirtualKeyboardVisible() {
 
 export const useHandlePayment = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     events.on(EventName.OpenApp, (data) => {
       if (data?.path) {
-        navigate(data?.path, {
-          state: data,
-        });
+        navigate(data?.path, { state: data });
       }
     });
 
-    events.on(EventName.OnDataCallback, (resp) => {
-      const { appTransID, eventType } = resp;
+    events.on(EventName.OnDataCallback, (res) => {
+      const { appTransID, eventType } = res;
+
       if (appTransID || eventType === "PAY_BY_CUSTOM_METHOD") {
-        navigate("/result", {
-          state: resp,
-        });
+        navigate("/result", { state: res });
       }
     });
 
     events.on(EventName.PaymentClose, (data = {}) => {
       const { zmpOrderId } = data;
+
       navigate("/result", {
-        state: { data: { zmpOrderId } },
+        state: {
+          data: { zmpOrderId },
+        },
       });
     });
   }, []);
@@ -89,4 +90,24 @@ export function useLocalStorageCart() {
   useEffect(() => {
     window.localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+}
+
+export function useAuthInquiryOnStartup() {
+  const isUserAuthorized = useAtomValue(isUserAuthorizedAtom);
+  const setUserInfo = useSetAtom(userInfoAtom);
+
+  useEffect(() => {
+    if (isUserAuthorized) return;
+
+    setTimeout(async () => {
+      const authResult = await authorize({
+        scopes: ["scope.userInfo"],
+      });
+
+      if (!authResult["scope.userInfo"]) return;
+
+      const getUserInfoResult = await getUserInfo();
+      setUserInfo(getUserInfoResult.userInfo);
+    }, 1500);
+  }, []);
 }
