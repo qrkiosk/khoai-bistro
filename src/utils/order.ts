@@ -75,3 +75,13 @@ export const buildOrder = ({
   customer,
   details: buildOrderDetails(cart),
 });
+
+export const genErrorToast = (opts: {
+  title: string;
+  description: string;
+}) => ({
+  ...opts,
+  status: "error" as const,
+  duration: 8000,
+  isClosable: true,
+});

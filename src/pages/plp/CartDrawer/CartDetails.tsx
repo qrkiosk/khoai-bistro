@@ -7,8 +7,6 @@ import {
   Grid,
   GridItem,
   Heading,
-  Radio,
-  RadioGroup,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -23,7 +21,6 @@ import {
   userNameAtom,
   setPaymentTypeAtom,
 } from "../../../state";
-import { PaymentType } from "../../../types/payment";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import {
   calcItemTotalAmount,
@@ -233,22 +230,6 @@ const CartDetails = () => {
               </Text>
             </GridItem>
           </Grid>
-        </Box>
-        <Divider />
-
-        <Box p={4} bgColor="var(--zmp-background-white)">
-          <Heading size="sm">Phương thức thanh toán</Heading>
-          <Box mt={3}>
-            <RadioGroup
-              value={cart.payment.paymentType}
-              onChange={setPaymentType}
-            >
-              <Stack rowGap={2}>
-                <Radio value={PaymentType.CASH}>Tiền mặt</Radio>
-                <Radio value={PaymentType.MOMO}>Ví MoMo</Radio>
-              </Stack>
-            </RadioGroup>
-          </Box>
         </Box>
         <Divider />
       </Box>

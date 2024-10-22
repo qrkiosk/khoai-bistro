@@ -1,11 +1,17 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { useAtomValue } from "jotai";
 import { Box, Button, useBoolean, useToast } from "@chakra-ui/react";
 import { Payment } from "zmp-sdk";
 
-import { cartAtom, tableInfoAtom, userInfoAtom } from "../../../state";
+import {
+  cartAtom,
+  storeInfoAtom,
+  tableInfoAtom,
+  userInfoAtom,
+} from "../../../state";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
-import { buildOrder } from "../../../utils/order";
+import { withThousandSeparators } from "../../../utils/number";
+import { buildOrder, genErrorToast } from "../../../utils/order";
 import {
   createMerchantSideOrder,
   queryMerchantSideOrder,
@@ -16,29 +22,28 @@ const PlaceOrderButton = () => {
   const [isLoading, { on: showLoading, off: hideLoading }] = useBoolean();
 
   const { data: table } = useAtomValue(tableInfoAtom);
+  const { data: store } = useAtomValue(storeInfoAtom);
   const cart = useAtomValue(cartAtom);
   const customer = useAtomValue(userInfoAtom);
 
-  const onClickPlaceOrder = useCallback(async () => {
+  const onClickPlaceOrder = async () => {
     if (table == null) {
-      toast({
-        title: "Chưa thể đặt đơn vào lúc này.",
-        description: "Lỗi: Thiếu thông tin bàn hoặc quán.",
-        status: "error",
-        duration: 8000,
-        isClosable: true,
-      });
+      toast(
+        genErrorToast({
+          title: "Chưa thể đặt đơn vào lúc này.",
+          description: "Lỗi: Thiếu thông tin bàn hoặc quán.",
+        })
+      );
       return;
     }
 
     if (customer == null) {
-      toast({
-        title: "Chưa thể đặt đơn vào lúc này.",
-        description: "Lỗi: Thiếu thông tin khách hàng.",
-        status: "error",
-        duration: 8000,
-        isClosable: true,
-      });
+      toast(
+        genErrorToast({
+          title: "Chưa thể đặt đơn vào lúc này.",
+          description: "Lỗi: Thiếu thông tin khách hàng.",
+        })
+      );
       return;
     }
 
@@ -47,30 +52,46 @@ const PlaceOrderButton = () => {
     try {
       const orderData = buildOrder({ table, customer, cart });
       const createMSOrderResult = await createMerchantSideOrder(orderData);
-      const { id: orderId, companyId, storeId } = createMSOrderResult.data.data;
+      const {
+        id: merchantSideOrderId,
+        companyId,
+        storeId,
+      } = createMSOrderResult.data.data;
 
       const queryMSOrderResult = await queryMerchantSideOrder({
-        orderId,
+        orderId: merchantSideOrderId,
         companyId,
         storeId,
       });
       const merchantSideOrder = queryMSOrderResult.data.data;
-      console.log(merchantSideOrder);
 
-      // TODO: Call Payment.createOrder here to create a Zalo-side order
-      // and proceed to show payment list
-    } catch (error: any) {
-      toast({
-        title: "Xảy ra lỗi trong quá trình lên đơn 😢",
-        description: error?.message,
-        status: "error",
-        duration: 8000,
-        isClosable: true,
+      const paymentResult = await Payment.createOrder({
+        desc: `Thanh toán ${withThousandSeparators(
+          merchantSideOrder.totalAmount
+        )} cho ${store?.name}`,
+        item: merchantSideOrder.details.map((item) => ({
+          id: item.id,
+          amount: item.totalAmount,
+        })),
+        amount: 1000,
       });
+
+      const { orderId: paymentOrderId, messageToken } = paymentResult;
+      console.log("Payment.createOrder success", {
+        paymentOrderId,
+        messageToken,
+      });
+    } catch (error: any) {
+      toast(
+        genErrorToast({
+          title: "Xảy ra lỗi trong quá trình tạo đơn hàng 😢",
+          description: error?.message,
+        })
+      );
     } finally {
       hideLoading();
     }
-  }, [table, customer, cart]);
+  };
 
   return (
     <Box
