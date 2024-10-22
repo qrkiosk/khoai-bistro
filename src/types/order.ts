@@ -7,7 +7,7 @@ export interface Order {
   companyId: number;
   storeId: number;
   customer: UserInfo;
-  paymentType: PaymentType;
+  paymentType: PaymentType | null;
   sourceType: ShippingType;
   tableId: number;
   tableName: string;
@@ -50,7 +50,7 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
   shiftEmployeeId: null;
   tableId: number;
   tableName: string;
-  paymentType: "MOMO";
+  paymentType: PaymentType | null;
   sourceType: "ON_SITE";
   amount: number;
   taxAmount: number;

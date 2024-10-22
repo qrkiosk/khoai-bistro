@@ -17,7 +17,7 @@ const Layout = () => {
 
     setTimeout(async () => {
       const authResult = await authorize({
-        scopes: ["scope.userInfo" /*, "scope.userPhonenumber" */],
+        scopes: ["scope.userInfo"],
       });
 
       if (!authResult["scope.userInfo"]) return;

@@ -75,8 +75,8 @@ const PlaceOrderButton = () => {
         })),
         amount: 1000,
       });
-
       const { orderId: paymentOrderId, messageToken } = paymentResult;
+
       console.log("Payment.createOrder success", {
         paymentOrderId,
         messageToken,

@@ -13,7 +13,7 @@ export interface CartProductVariant extends BaseProductVariant {
 export interface Cart {
   items: CartProductVariant[];
   payment: {
-    paymentType: PaymentType;
+    paymentType: PaymentType | null;
   };
   shipping: {
     shippingType: ShippingType;

@@ -264,7 +264,7 @@ export const cartAtom = atomWithStorage<Cart>(
   "cachedCart",
   {
     items: [],
-    payment: { paymentType: PaymentType.MOMO },
+    payment: { paymentType: null },
     shipping: { shippingType: ShippingType.ON_SITE },
   },
   undefined,
