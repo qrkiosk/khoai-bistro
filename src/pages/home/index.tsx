@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Box, Spinner } from "@chakra-ui/react";
 import { Page, useNavigate } from "zmp-ui";
 
-import { getTestSearchParams } from "../utils/product";
+import { getTestSearchParams } from "../../utils/product";
 
 const HomePage = () => {
   const navigate = useNavigate();

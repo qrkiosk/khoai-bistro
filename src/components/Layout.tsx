@@ -2,12 +2,13 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 
-import { useAuthInquiryOnStartup } from "../hooks";
-import HomePage from "../pages";
+import { useAuthInquiryOnStartup, useHandlePayment } from "../hooks";
+import HomePage from "../pages/home";
 import ProductListPage from "../pages/plp";
 
 const Layout = () => {
   useAuthInquiryOnStartup();
+  useHandlePayment();
 
   return (
     <Box display="flex" flexDir="column" className="h-screen page-content">
