@@ -12,6 +12,7 @@ import {
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { withThousandSeparators } from "../../../utils/number";
 import { buildOrder, genErrorToast } from "../../../utils/order";
+import { delay } from "../../../utils";
 import {
   createMerchantSideOrder,
   queryMerchantSideOrder,
@@ -27,65 +28,68 @@ const PlaceOrderButton = () => {
   const customer = useAtomValue(userInfoAtom);
 
   const onClickPlaceOrder = async () => {
-    if (table == null) {
-      toast(
-        genErrorToast({
-          title: "Chưa thể đặt đơn vào lúc này.",
-          description: "Lỗi: Thiếu thông tin bàn hoặc quán.",
-        })
-      );
-      return;
-    }
-
-    if (customer == null) {
-      toast(
-        genErrorToast({
-          title: "Chưa thể đặt đơn vào lúc này.",
-          description: "Lỗi: Thiếu thông tin khách hàng.",
-        })
-      );
-      return;
-    }
-
     showLoading();
 
     try {
+      if (table == null) {
+        throw new Error(
+          "Chưa thể tiến hành đặt đơn: Thiếu thông tin bàn hoặc quán."
+        );
+      }
+
+      if (customer == null) {
+        throw new Error(
+          "Chưa thể tiến hành đặt đơn: Thiếu thông tin khách hàng."
+        );
+      }
+
       const orderData = buildOrder({ table, customer, cart });
       const createMSOrderResult = await createMerchantSideOrder(orderData);
-      const {
-        id: merchantSideOrderId,
-        companyId,
-        storeId,
-      } = createMSOrderResult.data.data;
+      const { id: orderId, companyId, storeId } = createMSOrderResult.data.data;
+
+      await delay(1000); // wait for merchant server to complete all operations related to the order
 
       const queryMSOrderResult = await queryMerchantSideOrder({
-        orderId: merchantSideOrderId,
+        orderId,
         companyId,
         storeId,
       });
       const merchantSideOrder = queryMSOrderResult.data.data;
 
+      if (!merchantSideOrder.isActive) {
+        throw new Error(
+          "Xảy ra lỗi trong quá trình tạo đơn ở server, quý khách vui lòng thử lại."
+        );
+      }
+
       const paymentResult = await Payment.createOrder({
-        desc: `Thanh toán ${withThousandSeparators(
-          merchantSideOrder.totalAmount
-        )} cho ${store?.name}`,
+        desc: `Thanh toán đơn hàng ${
+          merchantSideOrder.code
+        } số tiền ${withThousandSeparators(merchantSideOrder.totalAmount)}`,
         item: merchantSideOrder.details.map((item) => ({
           id: item.id,
           amount: item.totalAmount,
         })),
-        amount: 1000,
+        amount: 1_000_000, // TODO: Use actual order amount
+        extradata: JSON.stringify({
+          storeName: store?.name,
+          storeId,
+          companyId,
+          orderId,
+          customerId: customer.id,
+        }),
       });
-      const { orderId: paymentOrderId, messageToken } = paymentResult;
+      const { orderId: zmpOrderId, messageToken } = paymentResult;
 
       console.log("Payment.createOrder success", {
-        paymentOrderId,
+        paymentOrderId: zmpOrderId,
         messageToken,
       });
     } catch (error: any) {
       console.log(error);
       toast(
         genErrorToast({
-          title: "Xảy ra lỗi trong quá trình tạo đơn hàng 😢",
+          title: "Tạo đơn hàng không thành công",
           description: error?.message,
         })
       );

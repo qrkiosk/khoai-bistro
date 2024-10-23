@@ -69,12 +69,12 @@ export const useHandlePayment = () => {
       }
     });
 
-    events.on(EventName.OnDataCallback, (res) => {
-      const { appTransID, eventType } = res;
+    events.on(EventName.OnDataCallback, (data) => {
+      const { appTransID, eventType } = data;
 
       if (appTransID || eventType === "PAY_BY_CUSTOM_METHOD") {
         navigate("/result", {
-          state: { ...res, redirectSearch: plpSearchParams.search },
+          state: { ...data, redirectSearch: plpSearchParams.search },
         });
       }
     });

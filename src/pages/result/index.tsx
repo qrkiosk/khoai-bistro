@@ -44,7 +44,7 @@ const CheckoutResultPage = () => {
         data,
         success: (res) => {
           if (res.resultCode === 0) {
-            timeout = setTimeout(checkStatus, 3000); // Payment still in progress, continute to wait for 3s
+            timeout = setTimeout(checkStatus, 3000); // Payment still in progress, retry after 3s
           }
           setPaymentResult(res);
         },
@@ -59,7 +59,7 @@ const CheckoutResultPage = () => {
   }, []);
 
   useEffect(() => {
-    if (paymentResult != null && paymentResult.resultCode >= 0) {
+    if (paymentResult?.resultCode === 1) {
       closeCart();
       setCart(RESET);
     }
@@ -83,7 +83,7 @@ const CheckoutResultPage = () => {
               );
             }}
           >
-            {paymentResult.resultCode === 1 ? "Hoàn tất" : "Đóng"}
+            {paymentResult.resultCode === 1 ? "Hoàn tất" : "Thử lại"}
           </Button>
         </Box>
       )}
