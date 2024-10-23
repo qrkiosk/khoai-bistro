@@ -82,6 +82,7 @@ const PlaceOrderButton = () => {
         messageToken,
       });
     } catch (error: any) {
+      console.log(error);
       toast(
         genErrorToast({
           title: "Xảy ra lỗi trong quá trình tạo đơn hàng 😢",
