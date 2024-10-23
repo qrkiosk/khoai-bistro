@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { authorize, EventName, events, getUserInfo } from "zmp-sdk";
 import { useNavigate, useSnackbar } from "zmp-ui";
@@ -7,6 +7,7 @@ import { Cart } from "../types/cart";
 import { matchStatusBarColor } from "../utils/device";
 import {
   cartAtom,
+  isCartDrawerOpenAtom,
   isUserAuthorizedAtom,
   plpSearchParamsAtom,
   userInfoAtom,
@@ -40,6 +41,14 @@ export function useVirtualKeyboardVisible() {
 
   return visible;
 }
+
+export const useCartDrawer = () => {
+  const [isOpen, setIsOpen] = useAtom(isCartDrawerOpenAtom);
+  const onOpen = useCallback(() => setIsOpen(true), []);
+  const onClose = useCallback(() => setIsOpen(false), []);
+
+  return { isOpen, onOpen, onClose };
+};
 
 export const usePlpSearchParams = () => {
   return useAtomValue(plpSearchParamsAtom);

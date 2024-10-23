@@ -21,6 +21,7 @@ import {
   userNameAtom,
   setPaymentTypeAtom,
 } from "../../../state";
+import { useCartDrawer } from "../../../hooks";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import {
   calcItemTotalAmount,
@@ -28,7 +29,6 @@ import {
 } from "../../../utils/cart";
 import { DisplayPrice } from "../../../components/prices";
 import Divider from "../../../components/Divider";
-import { useCartDrawer } from "./localState";
 import PlaceOrderButton from "./PlaceOrderButton";
 
 const CartDetails = () => {

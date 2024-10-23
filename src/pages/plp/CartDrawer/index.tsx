@@ -14,9 +14,9 @@ import {
 } from "@chakra-ui/react";
 
 import { cartAtom, cartSubtotalAtom } from "../../../state";
+import { useCartDrawer } from "../../../hooks";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { DisplayPrice } from "../../../components/prices";
-import { useCartDrawer } from "./localState";
 import CartDetails from "./CartDetails";
 
 const CartDrawer = () => {

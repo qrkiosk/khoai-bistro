@@ -277,6 +277,8 @@ export const setVariantNoteAtom = atom(null, (get, set, note: string) => {
   set(productVariantAtom, { ...productVariant, note });
 });
 
+export const isCartDrawerOpenAtom = atom(false);
+
 export const cartAtom = atomWithStorage<Cart>(
   "cachedCart",
   {

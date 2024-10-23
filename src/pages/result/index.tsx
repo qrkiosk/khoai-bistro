@@ -7,10 +7,10 @@ import { Page, useNavigate } from "zmp-ui";
 import { Box, Button } from "@chakra-ui/react";
 
 import { PaymentResult } from "../../types/order";
+import { useCartDrawer } from "../../hooks";
 import { APP_ACCENT_COLOR } from "../../utils/constants";
 import { cartAtom } from "../../state";
 import ResultAnnouncement from "./ResultAnnouncement";
-import { useCartDrawer } from "../plp/CartDrawer/localState";
 
 type LocationType = Location<{
   path?: string;
