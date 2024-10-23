@@ -34,6 +34,23 @@ export const tableIdAtom = atom<number | null>(null);
 export const companyIdAtom = atom<number | null>(null);
 export const storeIdAtom = atom<number | null>(null);
 
+export const plpSearchParamsAtom = atom((get) => {
+  const tableId = get(tableIdAtom);
+  const storeId = get(storeIdAtom);
+  const companyId = get(companyIdAtom);
+
+  const plpSearchParams = new URLSearchParams({
+    tableId: (tableId ?? "").toString(),
+    storeId: (storeId ?? "").toString(),
+    companyId: (companyId ?? "").toString(),
+  });
+
+  return {
+    isEmpty: tableId == null || storeId == null,
+    search: plpSearchParams.toString(),
+  };
+});
+
 export const tableInfoAtom = atomWithQuery<
   StoreTable | null,
   Error,

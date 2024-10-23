@@ -38,7 +38,7 @@ const NonMandatoryOption = ({
         {option.name}
       </Heading>
       <CheckboxGroup value={selectedDetails} onChange={setSelectedDetails}>
-        <Stack rowGap={2}>
+        <Stack rowGap={3}>
           {option.details.map((detail, idx) => {
             const isLast = idx === option.details.length - 1;
 
@@ -63,7 +63,7 @@ const NonMandatoryOption = ({
                     </Text>
                   )}
                 </Box>
-                {!isLast && <LineDivider mt={2} />}
+                {!isLast && <LineDivider mt={3} />}
               </Box>
             );
           })}

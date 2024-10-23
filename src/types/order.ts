@@ -1,3 +1,5 @@
+import { AsyncCallbackFailObject, CheckTransactionReturns } from "zmp-sdk";
+
 import { CreateUpdateTrace } from "./common";
 import { PaymentType } from "./payment";
 import { ShippingType } from "./shipping";
@@ -82,3 +84,5 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
   }>;
   mac: string;
 }
+
+export type PaymentResult = CheckTransactionReturns | AsyncCallbackFailObject;

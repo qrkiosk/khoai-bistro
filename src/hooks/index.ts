@@ -5,7 +5,12 @@ import { useNavigate, useSnackbar } from "zmp-ui";
 
 import { Cart } from "../types/cart";
 import { matchStatusBarColor } from "../utils/device";
-import { cartAtom, isUserAuthorizedAtom, userInfoAtom } from "../state";
+import {
+  cartAtom,
+  isUserAuthorizedAtom,
+  plpSearchParamsAtom,
+  userInfoAtom,
+} from "../state";
 
 export function useMatchStatusTextColor(visible?: boolean) {
   const changedRef = useRef(false);
@@ -36,13 +41,22 @@ export function useVirtualKeyboardVisible() {
   return visible;
 }
 
+export const usePlpSearchParams = () => {
+  return useAtomValue(plpSearchParamsAtom);
+};
+
 export const useHandlePayment = () => {
   const navigate = useNavigate();
+  const plpSearchParams = usePlpSearchParams();
 
   useEffect(() => {
+    if (plpSearchParams.isEmpty) return;
+
     events.on(EventName.OpenApp, (data) => {
       if (data?.path) {
-        navigate(data?.path, { state: data });
+        navigate(data?.path || "/result", {
+          state: { ...data, redirectSearch: plpSearchParams.search },
+        });
       }
     });
 
@@ -50,7 +64,9 @@ export const useHandlePayment = () => {
       const { appTransID, eventType } = res;
 
       if (appTransID || eventType === "PAY_BY_CUSTOM_METHOD") {
-        navigate("/result", { state: res });
+        navigate("/result", {
+          state: { ...res, redirectSearch: plpSearchParams.search },
+        });
       }
     });
 
@@ -59,11 +75,11 @@ export const useHandlePayment = () => {
 
       navigate("/result", {
         state: {
-          data: { zmpOrderId },
+          data: { zmpOrderId, redirectSearch: plpSearchParams.search },
         },
       });
     });
-  }, []);
+  }, [plpSearchParams.search]);
 };
 
 export function useToBeImplemented() {
@@ -92,7 +108,7 @@ export function useLocalStorageCart() {
   }, [cart]);
 }
 
-export function useAuthInquiryOnStartup() {
+export const useAuthInquiryOnStartup = () => {
   const isUserAuthorized = useAtomValue(isUserAuthorizedAtom);
   const setUserInfo = useSetAtom(userInfoAtom);
 
@@ -110,4 +126,4 @@ export function useAuthInquiryOnStartup() {
       setUserInfo(getUserInfoResult.userInfo);
     }, 1500);
   }, []);
-}
+};

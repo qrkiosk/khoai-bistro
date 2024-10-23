@@ -62,7 +62,7 @@ const CartDrawer = () => {
         onClose={onClose}
       >
         <DrawerOverlay />
-        <DrawerContent h="100%" overflowY="auto" className="page-content">
+        <DrawerContent h="100%" overflowY="auto" className="safe-area">
           <Box>
             <IconButton
               ml={3}

@@ -13,7 +13,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <Page className="page">
+    <Page>
       <Box h="100%" display="flex" alignItems="center" justifyContent="center">
         <Spinner size="lg" />
       </Box>

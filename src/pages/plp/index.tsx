@@ -11,11 +11,9 @@ import CartDrawer from "./CartDrawer";
 
 const ProductListPage = () => {
   useAtom(searchParamIdsQueryEffect);
+
   return (
-    <Page
-      style={{ minHeight: "unset" }}
-      className="relative flex-1 flex flex-col bg-white"
-    >
+    <Page className="flex-1 flex flex-col relative bg-white">
       <Header />
       <MainContent />
       <CategoriesDrawer />

@@ -1,10 +1,10 @@
-.page {
-  padding: 16px 16px 96px 16px;
-}
-
-.page-content {
+.safe-area {
   padding-top: var(--zaui-safe-area-inset-top, 16px);
   padding-bottom: var(--zaui-safe-area-inset-bottom, 16px);
+}
+
+.safe-area .zaui-page {
+  min-height: unset;
 }
 
 .section-container {
