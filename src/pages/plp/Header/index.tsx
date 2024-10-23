@@ -62,7 +62,7 @@ const HeaderContent = () => {
     >
       <GridItem colSpan={2}>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box display="flex" alignItems="flex-start" className="space-x-2">
+          <Box display="flex" alignItems="center" className="space-x-2">
             <Image className="w-10 h-10 rounded-lg border-inset" src={logo} />
             <Box>
               <Heading size="xs" fontWeight="semibold">

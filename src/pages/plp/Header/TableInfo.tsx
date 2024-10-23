@@ -22,19 +22,9 @@ const TableInfo = () => {
   if (isLoading) return <Spinner size="sm" />;
 
   return (
-    <Box
-      w="100%"
-      h="100%"
-      display="flex"
-      alignItems="center"
-      whiteSpace="wrap"
-      lineHeight={1.2}
-    >
-      <Icon size={20} icon="zi-location" />
-      <Text fontSize="sm" fontWeight="normal" ml={1}>
-        {`${storeInfo.name} – Bàn ${tableInfo.name}`}
-      </Text>
-    </Box>
+    <Text fontSize="sm" fontWeight="normal" whiteSpace="wrap" lineHeight={1.3}>
+      {`${storeInfo.name} – Bàn ${tableInfo.name}`}
+    </Text>
   );
 };
 
