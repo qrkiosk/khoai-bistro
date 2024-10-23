@@ -113,7 +113,7 @@ const PlaceOrderButton = () => {
         isLoading={isLoading}
         onClick={onClickPlaceOrder}
       >
-        Xác nhận đặt đơn
+        Đặt đơn
       </Button>
     </Box>
   );

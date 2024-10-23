@@ -27,7 +27,7 @@ const ResultTemplate = ({ title, message, icon }: ResultTemplateProps) => (
 );
 
 const ResultAnnouncement = ({ data }: CheckoutResultProps) => {
-  if (data == null || data.resultCode === 0) {
+  if (data == null) {
     return (
       <ResultTemplate
         message="Hệ thống đang xử lý thanh toán, vui lòng chờ trong giây lát..."
@@ -49,7 +49,7 @@ const ResultAnnouncement = ({ data }: CheckoutResultProps) => {
   return (
     <ResultTemplate
       title="Thanh toán thất bại"
-      message="Có lỗi trong quá trình xử lý, vui lòng kiểm tra lại hoặc liên hệ quán để được hỗ trợ."
+      message="Có lỗi trong quá trình xử lý, vui lòng thử lại hoặc liên hệ quán để được hỗ trợ."
       icon={<IconPaymentFail />}
     />
   );

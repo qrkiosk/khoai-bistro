@@ -23,7 +23,7 @@ const TableInfo = () => {
 
   return (
     <Text fontSize="sm" fontWeight="normal" whiteSpace="wrap" lineHeight={1.3}>
-      {`${storeInfo.name} – Bàn ${tableInfo.name}`}
+      {`${storeInfo.name}, Bàn ${tableInfo.name}`}
     </Text>
   );
 };

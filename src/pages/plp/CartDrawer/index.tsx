@@ -17,6 +17,7 @@ import { cartAtom, cartSubtotalAtom } from "../../../state";
 import { useCartDrawer } from "../../../hooks";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { DisplayPrice } from "../../../components/prices";
+import Divider from "../../../components/Divider";
 import CartDetails from "./CartDetails";
 
 const CartDrawer = () => {
@@ -68,13 +69,15 @@ const CartDrawer = () => {
               ml={3}
               isRound={true}
               autoFocus={false}
-              variant="outline"
+              variant="ghost"
               aria-label="Close"
               bgColor="var(--zmp-background-white)"
+              _hover={{ bg: "none" }}
               fontSize="md"
-              icon={<Icon icon="zi-close" />}
+              icon={<Icon icon="zi-arrow-left" />}
               onClick={onClose}
             />
+            <Divider />
           </Box>
           {isCartEmpty ? (
             <Box

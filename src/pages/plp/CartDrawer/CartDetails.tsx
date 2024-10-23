@@ -128,7 +128,7 @@ const CartDetails = () => {
                             _hover={{ bg: "none" }}
                             onClick={onClickEditItem}
                           >
-                            Chỉnh sửa
+                            Sửa
                           </Button>
                           <Button
                             colorScheme={APP_ACCENT_COLOR}
