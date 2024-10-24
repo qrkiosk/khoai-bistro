@@ -58,9 +58,13 @@ export const useHandlePayment = () => {
   useEffect(() => {
     if (!verifyLocationSearch(search)) return;
 
+    const searchParams = new URLSearchParams(search);
+    searchParams.set("checkoutRedirect", "true");
+    const redirectSearch = searchParams.toString();
+
     events.on(EventName.OpenApp, (data: { path: string }) => {
       navigate(data?.path || "/result", {
-        state: { ...data, redirectSearch: search },
+        state: { ...data, redirectSearch },
       });
     });
 
@@ -69,7 +73,7 @@ export const useHandlePayment = () => {
 
       if (appTransID || eventType === "PAY_BY_CUSTOM_METHOD") {
         navigate("/result", {
-          state: { ...data, redirectSearch: search },
+          state: { ...data, redirectSearch },
         });
       }
     });
@@ -80,7 +84,7 @@ export const useHandlePayment = () => {
       navigate("/result", {
         state: {
           data: { zmpOrderId },
-          redirectSearch: search,
+          redirectSearch,
         },
       });
     });

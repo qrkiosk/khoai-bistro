@@ -47,7 +47,7 @@ const PlaceOrderButton = () => {
       const createMSOrderResult = await createMerchantSideOrder(orderData);
       const { id: orderId, companyId, storeId } = createMSOrderResult.data.data;
 
-      await delay(1000); // wait for merchant server to complete all operations related to the order
+      await delay(600); // wait for merchant server to complete all operations related to the order
 
       const queryMSOrderResult = await queryMerchantSideOrder({
         orderId,
@@ -70,7 +70,7 @@ const PlaceOrderButton = () => {
           id: item.id,
           amount: item.totalAmount,
         })),
-        amount: 1_000_000, // TODO: Use actual order amount
+        amount: 1000, // TODO: Use actual order amount
         extradata: JSON.stringify({
           storeName: store?.name,
           storeId,

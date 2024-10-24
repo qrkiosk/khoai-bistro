@@ -50,17 +50,18 @@ const CheckoutResultPage = () => {
 
     let timeout: number;
     const checkStatus = () => {
-      checkTransAttempts.current += 1;
       Payment.checkTransaction({
         data,
         success: (data) => {
           setPaymentResult(data);
           if (data.resultCode === 0 && checkTransAttempts.current < 5) {
-            timeout = setTimeout(checkStatus, 3000); // Payment still in progress, retry after 3s
+            // Transaction still in progress, retry every 3s for 5 times
+            timeout = setTimeout(checkStatus, 3000);
           }
         },
         fail: setPaymentResult,
       });
+      checkTransAttempts.current += 1;
     };
     checkStatus();
 
@@ -94,7 +95,7 @@ const CheckoutResultPage = () => {
               );
             }}
           >
-            {paymentResult.resultCode === 1 ? "Hoàn tất" : "Thử lại"}
+            {paymentResult.resultCode === 1 ? "Hoàn tất" : "Đóng"}
           </Button>
         </Box>
       )}
