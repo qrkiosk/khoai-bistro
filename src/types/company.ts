@@ -15,6 +15,7 @@ export interface Store extends CreateUpdateTrace {
   id: number;
   companyId: number;
   companyName: string;
+  companyAvatar: string;
   name: string;
   phone: string;
   address: string;

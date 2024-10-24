@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
-import { createStore, Provider as JotaiProvider } from "jotai";
-import { DevTools } from "jotai-devtools";
+import { Provider as JotaiProvider } from "jotai";
 import "jotai-devtools/styles.css";
 import { useHydrateAtoms } from "jotai/react/utils";
 import { queryClientAtom } from "jotai-tanstack-query";
@@ -12,7 +11,6 @@ import ConfigProvider from "./ConfigProvider";
 import Layout from "./Layout";
 
 const queryClient = new QueryClient();
-const customStore = createStore();
 
 const HydrateAtoms = ({ children }: { children: ReactNode }) => {
   useHydrateAtoms([[queryClientAtom, queryClient]]);
@@ -22,8 +20,7 @@ const HydrateAtoms = ({ children }: { children: ReactNode }) => {
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <JotaiProvider store={customStore}>
-        <DevTools store={customStore} />
+      <JotaiProvider>
         <HydrateAtoms>
           <ChakraProvider>
             <ConfigProvider>

@@ -14,8 +14,11 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 
-import logo from "../../../static/icons/logo.png";
-import { categoryNameInViewAtom, userNameAtom } from "../../../state";
+import {
+  categoryNameInViewAtom,
+  storeInfoAtom,
+  userNameAtom,
+} from "../../../state";
 import { useCategoryDrawer } from "../localState";
 import {
   inputAtom,
@@ -34,6 +37,7 @@ const HeaderContent = () => {
   } = useSearchMode();
   const categoryNameInView = useAtomValue(categoryNameInViewAtom);
   const userName = useAtomValue(userNameAtom);
+  const { data: storeInfo } = useAtomValue(storeInfoAtom);
 
   const onChangeInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value),
@@ -52,9 +56,17 @@ const HeaderContent = () => {
       rowGap={2}
     >
       <GridItem colSpan={2}>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          pl={2.5}
+        >
           <Box display="flex" alignItems="center" className="space-x-2">
-            <Image className="w-10 h-10 rounded-lg border-inset" src={logo} />
+            <Image
+              className="w-10 h-10 rounded-lg border-inset"
+              src={storeInfo?.companyAvatar}
+            />
             <Box>
               <Heading size="xs" fontWeight="semibold">
                 {userName ? `Xin chào, ${userName}!` : "Xin chào quý khách!"}
@@ -70,7 +82,7 @@ const HeaderContent = () => {
 
       <GridItem colSpan={3}>
         {isInSearchMode ? (
-          <InputGroup size="sm">
+          <InputGroup size="sm" px={2.5}>
             <Input
               autoFocus
               placeholder="Nhập từ khoá"
@@ -78,7 +90,7 @@ const HeaderContent = () => {
               value={input}
               onChange={onChangeInput}
             />
-            <InputRightElement>
+            <InputRightElement right="10px">
               <CloseButton
                 size="sm"
                 _hover={{ bg: "none" }}
@@ -87,7 +99,12 @@ const HeaderContent = () => {
             </InputRightElement>
           </InputGroup>
         ) : (
-          <Box display="flex" alignItems="center" className="space-x-2">
+          <Box
+            display="flex"
+            alignItems="center"
+            className="space-x-2"
+            px={2.5}
+          >
             <Box display="flex" flexGrow={1}>
               <Button
                 variant="outline"
@@ -121,7 +138,12 @@ const Header = () => {
     <ZHeader
       showBackIcon={false}
       title={(<HeaderContent />) as unknown as string}
-      style={{ position: "sticky", height: "auto", padding: "8px 12px" }}
+      style={{
+        position: "sticky",
+        height: "auto",
+        padding: "8px 0 2px",
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
     />
   );
 };

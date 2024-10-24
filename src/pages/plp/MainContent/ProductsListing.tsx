@@ -30,9 +30,9 @@ ProductsListing.Banner = forwardRef<
   const [emblaRef] = useEmblaCarousel({ dragFree: true });
 
   return (
-    <Box bgColor="var(--zmp-background-white)" px={6} py={5}>
+    <Box bgColor="var(--zmp-background-white)" py={5}>
       <Box ref={ref} id={category.id} />
-      <Heading as="p" size="md" fontWeight={500} mt={1} mb={4}>
+      <Heading as="p" size="md" fontWeight={500} px={6} mt={1} mb={2}>
         {category.name}
       </Heading>
       <Box className="embla">

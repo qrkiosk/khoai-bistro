@@ -30,7 +30,7 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
       p={2.5}
       onClick={selectProduct}
     >
-      <Box flexGrow={1} display="flex" position="relative">
+      <Box className="flex-1 flex relative space-x-2">
         <Image
           src={product.url}
           alt="Banner Product Image"
@@ -40,7 +40,7 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
           minW="96px"
           maxW="96px"
         />
-        <Box display="flex" flexDir="column" ml={2}>
+        <Box display="flex" flexDir="column">
           <Box flexGrow={1}>
             <Text>{product.name}</Text>
             <Text color="GrayText" fontSize="xs" className="two-line-ellipsis">
@@ -117,7 +117,7 @@ ProductItem.List = ({ product }: { product: Product }) => {
       variant="unstyled"
       onClick={selectProduct}
     >
-      <Box flexGrow={1} display="flex" position="relative">
+      <Box className="flex-1 flex relative space-x-2">
         <Image
           src={product.url}
           alt="List Product Image"
@@ -127,7 +127,7 @@ ProductItem.List = ({ product }: { product: Product }) => {
           minW="96px"
           maxW="96px"
         />
-        <Box display="flex" flexDir="column" ml={2}>
+        <Box display="flex" flexDir="column">
           <Box flexGrow={1}>
             <Text>{product.name}</Text>
             <Text color="GrayText" fontSize="xs" className="two-line-ellipsis">

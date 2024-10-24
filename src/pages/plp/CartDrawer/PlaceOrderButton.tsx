@@ -1,10 +1,11 @@
 import React from "react";
 import { useAtomValue } from "jotai";
-import { Box, Button, useBoolean, useToast } from "@chakra-ui/react";
+import { Box, Button, Text, useBoolean, useToast } from "@chakra-ui/react";
 import { Payment } from "zmp-sdk";
 
 import {
   cartAtom,
+  cartSubtotalAtom,
   storeInfoAtom,
   tableInfoAtom,
   userInfoAtom,
@@ -17,6 +18,7 @@ import {
   createMerchantSideOrder,
   queryMerchantSideOrder,
 } from "../../../api/order";
+import { DisplayPrice } from "../../../components/prices";
 
 const PlaceOrderButton = () => {
   const toast = useToast();
@@ -26,6 +28,7 @@ const PlaceOrderButton = () => {
   const { data: store } = useAtomValue(storeInfoAtom);
   const cart = useAtomValue(cartAtom);
   const customer = useAtomValue(userInfoAtom);
+  const subtotal = useAtomValue(cartSubtotalAtom);
 
   const onClickPlaceOrder = async () => {
     showLoading();
@@ -70,13 +73,14 @@ const PlaceOrderButton = () => {
           id: item.id,
           amount: item.totalAmount,
         })),
-        amount: 1000, // TODO: Use actual order amount
+        amount: merchantSideOrder.totalAmount,
         extradata: JSON.stringify({
           storeName: store?.name,
           storeId,
           companyId,
           orderId,
           customerId: customer.id,
+          orderCode: merchantSideOrder.code,
         }),
       });
       const { orderId: zmpOrderId, messageToken } = paymentResult;
@@ -105,6 +109,7 @@ const PlaceOrderButton = () => {
       right={0}
       bottom={0}
       bgColor="var(--zmp-background-white)"
+      boxShadow="0px -4px 6px rgba(0, 0, 0, 0.1)"
       p={3}
     >
       <Button
@@ -117,7 +122,12 @@ const PlaceOrderButton = () => {
         isLoading={isLoading}
         onClick={onClickPlaceOrder}
       >
-        Đặt đơn
+        <Box w="100%" display="flex" justifyContent="space-between">
+          <Text>Đặt đơn</Text>
+          <Text>
+            <DisplayPrice>{subtotal}</DisplayPrice>
+          </Text>
+        </Box>
       </Button>
     </Box>
   );

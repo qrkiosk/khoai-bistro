@@ -85,7 +85,8 @@ const ProductDetails = () => {
           alt=""
           objectFit="cover"
           w="100%"
-          maxHeight="250px"
+          minHeight="260px"
+          maxHeight="260px"
         />
 
         <Box p={4} bgColor="var(--zmp-background-white)">
@@ -138,7 +139,7 @@ const ProductDetails = () => {
               isDisabled={productVariantQty === minQty}
               onClick={() => updateProductVariantQty("DEC", minQty)}
             >
-              <Text fontSize="xl" color={APP_ACCENT_COLOR}>
+              <Text fontSize="xl" color="var(--chakra-colors-blue-500)">
                 –
               </Text>
             </Button>
@@ -146,7 +147,7 @@ const ProductDetails = () => {
               <Heading fontSize="xl">{productVariantQty}</Heading>
             </Box>
             <Button onClick={() => updateProductVariantQty("INC")}>
-              <Text fontSize="xl" color={APP_ACCENT_COLOR}>
+              <Text fontSize="xl" color="var(--chakra-colors-blue-500)">
                 ＋
               </Text>
             </Button>
@@ -161,6 +162,7 @@ const ProductDetails = () => {
         right={0}
         bottom={0}
         bgColor="var(--zmp-background-white)"
+        boxShadow="0px -4px 6px rgba(0, 0, 0, 0.1)"
         p={3}
       >
         {shouldRemoveFromCart ? (

@@ -3,16 +3,13 @@ import React, { FC, useMemo } from "react";
 import { Product } from "../../types/product";
 import { SelectedOptions } from "../../types/cart";
 import { calcFinalPrice } from "../../utils/product";
+import { withThousandSeparators } from "../../utils/number";
 
-const CURRENCY_SYMBOL = "";
-
-export const DisplayPrice: FC<{ children: number }> = ({ children }) => {
-  return (
-    <>
-      {CURRENCY_SYMBOL}
-      {children.toLocaleString()}
-    </>
-  );
+export const DisplayPrice: FC<{ children: number | string }> = ({
+  children,
+}) => {
+  if (typeof children === "string") return children;
+  return withThousandSeparators(children);
 };
 
 export const FinalPrice: FC<{

@@ -3,11 +3,11 @@
   margin: auto;
   --slide-height: 19rem;
   --slide-spacing: 1rem;
-  --slide-size: 88%;
+  --slide-size: 90%;
 }
 .embla__viewport {
   overflow: hidden;
-  padding: 4px;
+  padding: 8px 24px;
 }
 .embla__container {
   display: flex;

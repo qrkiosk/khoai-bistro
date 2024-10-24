@@ -35,6 +35,7 @@ const CartDrawer = () => {
           right={0}
           bottom={0}
           bgColor="var(--zmp-background-white)"
+          boxShadow="0px -4px 6px rgba(0, 0, 0, 0.1)"
           p={3}
         >
           <Button
