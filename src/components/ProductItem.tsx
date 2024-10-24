@@ -11,6 +11,7 @@ import { FinalPrice } from "./prices";
 const ProductItem = {} as {
   Banner: React.FC<{ product: Product }>;
   Grid: React.FC<{ product: Product }>;
+  List: React.FC<{ product: Product }>;
 };
 
 ProductItem.Banner = ({ product }: { product: Product }) => {
@@ -29,13 +30,14 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
       p={2.5}
       onClick={selectProduct}
     >
-      <Box display="flex" position="relative" maxWidth="calc(100%)">
+      <Box flexGrow={1} display="flex" position="relative">
         <Image
           src={product.url}
-          alt="Horizontal Product Image"
+          alt="Banner Product Image"
           loading="lazy"
           borderRadius="12px"
           objectFit="cover"
+          minW="96px"
           maxW="96px"
         />
         <Box display="flex" flexDir="column" ml={2}>
@@ -78,6 +80,7 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
         <Image
           loading="lazy"
           src={product.url}
+          alt="Grid Product Image"
           className="absolute left-0 right-0 top-0 bottom-0 w-full h-full object-cover object-center rounded-lg bg-skeleton"
         />
         <IconButton
@@ -88,8 +91,8 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
           aria-label="Add"
           size="sm"
           position="absolute"
-          right="6px"
-          bottom="6px"
+          right="4px"
+          bottom="4px"
           onClick={selectProduct}
         />
       </Box>
@@ -98,6 +101,57 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
         <FinalPrice>{product}</FinalPrice>
       </Text>
     </Box>
+  );
+};
+
+ProductItem.List = ({ product }: { product: Product }) => {
+  const setSelectedProductId = useSetAtom(selectedProductIdAtom);
+  const selectProduct = useCallback(() => {
+    setSelectedProductId(product.id);
+  }, [product.id]);
+
+  return (
+    <Card
+      direction="row"
+      overflow="hidden"
+      variant="unstyled"
+      onClick={selectProduct}
+    >
+      <Box flexGrow={1} display="flex" position="relative">
+        <Image
+          src={product.url}
+          alt="List Product Image"
+          loading="lazy"
+          borderRadius="12px"
+          objectFit="cover"
+          minW="96px"
+          maxW="96px"
+        />
+        <Box display="flex" flexDir="column" ml={2}>
+          <Box flexGrow={1}>
+            <Text>{product.name}</Text>
+            <Text color="GrayText" fontSize="xs" className="two-line-ellipsis">
+              {product.description}
+            </Text>
+          </Box>
+          <Text color="InfoText" fontWeight="semibold" fontSize="sm" pb={2}>
+            <FinalPrice>{product}</FinalPrice>
+          </Text>
+        </Box>
+        <IconButton
+          icon={<Icon size={14} icon="zi-plus" />}
+          isRound={true}
+          variant="solid"
+          colorScheme={APP_ACCENT_COLOR}
+          aria-label="Add"
+          size="sm"
+          position="absolute"
+          right={0}
+          bottom={0}
+          onClick={selectProduct}
+        />
+      </Box>
+    </Card>
   );
 };
 

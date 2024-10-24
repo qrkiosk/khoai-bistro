@@ -4,6 +4,7 @@ import { useAtomValue } from "jotai";
 import { Box, Text } from "@chakra-ui/react";
 import isEmpty from "lodash/isEmpty";
 
+import { CategoryTemplate } from "../../../types/product";
 import {
   isSearchQueryEmptyAtom,
   storeProductsByCategoryAtom,
@@ -44,13 +45,26 @@ const MainContent = () => {
         overflowY="auto"
         h="100%"
       >
-        {categories.map((category, index) => (
-          <CategoryItem
-            key={category.id}
-            category={category}
-            shouldShowBanner={index === 0}
-          />
-        ))}
+        {categories.map((category, index) => {
+          const template = (function () {
+            switch (index) {
+              case 0:
+                return CategoryTemplate.BANNER;
+              case 1:
+                return CategoryTemplate.GRID;
+              default:
+                return CategoryTemplate.LIST;
+            }
+          })();
+
+          return (
+            <CategoryItem
+              key={category.id}
+              category={category}
+              template={category.template ?? template}
+            />
+          );
+        })}
       </Box>
       <SearchResult />
     </Box>

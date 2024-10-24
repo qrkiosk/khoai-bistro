@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Divider as LineDivider } from "@chakra-ui/react";
 import useEmblaCarousel from "embla-carousel-react";
 
 import { CategoryWithProducts } from "../../../types/product";
@@ -16,6 +16,11 @@ const ProductsListing = {} as {
       category: CategoryWithProducts;
     } & React.RefAttributes<HTMLDivElement>
   >;
+  List: React.ForwardRefExoticComponent<
+    {
+      category: CategoryWithProducts;
+    } & React.RefAttributes<HTMLDivElement>
+  >;
 };
 
 ProductsListing.Banner = forwardRef<
@@ -27,7 +32,7 @@ ProductsListing.Banner = forwardRef<
   return (
     <Box bgColor="var(--zmp-background-white)" px={6} py={5}>
       <Box ref={ref} id={category.id} />
-      <Heading as="p" size="md" fontWeight={500} mt={1} mb={3}>
+      <Heading as="p" size="md" fontWeight={500} mt={1} mb={4}>
         {category.name}
       </Heading>
       <Box className="embla">
@@ -52,13 +57,39 @@ ProductsListing.Grid = forwardRef<
   return (
     <Box bgColor="var(--zmp-background-white)" px={6} py={5}>
       <Box ref={ref} id={category.id} />
-      <Heading as="p" size="md" fontWeight={500} mt={1} mb={2}>
+      <Heading as="p" size="md" fontWeight={500} mt={1} mb={4}>
         {category.name}
       </Heading>
       <Box className="grid grid-cols-2 gap-4">
         {category.products.map((product) => (
           <ProductItem.Grid key={product.id} product={product} />
         ))}
+      </Box>
+    </Box>
+  );
+});
+
+ProductsListing.List = forwardRef<
+  HTMLDivElement,
+  { category: CategoryWithProducts }
+>(({ category }, ref) => {
+  return (
+    <Box bgColor="var(--zmp-background-white)" px={6} py={5}>
+      <Box ref={ref} id={category.id} />
+      <Heading as="p" size="md" fontWeight={500} mt={1} mb={4}>
+        {category.name}
+      </Heading>
+      <Box className="flex flex-col">
+        {category.products.map((product, idx) => {
+          const isLast = idx === category.products.length - 1;
+
+          return (
+            <Box key={product.id}>
+              <ProductItem.List product={product} />
+              {!isLast && <LineDivider my={4} />}
+            </Box>
+          );
+        })}
       </Box>
     </Box>
   );

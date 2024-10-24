@@ -1,5 +1,11 @@
 import { Base } from "./common";
 
+export enum CategoryTemplate {
+  BANNER = "BANNER",
+  GRID = "GRID",
+  LIST = "LIST",
+}
+
 export interface OptionDetail extends Base {
   id: string;
   name: string;
@@ -44,6 +50,7 @@ export interface Category extends Base {
   name: string;
   seq: number;
   isActive: boolean;
+  template?: CategoryTemplate;
 }
 
 export interface CategoryWithProducts extends Category {

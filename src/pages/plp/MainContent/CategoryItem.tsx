@@ -3,17 +3,17 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { Box } from "@chakra-ui/react";
 
 import { categoryIdInViewAtom, setCategoryRefsMapAtom } from "../../../state";
-import { CategoryWithProducts } from "../../../types/product";
+import { CategoryTemplate, CategoryWithProducts } from "../../../types/product";
 import Divider from "../../../components/Divider";
 import { mainContentRefAtom } from "./localState";
 import ProductsListing from "./ProductsListing";
 
 const CategoryItem = ({
   category,
-  shouldShowBanner,
+  template,
 }: {
   category: CategoryWithProducts;
-  shouldShowBanner: boolean;
+  template: CategoryTemplate;
 }) => {
   const scrollIntoViewRef = useRef<HTMLDivElement>(null);
   const observeIntersectionRef = useRef<HTMLDivElement>(null);
@@ -42,10 +42,14 @@ const CategoryItem = ({
 
   return (
     <Box key={category.id} ref={observeIntersectionRef}>
-      {shouldShowBanner ? (
+      {template === CategoryTemplate.BANNER && (
         <ProductsListing.Banner ref={scrollIntoViewRef} category={category} />
-      ) : (
+      )}
+      {template === CategoryTemplate.GRID && (
         <ProductsListing.Grid ref={scrollIntoViewRef} category={category} />
+      )}
+      {template === CategoryTemplate.LIST && (
+        <ProductsListing.List ref={scrollIntoViewRef} category={category} />
       )}
       <Divider />
     </Box>

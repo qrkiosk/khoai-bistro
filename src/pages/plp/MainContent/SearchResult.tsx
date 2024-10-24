@@ -24,7 +24,7 @@ const SearchResult = () => {
     >
       {searchResult.map((category) => (
         <Box key={category.id}>
-          <ProductsListing.Grid category={category} />
+          <ProductsListing.List category={category} />
           <Divider />
         </Box>
       ))}
