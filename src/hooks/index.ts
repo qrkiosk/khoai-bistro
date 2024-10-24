@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { RESET } from "jotai/utils";
 import { authorize, EventName, events, getUserInfo } from "zmp-sdk";
 import { useNavigate, useSnackbar } from "zmp-ui";
 
@@ -13,6 +14,13 @@ import {
   userInfoAtom,
   getSearchAtom,
 } from "../state";
+
+export const useResetCart = () => {
+  const setCart = useSetAtom(cartAtom);
+  useEffect(() => {
+    setCart(RESET);
+  }, []);
+};
 
 export function useMatchStatusTextColor(visible?: boolean) {
   const changedRef = useRef(false);
