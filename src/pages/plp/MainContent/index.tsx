@@ -1,17 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { useLocation } from "react-router";
 import { useAtomValue } from "jotai";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useBoolean } from "@chakra-ui/react";
 import isEmpty from "lodash/isEmpty";
 
 import {
   isSearchQueryEmptyAtom,
   storeProductsByCategoryAtom,
 } from "../../../state";
+import { delay } from "../../../utils";
 import { SkeletonContent } from "../../../components/skeletons";
 import { usePlpMainContentAreaRef } from "./localState";
 import CategoryItem from "./CategoryItem";
 import SearchResult from "./SearchResult";
+
+const useRenderFromCOResult = () => {
+  const [isLoading, { on, off }] = useBoolean(false);
+  const { search } = useLocation();
+
+  useEffect(() => {
+    const isRedirectedFromCOResult =
+      new URLSearchParams(search).get("checkoutRedirect") === "true";
+
+    if (isRedirectedFromCOResult) {
+      on();
+      delay(600).then(off);
+    }
+  }, [search]);
+
+  return isLoading;
+};
 
 const MainContent = () => {
   const ref = usePlpMainContentAreaRef();
@@ -19,8 +38,9 @@ const MainContent = () => {
   const { data: categories, isLoading: isFetching } = useAtomValue(
     storeProductsByCategoryAtom
   );
+  const isLoading = useRenderFromCOResult();
 
-  if (isFetching || isEmpty(categories)) {
+  if (isLoading || isFetching || isEmpty(categories)) {
     return (
       <Box
         className="flex-1 overflow-auto"
