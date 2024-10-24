@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, Location } from "react-router";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation, Location as BaseLocation } from "react-router";
 import { useSetAtom } from "jotai";
 import { RESET } from "jotai/utils";
 import { Payment } from "zmp-sdk";
@@ -12,41 +12,52 @@ import { APP_ACCENT_COLOR } from "../../utils/constants";
 import { cartAtom } from "../../state";
 import ResultAnnouncement from "./ResultAnnouncement";
 
-type LocationType = Location<{
+interface State {
   path?: string;
-  data?: unknown;
+  data?: string | Record<string, string>;
   redirectSearch: string;
-}>;
+}
+
+type Location = BaseLocation<State>;
+
+const getCheckTransData = (state: State) => {
+  if ("path" in state) {
+    return state.path;
+  }
+
+  if ("data" in state) {
+    return state.data;
+  }
+
+  return null;
+};
 
 const CheckoutResultPage = () => {
   const navigate = useNavigate();
-  const { state }: LocationType = useLocation();
+  const { state }: Location = useLocation();
   const { onClose: closeCart } = useCartDrawer();
   const setCart = useSetAtom(cartAtom);
+  const checkTransAttempts = useRef(0);
   const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(
     null
   );
 
   useEffect(() => {
+    if (!state) return;
+
+    const data = getCheckTransData(state);
+    if (!data) return;
+
     let timeout: number;
-
     const checkStatus = () => {
-      if (!state) return;
-
-      let data;
-      if ("path" in state) {
-        data = state.path;
-      } else if ("data" in state) {
-        data = state.data;
-      }
-
+      checkTransAttempts.current += 1;
       Payment.checkTransaction({
         data,
-        success: (res) => {
-          if (res.resultCode === 0) {
+        success: (data) => {
+          setPaymentResult(data);
+          if (data.resultCode === 0 && checkTransAttempts.current < 5) {
             timeout = setTimeout(checkStatus, 3000); // Payment still in progress, retry after 3s
           }
-          setPaymentResult(res);
         },
         fail: setPaymentResult,
       });

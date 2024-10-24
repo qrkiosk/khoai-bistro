@@ -31,24 +31,32 @@ export const isUserAuthorizedAtom = atom<boolean>(
 export const userNameAtom = atom((get) => get(userInfoAtom)?.name);
 
 export const tableIdAtom = atom<number | null>(null);
-export const companyIdAtom = atom<number | null>(null);
 export const storeIdAtom = atom<number | null>(null);
+export const companyIdAtom = atom<number | null>(null);
 
-export const plpSearchParamsAtom = atom((get) => {
+export const getSearchAtom = atom((get) => {
   const tableId = get(tableIdAtom);
   const storeId = get(storeIdAtom);
   const companyId = get(companyIdAtom);
 
-  const plpSearchParams = new URLSearchParams({
+  const searchParams = new URLSearchParams({
     tableId: (tableId ?? "").toString(),
     storeId: (storeId ?? "").toString(),
     companyId: (companyId ?? "").toString(),
   });
 
-  return {
-    isEmpty: tableId == null || storeId == null,
-    search: plpSearchParams.toString(),
-  };
+  return searchParams.toString();
+});
+
+export const setSearchParamIdsAtom = atom(null, (_get, set, search: string) => {
+  const searchParams = new URLSearchParams(search);
+  const tableId = searchParams.get("tableId");
+  const storeId = searchParams.get("storeId");
+  const companyId = searchParams.get("companyId");
+
+  set(tableIdAtom, tableId ? +tableId : null);
+  set(storeIdAtom, storeId ? +storeId : null);
+  set(companyIdAtom, companyId ? +companyId : null);
 });
 
 export const tableInfoAtom = atomWithQuery<

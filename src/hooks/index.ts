@@ -5,12 +5,13 @@ import { useNavigate, useSnackbar } from "zmp-ui";
 
 import { Cart } from "../types/cart";
 import { matchStatusBarColor } from "../utils/device";
+import { verifyLocationSearch } from "../utils/product";
 import {
   cartAtom,
   isCartDrawerOpenAtom,
   isUserAuthorizedAtom,
-  plpSearchParamsAtom,
   userInfoAtom,
+  getSearchAtom,
 } from "../state";
 
 export function useMatchStatusTextColor(visible?: boolean) {
@@ -50,23 +51,17 @@ export const useCartDrawer = () => {
   return { isOpen, onOpen, onClose };
 };
 
-export const usePlpSearchParams = () => {
-  return useAtomValue(plpSearchParamsAtom);
-};
-
 export const useHandlePayment = () => {
   const navigate = useNavigate();
-  const plpSearchParams = usePlpSearchParams();
+  const search = useAtomValue(getSearchAtom);
 
   useEffect(() => {
-    if (plpSearchParams.isEmpty) return;
+    if (!verifyLocationSearch(search)) return;
 
-    events.on(EventName.OpenApp, (data) => {
-      if (data?.path) {
-        navigate(data?.path || "/result", {
-          state: { ...data, redirectSearch: plpSearchParams.search },
-        });
-      }
+    events.on(EventName.OpenApp, (data: { path: string }) => {
+      navigate(data?.path || "/result", {
+        state: { ...data, redirectSearch: search },
+      });
     });
 
     events.on(EventName.OnDataCallback, (data) => {
@@ -74,7 +69,7 @@ export const useHandlePayment = () => {
 
       if (appTransID || eventType === "PAY_BY_CUSTOM_METHOD") {
         navigate("/result", {
-          state: { ...data, redirectSearch: plpSearchParams.search },
+          state: { ...data, redirectSearch: search },
         });
       }
     });
@@ -84,11 +79,12 @@ export const useHandlePayment = () => {
 
       navigate("/result", {
         state: {
-          data: { zmpOrderId, redirectSearch: plpSearchParams.search },
+          data: { zmpOrderId },
+          redirectSearch: search,
         },
       });
     });
-  }, [plpSearchParams.search]);
+  }, [search]);
 };
 
 export function useToBeImplemented() {

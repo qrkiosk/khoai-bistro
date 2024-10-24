@@ -16,11 +16,11 @@ import SearchResult from "./SearchResult";
 const MainContent = () => {
   const ref = usePlpMainContentAreaRef();
   const isSearchQueryEmpty = useAtomValue(isSearchQueryEmptyAtom);
-  const { data: categories, isLoading: isFetchingCategories } = useAtomValue(
+  const { data: categories, isLoading: isFetching } = useAtomValue(
     storeProductsByCategoryAtom
   );
 
-  if (isFetchingCategories || isEmpty(categories)) {
+  if (isFetching || isEmpty(categories)) {
     return (
       <Box
         className="flex-1 overflow-auto"

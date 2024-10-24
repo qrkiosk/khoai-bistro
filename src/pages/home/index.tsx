@@ -1,15 +1,22 @@
 import React, { useEffect } from "react";
+import { useLocation } from "react-router";
 import { Box, Spinner } from "@chakra-ui/react";
 import { Page, useNavigate } from "zmp-ui";
 
-import { getTestSearchParams } from "../../utils/product";
+import { delay } from "../../utils";
+import { getTestSearchParams, verifyLocationSearch } from "../../utils/product";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { search } = useLocation();
 
   useEffect(() => {
-    const search = getTestSearchParams();
-    setTimeout(() => navigate({ pathname: "/plp", search }), 500);
+    delay(500).then(() => {
+      navigate({
+        pathname: "/plp",
+        search: verifyLocationSearch(search) ? search : getTestSearchParams(),
+      });
+    });
   }, []);
 
   return (
