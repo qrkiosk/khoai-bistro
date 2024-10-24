@@ -6,8 +6,7 @@ import { categoryIdInViewAtom, setCategoryRefsMapAtom } from "../../../state";
 import { CategoryWithProducts } from "../../../types/product";
 import Divider from "../../../components/Divider";
 import { mainContentRefAtom } from "./localState";
-import Banner from "./Banner";
-import ProductList from "./ProductList";
+import ProductsListing from "./ProductsListing";
 
 const CategoryItem = ({
   category,
@@ -44,9 +43,9 @@ const CategoryItem = ({
   return (
     <Box key={category.id} ref={observeIntersectionRef}>
       {shouldShowBanner ? (
-        <Banner ref={scrollIntoViewRef} category={category} />
+        <ProductsListing.Banner ref={scrollIntoViewRef} category={category} />
       ) : (
-        <ProductList ref={scrollIntoViewRef} category={category} />
+        <ProductsListing.Grid ref={scrollIntoViewRef} category={category} />
       )}
       <Divider />
     </Box>

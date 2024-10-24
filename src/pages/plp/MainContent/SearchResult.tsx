@@ -4,7 +4,7 @@ import { Box } from "@chakra-ui/react";
 
 import { searchQueryAtom, searchResultSyncAtom } from "../../../state";
 import Divider from "../../../components/Divider";
-import ProductList from "./ProductList";
+import ProductsListing from "./ProductsListing";
 
 const SearchResult = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -24,7 +24,7 @@ const SearchResult = () => {
     >
       {searchResult.map((category) => (
         <Box key={category.id}>
-          <ProductList category={category} />
+          <ProductsListing.Grid category={category} />
           <Divider />
         </Box>
       ))}
