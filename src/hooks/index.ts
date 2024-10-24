@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { RESET } from "jotai/utils";
 import { authorize, EventName, events, getUserInfo } from "zmp-sdk";
 import { useNavigate, useSnackbar } from "zmp-ui";
+import { useBoolean } from "@chakra-ui/react";
 
 import { Cart } from "../types/cart";
+import { delay } from "../utils";
 import { matchStatusBarColor } from "../utils/device";
 import { verifyLocationSearch } from "../utils/product";
 import {
@@ -13,13 +15,41 @@ import {
   isUserAuthorizedAtom,
   userInfoAtom,
   getSearchAtom,
+  clearCartAtom,
 } from "../state";
 
 export const useResetCart = () => {
-  const setCart = useSetAtom(cartAtom);
+  const clearCart = useSetAtom(clearCartAtom);
   useEffect(() => {
-    setCart(RESET);
+    clearCart();
   }, []);
+};
+
+export const useRenderFromCOResult = () => {
+  const [isLoading, { on, off }] = useBoolean(false);
+  const { search } = useLocation();
+
+  useEffect(() => {
+    const isRedirectedFromCOResult =
+      new URLSearchParams(search).get("checkoutRedirect") === "true";
+
+    if (isRedirectedFromCOResult) {
+      on();
+      delay(600).then(off);
+    }
+  }, [search]);
+
+  return isLoading;
+};
+
+export const useDelayedRendering = (delayInMs: number) => {
+  const [shouldRender, { on: triggerRendering }] = useBoolean(false);
+
+  useEffect(() => {
+    delay(delayInMs).then(triggerRendering);
+  }, []);
+
+  return shouldRender;
 };
 
 export function useMatchStatusTextColor(visible?: boolean) {

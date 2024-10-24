@@ -47,7 +47,7 @@ const PlaceOrderButton = () => {
       const createMSOrderResult = await createMerchantSideOrder(orderData);
       const { id: orderId, companyId, storeId } = createMSOrderResult.data.data;
 
-      await delay(600); // wait for merchant server to complete all operations related to the order
+      await delay(500); // Wait for merchant server to complete all operations related to the order
 
       const queryMSOrderResult = await queryMerchantSideOrder({
         orderId,

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, Location as BaseLocation } from "react-router";
 import { useSetAtom } from "jotai";
-import { RESET } from "jotai/utils";
 import { Payment } from "zmp-sdk";
 import { Page, useNavigate } from "zmp-ui";
 import { Box, Button } from "@chakra-ui/react";
@@ -9,7 +8,7 @@ import { Box, Button } from "@chakra-ui/react";
 import { PaymentResult } from "../../types/order";
 import { useCartDrawer } from "../../hooks";
 import { APP_ACCENT_COLOR } from "../../utils/constants";
-import { cartAtom } from "../../state";
+import { clearCartAtom } from "../../state";
 import ResultAnnouncement from "./ResultAnnouncement";
 
 interface State {
@@ -36,7 +35,7 @@ const CheckoutResultPage = () => {
   const navigate = useNavigate();
   const { state }: Location = useLocation();
   const { onClose: closeCart } = useCartDrawer();
-  const setCart = useSetAtom(cartAtom);
+  const clearCart = useSetAtom(clearCartAtom);
   const checkTransAttempts = useRef(0);
   const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(
     null
@@ -72,8 +71,8 @@ const CheckoutResultPage = () => {
 
   useEffect(() => {
     if (paymentResult?.resultCode === 1) {
+      clearCart();
       closeCart();
-      setCart(RESET);
     }
   }, [paymentResult]);
 

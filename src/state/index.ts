@@ -1,6 +1,6 @@
 import { RefObject } from "react";
 import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
+import { atomWithStorage, RESET } from "jotai/utils";
 import { atomWithQuery } from "jotai-tanstack-query";
 import isEmpty from "lodash/isEmpty";
 import sortBy from "lodash/sortBy";
@@ -361,6 +361,10 @@ export const removeCartItemAtom = atom(
     });
   }
 );
+
+export const clearCartAtom = atom(null, (_get, set) => {
+  set(cartAtom, RESET);
+});
 
 export const setPaymentTypeAtom = atom(
   null,
