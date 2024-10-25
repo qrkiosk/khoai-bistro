@@ -22,12 +22,12 @@ const ProductDrawer = () => {
   return (
     <Drawer
       size="full"
-      placement="bottom"
+      placement="right"
       blockScrollOnMount={false}
       isOpen={isOpen}
       onClose={onClose}
     >
-      <DrawerContent h="100%" overflowY="auto">
+      <DrawerContent>
         <IconButton
           isRound={true}
           autoFocus={false}
@@ -36,6 +36,7 @@ const ProductDrawer = () => {
           left={3} // 12px
           variant="outline"
           aria-label="Close"
+          boxShadow="0 0 6px rgba(0, 0, 0, 0.15)"
           bgColor="var(--zmp-background-white)"
           _hover={{ bgColor: "var(--zmp-background-white)" }}
           fontSize="md"

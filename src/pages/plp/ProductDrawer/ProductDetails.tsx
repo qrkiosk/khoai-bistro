@@ -79,7 +79,7 @@ const ProductDetails = () => {
 
   return (
     <Box h="100%" display="flex" flexDir="column">
-      <Box bgColor="var(--zmp-background-color)" flexGrow={1}>
+      <Box flexGrow={1} overflowY="auto" bgColor="var(--zmp-background-color)">
         <Image
           src={productVariant.url}
           alt=""
