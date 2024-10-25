@@ -4,7 +4,7 @@ import { Box } from "@chakra-ui/react";
 
 import { searchQueryAtom, searchResultSyncAtom } from "../../../state";
 import Divider from "../../../components/Divider";
-import ProductsListing from "./ProductsListing";
+import ProductsListing from "../../../components/ProductsListing";
 
 const SearchResult = () => {
   const ref = useRef<HTMLDivElement>(null);

@@ -50,7 +50,7 @@ export interface Category extends Base {
   name: string;
   seq: number;
   isActive: boolean;
-  template?: CategoryTemplate;
+  template: CategoryTemplate;
 }
 
 export interface CategoryWithProducts extends Category {

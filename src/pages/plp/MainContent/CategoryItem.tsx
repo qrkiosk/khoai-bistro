@@ -6,7 +6,7 @@ import { categoryIdInViewAtom, setCategoryRefsMapAtom } from "../../../state";
 import { CategoryTemplate, CategoryWithProducts } from "../../../types/product";
 import Divider from "../../../components/Divider";
 import { mainContentRefAtom } from "./localState";
-import ProductsListing from "./ProductsListing";
+import ProductsListing from "../../../components/ProductsListing";
 
 const CategoryItem = ({
   category,

@@ -45,26 +45,13 @@ const MainContent = () => {
         overflowY="auto"
         h="100%"
       >
-        {categories.map((category, index) => {
-          const template = (function () {
-            switch (index) {
-              case 0:
-                return CategoryTemplate.BANNER;
-              case 1:
-                return CategoryTemplate.GRID;
-              default:
-                return CategoryTemplate.LIST;
-            }
-          })();
-
-          return (
-            <CategoryItem
-              key={category.id}
-              category={category}
-              template={category.template ?? template}
-            />
-          );
-        })}
+        {categories.map((category) => (
+          <CategoryItem
+            key={category.id}
+            category={category}
+            template={category.template || CategoryTemplate.LIST}
+          />
+        ))}
       </Box>
       <SearchResult />
     </Box>

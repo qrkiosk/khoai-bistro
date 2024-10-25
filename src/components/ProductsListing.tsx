@@ -2,8 +2,8 @@ import React, { forwardRef } from "react";
 import { Box, Heading, Divider as LineDivider } from "@chakra-ui/react";
 import useEmblaCarousel from "embla-carousel-react";
 
-import { CategoryWithProducts } from "../../../types/product";
-import ProductItem from "../../../components/ProductItem";
+import { CategoryWithProducts } from "../types/product";
+import ProductItem from "./ProductItem";
 
 const ProductsListing = {} as {
   Banner: React.ForwardRefExoticComponent<
