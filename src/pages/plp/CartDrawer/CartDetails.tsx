@@ -184,7 +184,7 @@ const CartDetails = () => {
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text fontSize="sm" textAlign="right" mt={1}>
+              <Text fontSize="sm" fontWeight="bold" textAlign="right" mt={1}>
                 <DisplayPrice>{subtotal}</DisplayPrice>
               </Text>
             </GridItem>

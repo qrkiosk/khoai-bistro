@@ -91,8 +91,8 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
           aria-label="Add"
           size="sm"
           position="absolute"
-          right="4px"
-          bottom="4px"
+          right="6px"
+          bottom="6px"
           onClick={selectProduct}
         />
       </Box>
