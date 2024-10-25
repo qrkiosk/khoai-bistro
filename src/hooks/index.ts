@@ -16,6 +16,8 @@ import {
   userInfoAtom,
   getSearchAtom,
   clearCartAtom,
+  tableInfoAtom,
+  storeInfoAtom,
 } from "../state";
 
 export const useResetCart = () => {
@@ -50,6 +52,20 @@ export const useDelayedRendering = (delayInMs: number) => {
   }, []);
 
   return shouldRender;
+};
+
+export const useIsLoadedTableOrStore = () => {
+  const { data: tableInfo, isLoading: isFetchingTable } =
+    useAtomValue(tableInfoAtom);
+  const { data: storeInfo, isLoading: isFetchingStore } =
+    useAtomValue(storeInfoAtom);
+
+  return (
+    !isFetchingTable &&
+    tableInfo != null &&
+    !isFetchingStore &&
+    storeInfo != null
+  );
 };
 
 export function useMatchStatusTextColor(visible?: boolean) {

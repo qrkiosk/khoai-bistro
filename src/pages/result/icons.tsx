@@ -177,7 +177,7 @@ export const IconPayment = () => {
 export const IconPaymentLoading = () => {
   return (
     <div className="[&_.zaui-spinner]:w-[100px] [&_.zaui-spinner]:h-[100px] [&_.zaui-spinner-logo]:flex [&_.zaui-spinner-logo]:justify-center [&_.zaui-spinner-logo]:items-center">
-      <Spinner logo={<IconPayment />}></Spinner>
+      <Spinner logo={<IconPayment />} />
     </div>
   );
 };

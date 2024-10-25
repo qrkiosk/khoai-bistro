@@ -12,6 +12,8 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  SkeletonCircle,
+  SkeletonText,
 } from "@chakra-ui/react";
 
 import {
@@ -19,6 +21,7 @@ import {
   storeInfoAtom,
   userNameAtom,
 } from "../../../state";
+import { useDelayedRendering, useIsLoadedTableOrStore } from "../../../hooks";
 import { useCategoryDrawer } from "../localState";
 import {
   inputAtom,
@@ -38,6 +41,8 @@ const HeaderContent = () => {
   const categoryNameInView = useAtomValue(categoryNameInViewAtom);
   const userName = useAtomValue(userNameAtom);
   const { data: storeInfo } = useAtomValue(storeInfoAtom);
+  const isLoadedTableOrStore = useIsLoadedTableOrStore();
+  const showCategoryNameInView = useDelayedRendering(800);
 
   const onChangeInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value),
@@ -56,24 +61,26 @@ const HeaderContent = () => {
       rowGap={2}
     >
       <GridItem colSpan={2}>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          pl={2.5}
-        >
-          <Box display="flex" alignItems="center" className="space-x-2">
+        <Box pl={2.5} className="flex items-center w-full space-x-2">
+          <SkeletonCircle size="10" isLoaded={isLoadedTableOrStore}>
             <Image
               className="w-10 h-10 rounded-lg border-inset"
               src={storeInfo?.companyAvatar}
             />
-            <Box>
-              <Heading size="xs" fontWeight="semibold">
-                {userName ? `Xin chào, ${userName}!` : "Xin chào quý khách!"}
-              </Heading>
-              <TableInfo />
-            </Box>
-          </Box>
+          </SkeletonCircle>
+          <SkeletonText
+            noOfLines={2}
+            skeletonHeight="2"
+            textAlign="left"
+            w="75%"
+            mt={2}
+            isLoaded={isLoadedTableOrStore}
+          >
+            <Heading size="xs" fontWeight="semibold">
+              {userName ? `Xin chào, ${userName}!` : "Xin chào quý khách!"}
+            </Heading>
+            <TableInfo />
+          </SkeletonText>
         </Box>
       </GridItem>
       <GridItem colSpan={1}>
@@ -115,7 +122,15 @@ const HeaderContent = () => {
                 rightIcon={<Icon icon="zi-chevron-down" size={20} />}
                 onClick={onOpen}
               >
-                {categoryNameInView ?? "Tất cả danh mục"}
+                <SkeletonText
+                  noOfLines={1}
+                  skeletonHeight="2"
+                  textAlign="left"
+                  w="60%"
+                  isLoaded={showCategoryNameInView}
+                >
+                  {categoryNameInView}
+                </SkeletonText>
               </Button>
             </Box>
             <Button
