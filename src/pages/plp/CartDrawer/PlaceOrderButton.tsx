@@ -123,7 +123,7 @@ const PlaceOrderButton = () => {
         onClick={onClickPlaceOrder}
       >
         <Box w="100%" display="flex" justifyContent="space-between">
-          <Text>Đặt đơn</Text>
+          <Text>Đặt món • {cart.items.length} món</Text>
           <Text>
             <DisplayPrice>{subtotal}</DisplayPrice>
           </Text>

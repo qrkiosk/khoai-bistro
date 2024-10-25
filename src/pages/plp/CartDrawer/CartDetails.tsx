@@ -7,9 +7,12 @@ import {
   Grid,
   GridItem,
   Heading,
+  IconButton,
+  SkeletonText,
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { Icon } from "zmp-ui";
 
 import {
   cartAtom,
@@ -19,7 +22,7 @@ import {
   removeCartItemAtom,
   tableInfoAtom,
   userNameAtom,
-  setPaymentTypeAtom,
+  storeInfoAtom,
 } from "../../../state";
 import { useCartDrawer } from "../../../hooks";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
@@ -37,14 +40,46 @@ const CartDetails = () => {
   const subtotal = useAtomValue(cartSubtotalAtom);
   const removeCartItem = useSetAtom(removeCartItemAtom);
   const { data: tableInfo } = useAtomValue(tableInfoAtom);
+  const { data: storeInfo } = useAtomValue(storeInfoAtom);
   const userName = useAtomValue(userNameAtom);
   const setProductVariant = useSetAtom(productVariantAtom);
   const setIsEditingCartItem = useSetAtom(isEditingCartItemAtom);
-  const setPaymentType = useSetAtom(setPaymentTypeAtom);
 
   return (
     <Box display="flex" flexDir="column" h="100%">
-      <Box bgColor="var(--zmp-background-color)" flexGrow={1}>
+      <Box
+        className="safe-area-top sticky top-0 left-0 right-0"
+        bgColor="var(--zmp-background-white)"
+        boxShadow="0px 1px 4px rgba(0, 0, 0, 0.1)"
+        zIndex={9999}
+      >
+        <Box className="px-3 py-2 flex items-center">
+          <IconButton
+            isRound={true}
+            autoFocus={false}
+            variant="outline"
+            aria-label="Close"
+            bgColor="var(--zmp-background-white)"
+            _hover={{ bgColor: "var(--zmp-background-white)" }}
+            fontSize="md"
+            icon={<Icon icon="zi-arrow-left" />}
+            onClick={onClose}
+          />
+          <SkeletonText
+            noOfLines={1}
+            skeletonHeight="2"
+            w="50%"
+            flexGrow={1}
+            textAlign="center"
+            mr={10}
+            isLoaded={!!storeInfo?.name}
+          >
+            <Heading size="sm">{storeInfo?.name}</Heading>
+          </SkeletonText>
+        </Box>
+      </Box>
+      <Box flexGrow={1} overflowY="auto" bgColor="var(--zmp-background-color)">
+        <Divider />
         <Box p={4} bgColor="var(--zmp-background-white)">
           <Grid templateColumns="repeat(3, 1fr)">
             <GridItem colSpan={2}>
@@ -64,6 +99,7 @@ const CartDetails = () => {
                   colorScheme={APP_ACCENT_COLOR}
                   variant="ghost"
                   size="xs"
+                  _hover={{ bg: "none" }}
                   onClick={onClose}
                 >
                   Thêm món

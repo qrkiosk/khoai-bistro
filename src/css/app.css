@@ -3,6 +3,14 @@
   padding-bottom: var(--zaui-safe-area-inset-bottom, 16px);
 }
 
+.safe-area-top {
+  padding-top: var(--zaui-safe-area-inset-top, 16px);
+}
+
+.safe-area-bottom {
+  padding-bottom: var(--zaui-safe-area-inset-bottom, 16px);
+}
+
 .safe-area .zaui-page {
   min-height: unset;
 }

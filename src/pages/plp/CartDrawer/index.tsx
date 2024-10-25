@@ -1,15 +1,12 @@
 import React from "react";
 import { useAtomValue } from "jotai";
-import { Icon } from "zmp-ui";
 import isEmpty from "lodash/isEmpty";
 import {
   Box,
   Button,
   Drawer,
   DrawerContent,
-  DrawerOverlay,
   Heading,
-  IconButton,
   Text,
 } from "@chakra-ui/react";
 
@@ -17,7 +14,6 @@ import { cartAtom, cartSubtotalAtom } from "../../../state";
 import { useCartDrawer } from "../../../hooks";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { DisplayPrice } from "../../../components/prices";
-import Divider from "../../../components/Divider";
 import CartDetails from "./CartDetails";
 
 const CartDrawer = () => {
@@ -58,38 +54,15 @@ const CartDrawer = () => {
       )}
       <Drawer
         size="full"
-        placement="bottom"
+        placement="right"
         blockScrollOnMount={false}
         isOpen={isOpen}
         onClose={onClose}
       >
-        <DrawerOverlay />
-        <DrawerContent h="100%" overflowY="auto" className="safe-area">
-          <Box>
-            <IconButton
-              ml={3}
-              isRound={true}
-              autoFocus={false}
-              variant="ghost"
-              aria-label="Close"
-              bgColor="var(--zmp-background-white)"
-              _hover={{ bg: "none" }}
-              fontSize="md"
-              icon={<Icon icon="zi-arrow-left" />}
-              onClick={onClose}
-            />
-            <Divider />
-          </Box>
+        <DrawerContent>
           {isCartEmpty ? (
-            <Box
-              h="80%"
-              p={4}
-              display="flex"
-              flexDir="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Heading size="md">Giỏ hàng của bạn đang trống</Heading>
+            <Box className="safe-area px-4 flex-1 flex flex-col items-center justify-center">
+              <Heading size="md">Giỏ hàng trống</Heading>
               <Text color="GrayText" fontSize="sm" mt={3} mb={5}>
                 Hãy thêm gì đó vào đây để làm mình vui nhé!
               </Text>
