@@ -6,7 +6,7 @@ import { Icon } from "zmp-ui";
 import { Product } from "../types/product";
 import { selectedProductIdAtom } from "../state";
 import { APP_ACCENT_COLOR } from "../utils/constants";
-import { FinalPrice } from "./prices";
+import { DisplayPrice, ProductDisplayPrices } from "./prices";
 
 const ProductItem = {} as {
   Banner: React.FC<{ product: Product }>;
@@ -42,14 +42,14 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
         />
         <Box display="flex" flexDir="column">
           <Box flexGrow={1}>
-            <Text>{product.name}</Text>
+            <Text fontSize="sm">{product.name}</Text>
             <Text color="GrayText" fontSize="xs" className="two-line-ellipsis">
               {product.description}
             </Text>
           </Box>
-          <Text color="InfoText" fontWeight="semibold" fontSize="sm" pb={2}>
-            <FinalPrice>{product}</FinalPrice>
-          </Text>
+          <ProductDisplayPrices pb={2}>
+            {[product.price, product.priceSale]}
+          </ProductDisplayPrices>
         </Box>
         <IconButton
           icon={<Icon size={14} icon="zi-plus" />}
@@ -96,10 +96,10 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
           onClick={selectProduct}
         />
       </Box>
-      <Text>{product.name}</Text>
-      <Text color="InfoText" fontWeight="semibold" fontSize="sm" pb={2}>
-        <FinalPrice>{product}</FinalPrice>
-      </Text>
+      <Text fontSize="sm">{product.name}</Text>
+      <ProductDisplayPrices pb={2}>
+        {[product.price, product.priceSale]}
+      </ProductDisplayPrices>
     </Box>
   );
 };
@@ -129,14 +129,14 @@ ProductItem.List = ({ product }: { product: Product }) => {
         />
         <Box display="flex" flexDir="column">
           <Box flexGrow={1}>
-            <Text>{product.name}</Text>
+            <Text fontSize="sm">{product.name}</Text>
             <Text color="GrayText" fontSize="xs" className="two-line-ellipsis">
               {product.description}
             </Text>
           </Box>
-          <Text color="InfoText" fontWeight="semibold" fontSize="sm" pb={2}>
-            <FinalPrice>{product}</FinalPrice>
-          </Text>
+          <ProductDisplayPrices pb={2}>
+            {[product.price, product.priceSale]}
+          </ProductDisplayPrices>
         </Box>
         <IconButton
           icon={<Icon size={14} icon="zi-plus" />}

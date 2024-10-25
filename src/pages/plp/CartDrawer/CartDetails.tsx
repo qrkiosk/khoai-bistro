@@ -184,9 +184,9 @@ const CartDetails = () => {
                     colSpan={1}
                     onClick={onClickEditItem}
                   >
-                    <Text fontSize="sm" textAlign="right" mt={5}>
-                      <DisplayPrice>{calcItemTotalAmount(item)}</DisplayPrice>
-                    </Text>
+                    <DisplayPrice variant="standard" textAlign="right" mt={5}>
+                      {calcItemTotalAmount(item)}
+                    </DisplayPrice>
                   </GridItem>
                 </>
               );
@@ -198,9 +198,9 @@ const CartDetails = () => {
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text fontSize="sm" textAlign="right" mt={5}>
-                <DisplayPrice>{subtotal}</DisplayPrice>
-              </Text>
+              <DisplayPrice variant="standard" textAlign="right" mt={5}>
+                {subtotal}
+              </DisplayPrice>
             </GridItem>
 
             <GridItem colSpan={2}>
@@ -209,9 +209,9 @@ const CartDetails = () => {
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text fontSize="sm" textAlign="right" mt={1}>
-                <DisplayPrice>{0}</DisplayPrice>
-              </Text>
+              <DisplayPrice variant="standard" textAlign="right" mt={1}>
+                {0}
+              </DisplayPrice>
             </GridItem>
 
             <GridItem colSpan={2}>
@@ -220,9 +220,9 @@ const CartDetails = () => {
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text fontSize="sm" fontWeight="bold" textAlign="right" mt={1}>
-                <DisplayPrice>{subtotal}</DisplayPrice>
-              </Text>
+              <DisplayPrice variant="total" textAlign="right" mt={1}>
+                {subtotal}
+              </DisplayPrice>
             </GridItem>
           </Grid>
         </Box>

@@ -35,6 +35,7 @@ export interface Product extends Base {
   name: string;
   description: string | null;
   price: number;
+  priceSale: number;
   seq: number;
   url: string;
   isActive: boolean;

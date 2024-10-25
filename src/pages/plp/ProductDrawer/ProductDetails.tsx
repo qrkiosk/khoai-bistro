@@ -19,7 +19,7 @@ import {
 import { APP_ACCENT_COLOR, APP_DANGER_COLOR } from "../../../utils/constants";
 import Divider from "../../../components/Divider";
 import { SkeletonContent } from "../../../components/skeletons";
-import { DisplayPrice } from "../../../components/prices";
+import { DisplayPrice, ProductDisplayPrices } from "../../../components/prices";
 import MandatoryOption from "../../../components/MandatoryOption";
 import NonMandatoryOption from "../../../components/NonMandatoryOption";
 import { useProductDrawer } from "./localState";
@@ -92,11 +92,11 @@ const ProductDetails = () => {
         <Box p={4} bgColor="var(--zmp-background-white)">
           <Box display="flex" justifyContent="space-between">
             <Heading size="sm">{productVariant.name}</Heading>
-            <Box textAlign="right">
-              <Heading size="sm">
-                <DisplayPrice>{productVariant.price}</DisplayPrice>
-              </Heading>
-              <Text as="sub" color="gray" fontSize="xs">
+            <Box display="flex" flexDir="column" alignItems="flex-end" mb={4}>
+              <ProductDisplayPrices size="lg" emphasizeSalePrice>
+                {[productVariant.price, productVariant.priceSale]}
+              </ProductDisplayPrices>
+              <Text as="sub" color="gray" fontSize="xs" mt={1}>
                 Giá gốc
               </Text>
             </Box>
@@ -127,7 +127,7 @@ const ProductDetails = () => {
           flexDir="column"
           alignItems="center"
         >
-          <Box w="100%" mb={3} display="flex" alignItems="center">
+          <Box w="100%" mb={3} display="flex" alignItems="flex-end">
             <Heading size="sm">Thêm lưu ý cho quán</Heading>
             <Text fontSize="xs" color="GrayText" ml={2}>
               Không bắt buộc
@@ -194,9 +194,9 @@ const ProductDetails = () => {
               <Text>
                 {isEditingCartItem ? "Cập nhật" : "Thêm vào"} giỏ hàng
               </Text>
-              <Text>
-                <DisplayPrice>{productVariantPrice}</DisplayPrice>
-              </Text>
+              <DisplayPrice variant="unstyled" size="md">
+                {productVariantPrice}
+              </DisplayPrice>
             </Box>
           </Button>
         )}

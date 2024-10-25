@@ -45,9 +45,9 @@ const CartDrawer = () => {
           >
             <Box w="100%" display="flex" justifyContent="space-between">
               <Text>Giỏ hàng • {cart.items.length} món</Text>
-              <Text>
-                <DisplayPrice>{subtotal}</DisplayPrice>
-              </Text>
+              <DisplayPrice variant="unstyled" size="md">
+                {subtotal}
+              </DisplayPrice>
             </Box>
           </Button>
         </Box>

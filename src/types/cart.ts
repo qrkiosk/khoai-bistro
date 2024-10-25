@@ -2,8 +2,6 @@ import { PaymentType } from "./payment";
 import { ShippingType } from "./shipping";
 import { BaseProductVariant } from "./product";
 
-export type SelectedOptions = Record<string, string | string[]>;
-
 export interface CartProductVariant extends BaseProductVariant {
   uniqIdentifier: string;
   quantity: number;

@@ -3,7 +3,7 @@ import { OptionWithSelectedDetail } from "../types/product";
 
 export const calcItemTotalAmount = (item: CartProductVariant) => {
   const quantity = item.quantity;
-  const baseItemPrice = item.price;
+  const baseItemPrice = item.priceSale;
   const optionsPrice = item.options.reduce((acc, opt) => {
     const selectedDetailPrice = opt.selectedDetail?.price ?? 0;
     const selectedDetailsTotalPrice = opt.selectedDetails.reduce(

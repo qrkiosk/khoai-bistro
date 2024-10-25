@@ -160,7 +160,7 @@ export const productVariantPriceAtom = atom((get) => {
   if (productVariant == null) return 0;
 
   const quantity = productVariant.quantity;
-  const basePrice = productVariant.price;
+  const basePrice = productVariant.priceSale;
   const optionsPrice = productVariant.options.reduce((acc, opt) => {
     const selectedDetailPrice = opt.selectedDetail?.price ?? 0;
     const selectedDetailsTotalAmount = opt.selectedDetails.reduce(
@@ -303,7 +303,7 @@ export const cartSubtotalAtom = atom((get) => {
 
   return cart.items.reduce((total, item) => {
     const quantity = item.quantity;
-    const baseItemPrice = item.price;
+    const baseItemPrice = item.priceSale;
     const optionsPrice = item.options.reduce((acc, opt) => {
       const selectedDetailPrice = opt.selectedDetail?.price ?? 0;
       const selectedDetailsTotalAmount = opt.selectedDetails.reduce(

@@ -8,9 +8,9 @@ import { calcItemTotalAmount } from "./cart";
 
 const buildOrderDetails = (cart: Cart): OrderDetail[] =>
   cart.items.map((item) => {
-    const { price: productPrice, quantity } = item; // product base price (before discount)
-    const price = productPrice - 0; // product final price (without extra options selected), equals productPrice for now
-    const amount = calcItemTotalAmount({ ...item, price });
+    const { priceSale: productPrice, quantity } = item; // base price (before discount)
+    const discountedPrice = productPrice - 0; // final price (discounted, without including extra options) - equals productPrice for now
+    const amount = calcItemTotalAmount({ ...item, priceSale: discountedPrice });
     const totalAmount = amount;
 
     const variants = item.options.reduce<OrderProductVariant[]>((acc, opt) => {
@@ -48,7 +48,7 @@ const buildOrderDetails = (cart: Cart): OrderDetail[] =>
       productName: item.name,
       productPrice,
       quantity,
-      price,
+      price: discountedPrice,
       amount,
       totalAmount,
       note: item.note ?? "",

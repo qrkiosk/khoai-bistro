@@ -48,14 +48,14 @@ const MandatoryOption = ({ option }: { option: OptionWithSelectedDetail }) => {
                 >
                   <Box display="flex">
                     <Radio id={detail.id} value={detail.id} />
-                    <Text as="span" ml={3}>
+                    <Text as="span" fontSize="sm" ml={3}>
                       {detail.name}
                     </Text>
                   </Box>
                   {detail.price > 0 && (
-                    <Text as="span">
-                      +<DisplayPrice>{detail.price}</DisplayPrice>
-                    </Text>
+                    <DisplayPrice as="span" variant="standard" prefix="+">
+                      {detail.price}
+                    </DisplayPrice>
                   )}
                 </Box>
                 {!isLast && <LineDivider mt={3} />}
