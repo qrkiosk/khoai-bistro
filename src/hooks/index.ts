@@ -118,6 +118,7 @@ export const useHandlePayment = () => {
 
     events.on(EventName.OpenApp, (data: { path: string }) => {
       navigate(data?.path || "/result", {
+        replace: true,
         state: { ...data, redirectSearch },
       });
     });
@@ -127,6 +128,7 @@ export const useHandlePayment = () => {
 
       if (appTransID || eventType === "PAY_BY_CUSTOM_METHOD") {
         navigate("/result", {
+          replace: true,
           state: { ...data, redirectSearch },
         });
       }
@@ -136,6 +138,7 @@ export const useHandlePayment = () => {
       const { zmpOrderId } = data;
 
       navigate("/result", {
+        replace: true,
         state: {
           data: { zmpOrderId },
           redirectSearch,

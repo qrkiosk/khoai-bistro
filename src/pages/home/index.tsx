@@ -12,10 +12,13 @@ const HomePage = () => {
 
   useEffect(() => {
     delay(500).then(() => {
-      navigate({
-        pathname: "/plp",
-        search: verifyLocationSearch(search) ? search : getTestSearchParams(),
-      });
+      navigate(
+        {
+          pathname: "/plp",
+          search: verifyLocationSearch(search) ? search : getTestSearchParams(), // TODO: Remove getTestSearchParams()
+        },
+        { replace: true }
+      );
     });
   }, []);
 
