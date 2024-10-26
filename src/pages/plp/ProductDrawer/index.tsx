@@ -22,7 +22,7 @@ const ProductDrawer = () => {
   return (
     <Drawer
       size="full"
-      placement="right"
+      placement="bottom"
       blockScrollOnMount={false}
       isOpen={isOpen}
       onClose={onClose}

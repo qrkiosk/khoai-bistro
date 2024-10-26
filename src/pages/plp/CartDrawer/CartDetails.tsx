@@ -215,7 +215,7 @@ const CartDetails = () => {
             </GridItem>
 
             <GridItem colSpan={2}>
-              <Text fontSize="sm" mt={1}>
+              <Text fontSize="sm" fontWeight="bold" mt={1}>
                 Tổng thanh toán
               </Text>
             </GridItem>

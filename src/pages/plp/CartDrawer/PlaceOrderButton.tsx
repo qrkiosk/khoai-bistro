@@ -118,13 +118,13 @@ const PlaceOrderButton = () => {
         colorScheme={APP_ACCENT_COLOR}
         w="100%"
         textAlign="left"
-        size="md"
+        size="lg"
         isLoading={isLoading}
         onClick={onClickPlaceOrder}
       >
         <Box w="100%" display="flex" justifyContent="space-between">
           <Text>Đặt món • {cart.items.length} món</Text>
-          <DisplayPrice variant="unstyled" size="md">
+          <DisplayPrice variant="unstyled" size="lg">
             {subtotal}
           </DisplayPrice>
         </Box>

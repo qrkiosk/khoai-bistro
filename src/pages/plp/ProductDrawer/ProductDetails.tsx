@@ -187,14 +187,14 @@ const ProductDetails = () => {
             colorScheme={APP_ACCENT_COLOR}
             w="100%"
             textAlign="left"
-            size="md"
+            size="lg"
             onClick={addToCartWithAuthInquiry}
           >
             <Box w="100%" display="flex" justifyContent="space-between">
               <Text>
                 {isEditingCartItem ? "Cập nhật" : "Thêm vào"} giỏ hàng
               </Text>
-              <DisplayPrice variant="unstyled" size="md">
+              <DisplayPrice variant="unstyled" size="lg">
                 {productVariantPrice}
               </DisplayPrice>
             </Box>

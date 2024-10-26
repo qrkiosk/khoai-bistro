@@ -85,7 +85,6 @@ export const ProductDisplayPrices = ({
   emphasizeSalePrice = false,
   ...otherProps
 }: ProductDisplayPricesProps) => {
-  console.log(priceSale, priceBase);
   return (
     <Box {...otherProps} className="flex items-center space-x-1">
       {priceSale !== priceBase && (

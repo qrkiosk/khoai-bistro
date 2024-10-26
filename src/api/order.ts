@@ -24,3 +24,14 @@ export const queryMerchantSideOrder = ({
     { companyId, storeId }
   );
 };
+
+export const sendZaloMessage = (data: {
+  customerId: string;
+  customerName: string;
+  tableName: string;
+  quantity: number;
+  totalAmount: number;
+  orderId: string;
+  orderCode: string;
+  accessTokenApp: string;
+}) => axios.post(`${BASE_URL}/zalo/app/send-message`, data);
