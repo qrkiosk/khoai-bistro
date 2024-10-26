@@ -19,7 +19,7 @@ import {
 import { APP_ACCENT_COLOR, APP_DANGER_COLOR } from "../../../utils/constants";
 import Divider from "../../../components/Divider";
 import { SkeletonContent } from "../../../components/skeletons";
-import { DisplayPrice, ProductDisplayPrices } from "../../../components/prices";
+import { Price, ProductPrice } from "../../../components/prices";
 import MandatoryOption from "../../../components/MandatoryOption";
 import NonMandatoryOption from "../../../components/NonMandatoryOption";
 import { useProductDrawer } from "./localState";
@@ -93,9 +93,9 @@ const ProductDetails = () => {
           <Box display="flex" justifyContent="space-between">
             <Heading size="sm">{productVariant.name}</Heading>
             <Box display="flex" flexDir="column" alignItems="flex-end" mb={4}>
-              <ProductDisplayPrices size="lg" emphasizeSalePrice>
+              <ProductPrice size="lg" emphasizeSalePrice>
                 {[productVariant.price, productVariant.priceSale]}
-              </ProductDisplayPrices>
+              </ProductPrice>
               <Text as="sub" color="gray" fontSize="xs" mt={1}>
                 Giá gốc
               </Text>
@@ -195,9 +195,9 @@ const ProductDetails = () => {
               <Text>
                 {isEditingCartItem ? "Cập nhật" : "Thêm vào"} giỏ hàng
               </Text>
-              <DisplayPrice variant="unstyled" size="lg">
+              <Price variant="unstyled" size="lg">
                 {productVariantPrice}
-              </DisplayPrice>
+              </Price>
             </Box>
           </Button>
         )}

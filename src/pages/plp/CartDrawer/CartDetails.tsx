@@ -30,7 +30,7 @@ import {
   calcItemTotalAmount,
   genMultiChoiceOptionDisplayText,
 } from "../../../utils/cart";
-import { DisplayPrice } from "../../../components/prices";
+import { Price } from "../../../components/prices";
 import Divider from "../../../components/Divider";
 import PlaceOrderButton from "./PlaceOrderButton";
 
@@ -184,9 +184,9 @@ const CartDetails = () => {
                     colSpan={1}
                     onClick={onClickEditItem}
                   >
-                    <DisplayPrice variant="standard" textAlign="right" mt={5}>
+                    <Price variant="standard" textAlign="right" mt={5}>
                       {calcItemTotalAmount(item)}
-                    </DisplayPrice>
+                    </Price>
                   </GridItem>
                 </>
               );
@@ -198,9 +198,9 @@ const CartDetails = () => {
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <DisplayPrice variant="standard" textAlign="right" mt={5}>
+              <Price variant="standard" textAlign="right" mt={5}>
                 {subtotal}
-              </DisplayPrice>
+              </Price>
             </GridItem>
 
             <GridItem colSpan={2}>
@@ -209,9 +209,9 @@ const CartDetails = () => {
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <DisplayPrice variant="standard" textAlign="right" mt={1}>
+              <Price variant="standard" textAlign="right" mt={1}>
                 {0}
-              </DisplayPrice>
+              </Price>
             </GridItem>
 
             <GridItem colSpan={2}>
@@ -220,9 +220,9 @@ const CartDetails = () => {
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <DisplayPrice variant="total" textAlign="right" mt={1}>
+              <Price variant="total" textAlign="right" mt={1}>
                 {subtotal}
-              </DisplayPrice>
+              </Price>
             </GridItem>
           </Grid>
         </Box>

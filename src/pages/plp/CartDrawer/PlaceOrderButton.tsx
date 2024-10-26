@@ -18,7 +18,7 @@ import {
   createMerchantSideOrder,
   queryMerchantSideOrder,
 } from "../../../api/order";
-import { DisplayPrice } from "../../../components/prices";
+import { Price } from "../../../components/prices";
 
 const PlaceOrderButton = () => {
   const toast = useToast();
@@ -83,12 +83,32 @@ const PlaceOrderButton = () => {
           orderCode: merchantSideOrder.code,
         }),
       });
-      const { orderId: zmpOrderId, messageToken } = paymentResult;
+      const { messageToken } = paymentResult;
 
-      console.log("Payment.createOrder success", {
-        paymentOrderId: zmpOrderId,
-        messageToken,
+      console.log("createMSOrderResult", createMSOrderResult);
+      console.log("merchantSideOrder", merchantSideOrder);
+      console.log("Payment.createOrder data", {
+        desc: `Thanh toán đơn hàng ${
+          merchantSideOrder.code
+        } số tiền ${withThousandSeparators(merchantSideOrder.totalAmount)}`,
+        item: merchantSideOrder.details.map((item) => ({
+          id: item.id,
+          amount: item.totalAmount,
+        })),
+        amount: merchantSideOrder.totalAmount,
+        extradata: JSON.stringify({
+          storeName: store?.name,
+          storeId,
+          companyId,
+          orderId,
+          customerId: customer.id,
+          orderCode: merchantSideOrder.code,
+        }),
       });
+      console.log("paymentResult", paymentResult);
+
+      // TODO: Save data for sending zalo message to global state here
+      // Card: https://trello.com/c/A0Ecqzdb/17-token-mini-app-khi-thanh-to%C3%A1n-th%C3%A0nh-c%C3%B4ng-call-server
     } catch (error: any) {
       console.log(error);
       toast(
@@ -125,9 +145,9 @@ const PlaceOrderButton = () => {
       >
         <Box w="100%" display="flex" justifyContent="space-between">
           <Text>Đặt món • {cart.items.length} món</Text>
-          <DisplayPrice variant="unstyled" size="lg">
+          <Price variant="unstyled" size="lg">
             {subtotal}
-          </DisplayPrice>
+          </Price>
         </Box>
       </Button>
     </Box>

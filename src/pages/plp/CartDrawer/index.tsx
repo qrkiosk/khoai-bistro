@@ -13,7 +13,7 @@ import {
 import { cartAtom, cartSubtotalAtom } from "../../../state";
 import { useCartDrawer } from "../../../hooks";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
-import { DisplayPrice } from "../../../components/prices";
+import { Price } from "../../../components/prices";
 import CartDetails from "./CartDetails";
 
 const CartDrawer = () => {
@@ -46,9 +46,9 @@ const CartDrawer = () => {
           >
             <Box w="100%" display="flex" justifyContent="space-between">
               <Text>Giỏ hàng • {cart.items.length} món</Text>
-              <DisplayPrice variant="unstyled" size="lg">
+              <Price variant="unstyled" size="lg">
                 {subtotal}
-              </DisplayPrice>
+              </Price>
             </Box>
           </Button>
         </Box>

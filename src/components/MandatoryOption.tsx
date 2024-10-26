@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 
 import { setVariantSelectedDetailAtom } from "../state";
-import { DisplayPrice } from "./prices";
+import { Price } from "./prices";
 import { OptionWithSelectedDetail } from "../types/product";
 
 const MandatoryOption = ({ option }: { option: OptionWithSelectedDetail }) => {
@@ -53,9 +53,9 @@ const MandatoryOption = ({ option }: { option: OptionWithSelectedDetail }) => {
                     </Text>
                   </Box>
                   {detail.price > 0 && (
-                    <DisplayPrice as="span" variant="standard" prefix="+">
+                    <Price as="span" variant="standard" prefix="+">
                       {detail.price}
-                    </DisplayPrice>
+                    </Price>
                   )}
                 </Box>
                 {!isLast && <LineDivider mt={3} />}

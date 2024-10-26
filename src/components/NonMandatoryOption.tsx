@@ -12,7 +12,7 @@ import {
 
 import { setVariantSelectedDetailsAtom } from "../state";
 import { OptionWithSelectedDetail } from "../types/product";
-import { DisplayPrice } from "./prices";
+import { Price } from "./prices";
 
 const NonMandatoryOption = ({
   option,
@@ -58,9 +58,9 @@ const NonMandatoryOption = ({
                     </Text>
                   </Box>
                   {detail.price > 0 && (
-                    <DisplayPrice as="span" variant="standard" prefix="+">
+                    <Price as="span" variant="standard" prefix="+">
                       {detail.price}
-                    </DisplayPrice>
+                    </Price>
                   )}
                 </Box>
                 {!isLast && <LineDivider mt={3} />}

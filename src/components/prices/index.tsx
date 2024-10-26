@@ -22,7 +22,7 @@ interface DisplayPriceProps extends Omit<TextProps, ProhibitedStyleProps> {
   suffix?: string;
 }
 
-export const DisplayPrice = ({
+export const Price = ({
   children,
   variant,
   size = "sm",
@@ -79,7 +79,7 @@ interface ProductDisplayPricesProps extends Omit<BoxProps, "size"> {
   emphasizeSalePrice?: boolean;
 }
 
-export const ProductDisplayPrices = ({
+export const ProductPrice = ({
   children: [priceBase, priceSale],
   size = "sm",
   emphasizeSalePrice = false,
@@ -88,13 +88,13 @@ export const ProductDisplayPrices = ({
   return (
     <Box {...otherProps} className="flex items-center space-x-1">
       {priceSale !== priceBase && (
-        <DisplayPrice variant="base" size={emphasizeSalePrice ? "sm" : size}>
+        <Price variant="base" size={emphasizeSalePrice ? "sm" : size}>
           {priceBase}
-        </DisplayPrice>
+        </Price>
       )}
-      <DisplayPrice variant="sale" size={size}>
+      <Price variant="sale" size={size}>
         {priceSale}
-      </DisplayPrice>
+      </Price>
     </Box>
   );
 };

@@ -6,7 +6,7 @@ import { Icon } from "zmp-ui";
 import { Product } from "../types/product";
 import { selectedProductIdAtom } from "../state";
 import { APP_ACCENT_COLOR } from "../utils/constants";
-import { ProductDisplayPrices } from "./prices";
+import { ProductPrice } from "./prices";
 
 const ProductItem = {} as {
   Banner: React.FC<{ product: Product }>;
@@ -47,9 +47,9 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
               {product.description}
             </Text>
           </Box>
-          <ProductDisplayPrices pb={2}>
+          <ProductPrice pb={2}>
             {[product.price, product.priceSale]}
-          </ProductDisplayPrices>
+          </ProductPrice>
         </Box>
         <IconButton
           icon={<Icon size={14} icon="zi-plus" />}
@@ -98,9 +98,7 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
         />
       </Box>
       <Text fontSize="sm">{product.name}</Text>
-      <ProductDisplayPrices pb={2}>
-        {[product.price, product.priceSale]}
-      </ProductDisplayPrices>
+      <ProductPrice pb={2}>{[product.price, product.priceSale]}</ProductPrice>
     </Box>
   );
 };
@@ -135,9 +133,9 @@ ProductItem.List = ({ product }: { product: Product }) => {
               {product.description}
             </Text>
           </Box>
-          <ProductDisplayPrices pb={2}>
+          <ProductPrice pb={2}>
             {[product.price, product.priceSale]}
-          </ProductDisplayPrices>
+          </ProductPrice>
         </Box>
         <IconButton
           icon={<Icon size={14} icon="zi-plus" />}
