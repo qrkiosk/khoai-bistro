@@ -157,13 +157,9 @@ const ProductDetails = () => {
       </Box>
 
       <Box
-        position="sticky"
-        left={0}
-        right={0}
-        bottom={0}
+        className="sticky left-0 right-0 bottom-0 p-3"
         bgColor="var(--zmp-background-white)"
         boxShadow="0px -4px 6px rgba(0, 0, 0, 0.1)"
-        p={3}
       >
         {shouldRemoveFromCart ? (
           <Button
