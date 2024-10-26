@@ -22,9 +22,10 @@ const NoteTextarea = () => {
     <Textarea
       ref={ref}
       rows={1}
-      size="md"
+      size="sm"
       transition="height none" // important for autosize to work properly
-      placeholder="Nhập lưu ý của bạn về món này."
+      placeholder="Thêm lưu ý của bạn về món này."
+      borderRadius="md"
       mb={5}
       value={variantNote}
       onChange={(e) => setVariantNote(e.target.value)}

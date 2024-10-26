@@ -84,5 +84,3 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
   }>;
   mac: string;
 }
-
-export type PaymentResult = CheckTransactionReturns | AsyncCallbackFailObject;

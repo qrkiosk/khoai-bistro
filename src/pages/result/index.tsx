@@ -1,23 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, Location as BaseLocation } from "react-router";
-import { useSetAtom } from "jotai";
-import { Payment } from "zmp-sdk";
-import { Page, useNavigate } from "zmp-ui";
-import { Box, Button } from "@chakra-ui/react";
+import { useLocation } from "react-router";
+import {
+  AsyncCallbackFailObject,
+  CheckTransactionReturns,
+  Payment,
+} from "zmp-sdk";
 
-import { PaymentResult } from "../../types/order";
-import { useCartDrawer } from "../../hooks";
-import { APP_ACCENT_COLOR } from "../../utils/constants";
-import { clearCartAtom } from "../../state";
-import ResultAnnouncement from "./ResultAnnouncement";
-
-interface State {
-  path?: string;
-  data?: string | Record<string, string>;
-  redirectSearch: string;
-}
-
-type Location = BaseLocation<State>;
+import { PaymentType, State, ResultPageLocation } from "../../types/payment";
+import {
+  ResultPending,
+  ResultGeneralError,
+  ResultCOD,
+  ResultMOMO,
+} from "../../components/payment";
 
 const getCheckTransData = (state: State) => {
   if ("path" in state) {
@@ -32,14 +27,11 @@ const getCheckTransData = (state: State) => {
 };
 
 const CheckoutResultPage = () => {
-  const navigate = useNavigate();
-  const { state }: Location = useLocation();
-  const { onClose: closeCart } = useCartDrawer();
-  const clearCart = useSetAtom(clearCartAtom);
+  const { state }: ResultPageLocation = useLocation();
   const checkTransAttempts = useRef(0);
-  const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(
-    null
-  );
+  const [paymentResult, setPaymentResult] = useState<
+    AsyncCallbackFailObject | CheckTransactionReturns | null
+  >(null);
 
   useEffect(() => {
     if (!state) return;
@@ -51,11 +43,14 @@ const CheckoutResultPage = () => {
     const checkStatus = () => {
       Payment.checkTransaction({
         data,
-        success: (data) => {
-          setPaymentResult(data);
-          if (data.resultCode === 0 && checkTransAttempts.current < 5) {
-            // Transaction still in progress, retry every 3s for 5 times
-            timeout = setTimeout(checkStatus, 3000);
+        success: (result) => {
+          console.log(result);
+          setPaymentResult(result);
+          if (result.resultCode === 0 && checkTransAttempts.current < 5) {
+            // Transaction still in progress, retry every 2.5s for 5 times
+            // After 5 attempts without success, transaction will be considered a failed one
+            // TODO: Mark the corresponding merchant-side order as failed if transaction fails
+            timeout = setTimeout(checkStatus, 2500);
           }
         },
         fail: setPaymentResult,
@@ -69,37 +64,25 @@ const CheckoutResultPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (paymentResult?.resultCode === 1) {
-      clearCart();
-      closeCart();
-    }
-  }, [paymentResult]);
+  if (paymentResult == null) return <ResultPending />;
 
-  return (
-    <Page className="flex-1 flex flex-col bg-white">
-      <ResultAnnouncement data={paymentResult} />
-      {paymentResult && (
-        <Box p={4}>
-          <Button
-            variant="solid"
-            autoFocus={false}
-            colorScheme={APP_ACCENT_COLOR}
-            size="md"
-            w="100%"
-            onClick={() => {
-              navigate(
-                { pathname: "/plp", search: state.redirectSearch },
-                { replace: true }
-              );
-            }}
-          >
-            {paymentResult.resultCode === 1 ? "Hoàn tất" : "Đóng"}
-          </Button>
-        </Box>
-      )}
-    </Page>
-  );
+  if ("code" in paymentResult) {
+    // This means paymentResult is an AsyncCallbackFailObject, checking the failure
+    console.log(paymentResult);
+    return <ResultGeneralError />;
+  }
+
+  // Here paymentResult is a CheckTransactionReturns
+  // Handle the result according to the payment method
+  switch (paymentResult.method) {
+    case PaymentType.MOMO:
+      return <ResultMOMO paymentResult={paymentResult} />;
+    case PaymentType.COD:
+      return <ResultCOD paymentResult={paymentResult} />;
+    case PaymentType.BANK:
+    default:
+      return null;
+  }
 };
 
 export default CheckoutResultPage;

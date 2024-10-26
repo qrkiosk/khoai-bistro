@@ -62,7 +62,7 @@ const CartDetails = () => {
             bgColor="var(--zmp-background-white)"
             _hover={{ bgColor: "var(--zmp-background-white)" }}
             fontSize="md"
-            icon={<Icon icon="zi-arrow-left" />}
+            icon={<Icon icon="zi-close" />}
             onClick={onClose}
           />
           <SkeletonText

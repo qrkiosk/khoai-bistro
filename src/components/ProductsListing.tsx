@@ -32,7 +32,7 @@ ProductsListing.Banner = forwardRef<
   return (
     <Box bgColor="var(--zmp-background-white)" py={5}>
       <Box ref={ref} id={category.id} />
-      <Heading as="p" size="md" px={6} mt={1} mb={2}>
+      <Heading as="p" size="md" fontWeight="semibold" px={6} mt={1} mb={2}>
         {category.name}
       </Heading>
       <Box className="embla">
@@ -57,7 +57,7 @@ ProductsListing.Grid = forwardRef<
   return (
     <Box bgColor="var(--zmp-background-white)" px={6} py={5}>
       <Box ref={ref} id={category.id} />
-      <Heading as="p" size="md" mt={1} mb={4}>
+      <Heading as="p" size="md" fontWeight="semibold" mt={1} mb={4}>
         {category.name}
       </Heading>
       <Box className="grid grid-cols-2 gap-4">
@@ -76,7 +76,7 @@ ProductsListing.List = forwardRef<
   return (
     <Box bgColor="var(--zmp-background-white)" px={6} py={5}>
       <Box ref={ref} id={category.id} />
-      <Heading as="p" size="md" mt={1} mb={4}>
+      <Heading as="p" size="md" fontWeight="semibold" mt={1} mb={4}>
         {category.name}
       </Heading>
       <Box className="flex flex-col">

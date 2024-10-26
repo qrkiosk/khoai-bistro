@@ -41,7 +41,7 @@ const ProductDrawer = () => {
           _hover={{ bgColor: "var(--zmp-background-white)" }}
           fontSize="md"
           zIndex={999}
-          icon={<Icon icon="zi-arrow-left" />}
+          icon={<Icon icon="zi-close" />}
           onClick={onClose}
         />
         <ErrorBoundary

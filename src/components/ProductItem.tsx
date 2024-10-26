@@ -6,7 +6,7 @@ import { Icon } from "zmp-ui";
 import { Product } from "../types/product";
 import { selectedProductIdAtom } from "../state";
 import { APP_ACCENT_COLOR } from "../utils/constants";
-import { DisplayPrice, ProductDisplayPrices } from "./prices";
+import { ProductDisplayPrices } from "./prices";
 
 const ProductItem = {} as {
   Banner: React.FC<{ product: Product }>;
@@ -25,7 +25,7 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
       direction="row"
       overflow="hidden"
       variant="unstyled"
-      borderRadius="12px"
+      borderRadius="2xl"
       boxShadow="0px 0px 4px rgba(0, 0, 0, 0.15)"
       p={2.5}
       onClick={selectProduct}
@@ -35,7 +35,7 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
           src={product.url}
           alt="Banner Product Image"
           loading="lazy"
-          borderRadius="12px"
+          borderRadius="xl"
           objectFit="cover"
           minW="96px"
           maxW="96px"
@@ -78,6 +78,7 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
     <Box className="space-y-2" onClick={selectProduct}>
       <Box className="w-full aspect-square relative">
         <Image
+          borderRadius="2xl"
           loading="lazy"
           src={product.url}
           alt="Grid Product Image"
@@ -122,7 +123,7 @@ ProductItem.List = ({ product }: { product: Product }) => {
           src={product.url}
           alt="List Product Image"
           loading="lazy"
-          borderRadius="12px"
+          borderRadius="xl"
           objectFit="cover"
           minW="96px"
           maxW="96px"

@@ -117,6 +117,7 @@ const PlaceOrderButton = () => {
         autoFocus={false}
         colorScheme={APP_ACCENT_COLOR}
         w="100%"
+        borderRadius="lg"
         textAlign="left"
         size="lg"
         isLoading={isLoading}
