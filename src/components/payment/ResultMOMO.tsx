@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useLocation } from "react-router";
 import { Page, useNavigate } from "zmp-ui";
 import { CheckTransactionReturns } from "zmp-sdk";
 
 import { ResultPageLocation } from "../../types/payment";
+import { sendZaloMessage } from "../../api/order";
+import { clearCartAtom, oaMessageReqDataAtom } from "../../state";
 import { useCartDrawer } from "../../hooks";
 import { IconPaymentFail, IconPaymentSuccess } from "./icons";
 import ResultTemplate from "./ResultTemplate";
 import CloseResultButton from "./CloseResultButton";
-import { useLocation } from "react-router";
-import { clearCartAtom } from "../../state";
-import { useSetAtom } from "jotai";
 
 const ResultMOMO = ({
   paymentResult,
@@ -20,6 +21,7 @@ const ResultMOMO = ({
   const { state }: ResultPageLocation = useLocation();
   const { onClose: closeCart } = useCartDrawer();
   const clearCart = useSetAtom(clearCartAtom);
+  const oaMessageReqData = useAtomValue(oaMessageReqDataAtom);
   const isSuccessful = paymentResult.resultCode === 1;
 
   const onClose = useCallback(() => {
@@ -31,20 +33,9 @@ const ResultMOMO = ({
 
   useEffect(() => {
     if (isSuccessful) {
+      if (oaMessageReqData != null) sendZaloMessage(oaMessageReqData);
       clearCart();
       closeCart();
-
-      // Card: https://trello.com/c/A0Ecqzdb/17-token-mini-app-khi-thanh-to%C3%A1n-th%C3%A0nh-c%C3%B4ng-call-server
-      // sendZaloMessage({
-      //   customerId: customer.id,
-      //   customerName: customer.name,
-      //   tableName: table.name,
-      //   quantity: merchantSideOrder.details.length,
-      //   totalAmount: merchantSideOrder.totalAmount,
-      //   orderId,
-      //   orderCode: merchantSideOrder.code,
-      //   accessTokenApp: messageToken ?? "",
-      // });
     }
   }, [isSuccessful]);
 

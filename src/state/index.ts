@@ -15,6 +15,7 @@ import {
 } from "../types/product";
 import { PaymentType } from "../types/payment";
 import { ShippingType } from "../types/shipping";
+import { OAMessageReqData } from "../types/order";
 import { FuseWithDataSet, getFuseInstance } from "../utils/fuse";
 import { getStoreTableById, getStoreById } from "../api/company";
 import { getProductById, getStoreProductsByCategory } from "../api/product";
@@ -468,3 +469,5 @@ export const categoryNameInViewAtom = atom<string | null>((get) => {
   );
   return category?.name ?? null;
 });
+
+export const oaMessageReqDataAtom = atom<OAMessageReqData | null>(null);

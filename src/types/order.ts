@@ -84,3 +84,16 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
   }>;
   mac: string;
 }
+
+export interface OAMessageReqData {
+  customerId: string;
+  customerName: string;
+  tableName: string;
+  quantity: number;
+  totalAmount: number;
+  orderId: string;
+  orderCode: string;
+  accessTokenApp: string;
+  companyId: number;
+  storeId: number;
+}

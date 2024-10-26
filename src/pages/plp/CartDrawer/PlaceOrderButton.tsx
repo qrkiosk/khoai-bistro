@@ -1,24 +1,25 @@
 import React from "react";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { Box, Button, Text, useBoolean, useToast } from "@chakra-ui/react";
 import { Payment } from "zmp-sdk";
 
+import { OAMessageReqData } from "../../../types/order";
 import {
   cartAtom,
   cartSubtotalAtom,
   cartTotalQtyAtom,
+  oaMessageReqDataAtom,
   storeInfoAtom,
   tableInfoAtom,
   userInfoAtom,
 } from "../../../state";
-import { APP_ACCENT_COLOR } from "../../../utils/constants";
-import { withThousandSeparators } from "../../../utils/number";
-import { buildOrder, genErrorToast } from "../../../utils/order";
-import { delay } from "../../../utils";
 import {
   createMerchantSideOrder,
   queryMerchantSideOrder,
 } from "../../../api/order";
+import { APP_ACCENT_COLOR } from "../../../utils/constants";
+import { withThousandSeparators } from "../../../utils/number";
+import { buildOrder, genErrorToast } from "../../../utils/order";
 import { Price } from "../../../components/prices";
 
 const PlaceOrderButton = () => {
@@ -31,6 +32,7 @@ const PlaceOrderButton = () => {
   const customer = useAtomValue(userInfoAtom);
   const subtotal = useAtomValue(cartSubtotalAtom);
   const cartTotalQty = useAtomValue(cartTotalQtyAtom);
+  const saveOAMessageReqData = useSetAtom(oaMessageReqDataAtom);
 
   const onClickPlaceOrder = async () => {
     showLoading();
@@ -51,8 +53,6 @@ const PlaceOrderButton = () => {
       const orderData = buildOrder({ table, customer, cart });
       const createMSOrderResult = await createMerchantSideOrder(orderData);
       const { id: orderId, companyId, storeId } = createMSOrderResult.data.data;
-
-      await delay(500); // Wait for merchant server to complete all operations related to the order
 
       const queryMSOrderResult = await queryMerchantSideOrder({
         orderId,
@@ -87,30 +87,20 @@ const PlaceOrderButton = () => {
       });
       const { messageToken } = paymentResult;
 
-      console.log("createMSOrderResult", createMSOrderResult);
-      console.log("merchantSideOrder", merchantSideOrder);
-      console.log("Payment.createOrder data", {
-        desc: `Thanh toán đơn hàng ${
-          merchantSideOrder.code
-        } số tiền ${withThousandSeparators(merchantSideOrder.totalAmount)}`,
-        item: merchantSideOrder.details.map((item) => ({
-          id: item.id,
-          amount: item.totalAmount,
-        })),
-        amount: merchantSideOrder.totalAmount,
-        extradata: JSON.stringify({
-          storeName: store?.name,
-          storeId,
-          companyId,
-          orderId,
-          customerId: customer.id,
-          orderCode: merchantSideOrder.code,
-        }),
-      });
-      console.log("paymentResult", paymentResult);
-
-      // TODO: Save data for sending zalo message to global state here
-      // Card: https://trello.com/c/A0Ecqzdb/17-token-mini-app-khi-thanh-to%C3%A1n-th%C3%A0nh-c%C3%B4ng-call-server
+      const newOAMessageReqData: OAMessageReqData = {
+        customerId: customer.id,
+        customerName: customer.name,
+        tableName: table.name,
+        quantity: merchantSideOrder.details.length,
+        totalAmount: merchantSideOrder.totalAmount,
+        orderId,
+        orderCode: merchantSideOrder.code,
+        accessTokenApp: messageToken ?? "",
+        companyId,
+        storeId,
+      };
+      saveOAMessageReqData(newOAMessageReqData);
+      console.log(newOAMessageReqData);
     } catch (error: any) {
       console.log(error);
       toast(
