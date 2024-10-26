@@ -298,6 +298,11 @@ export const cartAtom = atomWithStorage<Cart>(
   { getOnInit: true }
 );
 
+export const cartTotalQtyAtom = atom((get) => {
+  const cart = get(cartAtom);
+  return cart.items.reduce((acc, item) => acc + item.quantity, 0);
+});
+
 export const cartSubtotalAtom = atom((get) => {
   const cart = get(cartAtom);
 

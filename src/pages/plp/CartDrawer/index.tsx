@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { cartAtom, cartSubtotalAtom } from "../../../state";
+import { cartAtom, cartSubtotalAtom, cartTotalQtyAtom } from "../../../state";
 import { useCartDrawer } from "../../../hooks";
 import { APP_ACCENT_COLOR } from "../../../utils/constants";
 import { Price } from "../../../components/prices";
@@ -20,6 +20,7 @@ const CartDrawer = () => {
   const { isOpen, onOpen, onClose } = useCartDrawer();
   const cart = useAtomValue(cartAtom);
   const subtotal = useAtomValue(cartSubtotalAtom);
+  const cartTotalQty = useAtomValue(cartTotalQtyAtom);
   const isCartEmpty = isEmpty(cart.items);
 
   return (
@@ -45,7 +46,7 @@ const CartDrawer = () => {
             onClick={onOpen}
           >
             <Box w="100%" display="flex" justifyContent="space-between">
-              <Text>Giỏ hàng • {cart.items.length} món</Text>
+              <Text>Giỏ hàng • {cartTotalQty} món</Text>
               <Price variant="unstyled" size="lg">
                 {subtotal}
               </Price>

@@ -6,6 +6,7 @@ import { Payment } from "zmp-sdk";
 import {
   cartAtom,
   cartSubtotalAtom,
+  cartTotalQtyAtom,
   storeInfoAtom,
   tableInfoAtom,
   userInfoAtom,
@@ -29,6 +30,7 @@ const PlaceOrderButton = () => {
   const cart = useAtomValue(cartAtom);
   const customer = useAtomValue(userInfoAtom);
   const subtotal = useAtomValue(cartSubtotalAtom);
+  const cartTotalQty = useAtomValue(cartTotalQtyAtom);
 
   const onClickPlaceOrder = async () => {
     showLoading();
@@ -144,7 +146,7 @@ const PlaceOrderButton = () => {
         onClick={onClickPlaceOrder}
       >
         <Box w="100%" display="flex" justifyContent="space-between">
-          <Text>Đặt món • {cart.items.length} món</Text>
+          <Text>Đặt món • {cartTotalQty} món</Text>
           <Price variant="unstyled" size="lg">
             {subtotal}
           </Price>

@@ -5,12 +5,10 @@ import { authorize, EventName, events, getUserInfo } from "zmp-sdk";
 import { useNavigate, useSnackbar } from "zmp-ui";
 import { useBoolean } from "@chakra-ui/react";
 
-import { Cart } from "../types/cart";
 import { delay } from "../utils";
 import { matchStatusBarColor } from "../utils/device";
 import { verifyLocationSearch } from "../utils/product";
 import {
-  cartAtom,
   isCartDrawerOpenAtom,
   isUserAuthorizedAtom,
   userInfoAtom,
@@ -155,23 +153,6 @@ export function useToBeImplemented() {
       type: "success",
       text: "Chức năng dành cho các bên tích hợp phát triển...",
     });
-}
-
-export function useLocalStorageCart() {
-  const [cart, setCart] = useAtom(cartAtom);
-
-  useEffect(() => {
-    const cartJson = window.localStorage.getItem("cart");
-    if (cartJson) {
-      const cart: Cart = JSON.parse(cartJson);
-
-      if (cart && cart.items.length > 0) setCart(cart);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
 }
 
 export const useAuthInquiryOnStartup = () => {
