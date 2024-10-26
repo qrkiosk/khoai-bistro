@@ -10,7 +10,7 @@ import Header from "./Header";
 import MainContent from "./MainContent";
 import CategoriesDrawer from "./CategoriesDrawer";
 import ProductDrawer from "./ProductDrawer";
-import CartDrawer from "./CartDrawer";
+import Cart from "./Cart";
 
 const ProductListPage = () => {
   const setSearchParamIds = useSetAtom(setSearchParamIdsAtom);
@@ -28,7 +28,7 @@ const ProductListPage = () => {
       <MainContent />
       <CategoriesDrawer />
       <ProductDrawer />
-      <CartDrawer />
+      <Cart />
     </Page>
   );
 };
