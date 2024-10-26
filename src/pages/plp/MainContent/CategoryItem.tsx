@@ -41,7 +41,7 @@ const CategoryItem = ({
   }, []);
 
   return (
-    <Box key={category.id} ref={observeIntersectionRef}>
+    <Box ref={observeIntersectionRef}>
       {template === CategoryTemplate.BANNER && (
         <ProductsListing.Banner ref={scrollIntoViewRef} category={category} />
       )}

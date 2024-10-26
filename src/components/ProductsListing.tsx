@@ -39,7 +39,7 @@ ProductsListing.Banner = forwardRef<
         <Box className="embla__viewport" ref={emblaRef}>
           <Box className="embla__container">
             {category.products.map((product) => (
-              <Box className="embla__slide" key={product.id}>
+              <Box key={product.id} className="embla__slide">
                 <ProductItem.Banner product={product} />
               </Box>
             ))}

@@ -45,7 +45,7 @@ const CartSummary = () => {
           </GridItem>
 
           {cart.items.map((item) => (
-            <CartItem>{item}</CartItem>
+            <CartItem key={item.uniqIdentifier}>{item}</CartItem>
           ))}
 
           <GridItem colSpan={2}>

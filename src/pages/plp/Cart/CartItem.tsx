@@ -3,6 +3,8 @@ import { useSetAtom } from "jotai";
 import isEmpty from "lodash/isEmpty";
 import { Box, Button, GridItem, Heading, Stack, Text } from "@chakra-ui/react";
 
+import { OptionWithSelectedDetail } from "../../../types/product";
+import { CartProductVariant } from "../../../types/cart";
 import {
   isEditingCartItemAtom,
   productVariantAtom,
@@ -14,7 +16,22 @@ import {
   genMultiChoiceOptionDisplayText,
 } from "../../../utils/cart";
 import { Price } from "../../../components/prices";
-import { CartProductVariant } from "../../../types/cart";
+
+const CartItemOption = ({
+  children: option,
+}: {
+  children: OptionWithSelectedDetail;
+}) => {
+  if (option.selectedDetail) {
+    return <Text fontSize="sm">{option.selectedDetail.name}</Text>;
+  }
+
+  if (!isEmpty(option.selectedDetails)) {
+    return <Text fontSize="sm">{genMultiChoiceOptionDisplayText(option)}</Text>;
+  }
+
+  return null;
+};
 
 const CartItem = ({ children: item }: { children: CartProductVariant }) => {
   const removeCartItem = useSetAtom(removeCartItemAtom);
@@ -32,7 +49,7 @@ const CartItem = ({ children: item }: { children: CartProductVariant }) => {
 
   return (
     <>
-      <GridItem key={`${item.uniqIdentifier}--col1`} colSpan={2}>
+      <GridItem colSpan={2}>
         <Box h="100%" w="100%" display="flex" mt={5}>
           <Box className="clickable-area" onClick={onClickEditItem}>
             <Button
@@ -56,18 +73,7 @@ const CartItem = ({ children: item }: { children: CartProductVariant }) => {
               </Heading>
               <Stack rowGap={1}>
                 {item.options.map((opt) => (
-                  <>
-                    {opt.selectedDetail && (
-                      <Text key={opt.id} fontSize="sm">
-                        {opt.selectedDetail.name}
-                      </Text>
-                    )}
-                    {!isEmpty(opt.selectedDetails) && (
-                      <Text key={opt.id} fontSize="sm">
-                        {genMultiChoiceOptionDisplayText(opt)}
-                      </Text>
-                    )}
-                  </>
+                  <CartItemOption key={opt.id}>{opt}</CartItemOption>
                 ))}
                 {item.note && (
                   <Text fontSize="xs" color="GrayText">
@@ -105,7 +111,6 @@ const CartItem = ({ children: item }: { children: CartProductVariant }) => {
         </Box>
       </GridItem>
       <GridItem
-        key={`${item.uniqIdentifier}--col2`}
         colSpan={1}
         className="clickable-area"
         onClick={onClickEditItem}

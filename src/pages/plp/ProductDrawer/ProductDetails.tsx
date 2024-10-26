@@ -20,10 +20,9 @@ import { APP_ACCENT_COLOR, APP_DANGER_COLOR } from "../../../utils/constants";
 import Divider from "../../../components/Divider";
 import { SkeletonContent } from "../../../components/skeletons";
 import { Price, ProductPrice } from "../../../components/prices";
-import MandatoryOption from "../../../components/MandatoryOption";
-import NonMandatoryOption from "../../../components/NonMandatoryOption";
 import { useProductDrawer } from "./localState";
 import NoteTextarea from "./NoteTextarea";
+import ProductOption from "./ProductOption";
 
 const ProductDetails = () => {
   const { onClose } = useProductDrawer();
@@ -108,16 +107,7 @@ const ProductDetails = () => {
         <Divider />
 
         {productVariant.options.map((option) => (
-          <>
-            <Box key={option.id} p={4} bgColor="var(--zmp-background-white)">
-              {option.isMandatory ? (
-                <MandatoryOption option={option} />
-              ) : (
-                <NonMandatoryOption option={option} />
-              )}
-            </Box>
-            <Divider />
-          </>
+          <ProductOption key={option.id}>{option}</ProductOption>
         ))}
 
         <Box
