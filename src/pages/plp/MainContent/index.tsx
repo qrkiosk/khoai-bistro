@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { Box, Text } from "@chakra-ui/react";
 import isEmpty from "lodash/isEmpty";
 
-import { storeProductsByCategoryAtom } from "../../../state";
+import {
+  mainContentRefAtom,
+  storeProductsByCategoryAtom,
+} from "../../../state";
 import { useDelayedRendering } from "../../../hooks";
 import { SkeletonContent } from "../../../components/skeletons";
-import { usePlpMainContentAreaRef } from "./localState";
 import MainList from "./MainList";
 import SearchResult from "./SearchResult";
 
 const MainContent = () => {
-  const ref = usePlpMainContentAreaRef();
+  const ref = useRef<HTMLDivElement>(null);
+  const setMainContentRef = useSetAtom(mainContentRefAtom);
+  useEffect(() => {
+    setMainContentRef(ref);
+  }, [ref]);
+
   const { data: categories, isLoading: isFetching } = useAtomValue(
     storeProductsByCategoryAtom
   );

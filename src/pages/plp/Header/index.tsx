@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { useAtom, useAtomValue } from "jotai";
+import React, { useCallback, useEffect, useRef } from "react";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Header as ZHeader, Icon } from "zmp-ui";
 import {
   Box,
@@ -18,6 +18,8 @@ import {
 
 import {
   categoryNameInViewAtom,
+  headerRefAtom,
+  isHeaderShownAtom,
   storeInfoAtom,
   userNameAtom,
 } from "../../../state";
@@ -149,15 +151,33 @@ const HeaderContent = () => {
 };
 
 const Header = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const setHeaderRef = useSetAtom(headerRefAtom);
+  useEffect(() => {
+    setHeaderRef(ref);
+  }, [ref]);
+
+  const isHeaderShown = useAtomValue(isHeaderShownAtom);
+
   return (
     <ZHeader
+      ref={ref}
       showBackIcon={false}
       title={(<HeaderContent />) as unknown as string}
+      className="safe-area-top"
       style={{
-        position: "sticky",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+        paddingBottom: 0,
         height: "auto",
-        padding: "0px 0px 0px 0px",
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        transition: "visibility 0.3s linear,opacity 0.3s linear",
+        visibility: isHeaderShown ? "visible" : "hidden",
+        opacity: isHeaderShown ? 1 : 0,
       }}
     />
   );

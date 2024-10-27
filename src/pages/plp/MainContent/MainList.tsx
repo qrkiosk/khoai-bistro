@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { Icon } from "zmp-ui";
 import {
   Box,
@@ -11,6 +11,7 @@ import {
 
 import { CategoryTemplate } from "../../../types/product";
 import {
+  isHeaderShownAtom,
   isSearchQueryEmptyAtom,
   storeInfoAtom,
   storeProductsByCategoryAtom,
@@ -22,16 +23,31 @@ import { useIsLoadedTableOrStore } from "../../../hooks";
 
 const MainListHeader = () => {
   const storeInfoCardRef = useRef<HTMLDivElement>(null);
-  const [fillerBoxH, setFillerBoxHeight] = useState<string | number>();
+  const bannerImgRef = useRef<HTMLDivElement>(null);
+  const [fillerBoxH, setFillerBoxH] = useState<string | number>();
   const { data: tableInfo } = useAtomValue(tableInfoAtom);
   const { data: storeInfo } = useAtomValue(storeInfoAtom);
   const userName = useAtomValue(userNameAtom);
   const isDataReady = useIsLoadedTableOrStore();
+  const setIsHeaderShown = useSetAtom(isHeaderShownAtom);
+
+  useEffect(() => {
+    if (bannerImgRef.current == null) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setIsHeaderShown(false);
+      } else {
+        setIsHeaderShown(true);
+      }
+    });
+
+    observer.observe(bannerImgRef.current);
+  }, []);
 
   useEffect(() => {
     if (storeInfoCardRef.current?.clientHeight) {
-      const pb = 8;
-      setFillerBoxHeight(0.75 * storeInfoCardRef.current.clientHeight + pb);
+      setFillerBoxH(0.75 * storeInfoCardRef.current.clientHeight + 8);
     }
   }, [storeInfoCardRef.current?.clientHeight]);
 
@@ -43,6 +59,7 @@ const MainListHeader = () => {
   return (
     <>
       <Box
+        ref={bannerImgRef}
         className="flex justify-center relative w-full"
         h="33%"
         background="url(https://www.shutterstock.com/image-photo/cup-coffee-beans-sack-on-600nw-1037995396.jpg)"

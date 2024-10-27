@@ -471,3 +471,9 @@ export const categoryNameInViewAtom = atom<string | null>((get) => {
 });
 
 export const oaMessageReqDataAtom = atom<OAMessageReqData | null>(null);
+
+export const isHeaderShownAtom = atom(false);
+
+export const mainContentRefAtom = atom<RefObject<HTMLDivElement> | null>(null);
+
+export const headerRefAtom = atom<RefObject<HTMLDivElement> | null>(null);

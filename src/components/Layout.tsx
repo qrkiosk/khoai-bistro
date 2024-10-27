@@ -12,7 +12,7 @@ const Layout = () => {
   useHandlePayment();
 
   return (
-    <Box className="flex flex-col h-screen safe-area">
+    <Box className="flex flex-col h-screen safe-area-bottom">
       <Box className="flex-1 flex flex-col overflow-hidden">
         <Routes>
           <Route path="/" element={<HomePage />} />
