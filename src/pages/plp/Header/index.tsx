@@ -1,154 +1,13 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { Header as ZHeader, Icon } from "zmp-ui";
-import {
-  Box,
-  Button,
-  CloseButton,
-  Grid,
-  GridItem,
-  Heading,
-  Image,
-  Input,
-  InputGroup,
-  InputRightElement,
-  SkeletonCircle,
-  SkeletonText,
-} from "@chakra-ui/react";
+import React, { useEffect, useMemo, useRef } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { Header as ZHeader } from "zmp-ui";
 
 import {
-  categoryNameInViewAtom,
   headerRefAtom,
   isHeaderShownAtom,
-  storeInfoAtom,
-  userNameAtom,
+  isSearchQueryEmptyAtom,
 } from "../../../state";
-import { useDelayedRendering, useIsLoadedTableOrStore } from "../../../hooks";
-import { useCategoryDrawer } from "../localState";
-import {
-  inputAtom,
-  useSearchMode,
-  useDebouncedSearchQueryUpdate,
-} from "./localState";
-import TableInfo from "./TableInfo";
-
-const HeaderContent = () => {
-  const { onOpen } = useCategoryDrawer();
-  const [input, setInput] = useAtom(inputAtom);
-  const {
-    isInSearchMode,
-    onEnter: onEnterSearchMode,
-    onExit,
-  } = useSearchMode();
-  const categoryNameInView = useAtomValue(categoryNameInViewAtom);
-  const userName = useAtomValue(userNameAtom);
-  const { data: storeInfo } = useAtomValue(storeInfoAtom);
-  const isLoadedTableOrStore = useIsLoadedTableOrStore();
-  const showCategoryNameInView = useDelayedRendering(800);
-
-  const onChangeInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value),
-    []
-  );
-  const onExitSearchMode = useCallback(() => {
-    onExit();
-    setInput("");
-  }, []);
-  useDebouncedSearchQueryUpdate();
-
-  return (
-    <Grid
-      templateRows={`repeat(2, 1fr)`}
-      templateColumns="repeat(3, 1fr)"
-      rowGap={2}
-    >
-      <GridItem colSpan={2}>
-        <Box pl={2.5} className="flex items-center w-full space-x-2">
-          <SkeletonCircle size="10" isLoaded={isLoadedTableOrStore}>
-            <Image
-              className="w-10 h-10 rounded-lg border-inset"
-              src={storeInfo?.companyAvatar}
-            />
-          </SkeletonCircle>
-          <SkeletonText
-            noOfLines={2}
-            skeletonHeight="2"
-            textAlign="left"
-            w="75%"
-            mt={2}
-            isLoaded={isLoadedTableOrStore}
-          >
-            <Heading size="xs" fontWeight="semibold">
-              {userName ? `Xin chào, ${userName}!` : "Xin chào quý khách!"}
-            </Heading>
-            <TableInfo />
-          </SkeletonText>
-        </Box>
-      </GridItem>
-      <GridItem colSpan={1}>
-        {/* This col is for the mini app minimize button */}
-      </GridItem>
-
-      <GridItem colSpan={3}>
-        {isInSearchMode ? (
-          <InputGroup size="sm" px={2.5}>
-            <Input
-              autoFocus
-              placeholder="Nhập từ khoá"
-              borderRadius="md"
-              value={input}
-              onChange={onChangeInput}
-            />
-            <InputRightElement right="10px">
-              <CloseButton
-                size="sm"
-                _hover={{ bg: "none" }}
-                onClick={onExitSearchMode}
-              />
-            </InputRightElement>
-          </InputGroup>
-        ) : (
-          <Box
-            display="flex"
-            alignItems="center"
-            className="space-x-2"
-            px={2.5}
-          >
-            <Box display="flex" flexGrow={1}>
-              <Button
-                variant="outline"
-                size="sm"
-                w="100%"
-                p="0 8px"
-                justifyContent="space-between"
-                rightIcon={<Icon icon="zi-chevron-down" size={20} />}
-                onClick={onOpen}
-              >
-                <SkeletonText
-                  noOfLines={1}
-                  skeletonHeight="2"
-                  textAlign="left"
-                  w="60%"
-                  isLoaded={showCategoryNameInView}
-                >
-                  {categoryNameInView}
-                </SkeletonText>
-              </Button>
-            </Box>
-            <Button
-              variant="outline"
-              size="sm"
-              leftIcon={<Icon icon="zi-search" size={20} />}
-              onClick={onEnterSearchMode}
-            >
-              Tìm
-            </Button>
-          </Box>
-        )}
-      </GridItem>
-    </Grid>
-  );
-};
+import HeaderContent from "./HeaderContent";
 
 const Header = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -158,6 +17,36 @@ const Header = () => {
   }, [ref]);
 
   const isHeaderShown = useAtomValue(isHeaderShownAtom);
+  const isSearchQueryEmpty = useAtomValue(isSearchQueryEmptyAtom);
+  const headerStyles = useMemo<React.CSSProperties>(() => {
+    const common = {
+      top: 0,
+      left: 0,
+      right: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
+      paddingBottom: 0,
+      height: "auto",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      transition: "visibility 0.3s linear,opacity 0.3s linear",
+    };
+
+    if (isSearchQueryEmpty) {
+      return {
+        ...common,
+        position: "absolute",
+        visibility: isHeaderShown ? "visible" : "hidden",
+        opacity: isHeaderShown ? 1 : 0,
+      };
+    }
+
+    return {
+      ...common,
+      position: "sticky",
+      visibility: "visible",
+      opacity: 1,
+    };
+  }, [isSearchQueryEmpty, isHeaderShown]);
 
   return (
     <ZHeader
@@ -165,20 +54,7 @@ const Header = () => {
       showBackIcon={false}
       title={(<HeaderContent />) as unknown as string}
       className="safe-area-top"
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        paddingLeft: 0,
-        paddingRight: 0,
-        paddingBottom: 0,
-        height: "auto",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        transition: "visibility 0.3s linear,opacity 0.3s linear",
-        visibility: isHeaderShown ? "visible" : "hidden",
-        opacity: isHeaderShown ? 1 : 0,
-      }}
+      style={headerStyles}
     />
   );
 };
