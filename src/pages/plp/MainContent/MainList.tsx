@@ -8,6 +8,7 @@ import {
   Text,
   Divider as LineDivider,
 } from "@chakra-ui/react";
+import compact from "lodash/compact";
 
 import { CategoryTemplate } from "../../../types/product";
 import {
@@ -81,21 +82,21 @@ const MainListHeader = () => {
           </Heading>
 
           <Box display="flex" alignItems="flex-start" className="space-x-1">
-            <Icon size={20} icon="zi-location" />
+            <Icon size={20} icon="zi-location" style={{ color: "GrayText" }} />
             <Text color="GrayText" fontSize="sm">
-              {[
+              {compact([
                 safeStoreInfo.address,
                 safeStoreInfo.wardName,
                 safeStoreInfo.districtName,
                 safeStoreInfo.provinceName,
-              ].join(", ")}
+              ]).join(", ")}
             </Text>
           </Box>
 
           <LineDivider color="lightgrey" my={3} />
 
           <Box display="flex" alignItems="flex-start" className="space-x-1">
-            <Icon size={20} icon="zi-qrline" />
+            <Icon size={20} icon="zi-qrline" style={{ color: "GrayText" }} />
             <Text color="InfoText" fontSize="sm">
               <Text as="span">Bạn {userName || ""} đang ngồi </Text>
               <Text as="span" fontWeight="semibold">
