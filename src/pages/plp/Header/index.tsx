@@ -156,7 +156,7 @@ const Header = () => {
       style={{
         position: "sticky",
         height: "auto",
-        padding: "8px 0 2px",
+        padding: "0px 0px 0px 0px",
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     />

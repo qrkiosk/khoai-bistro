@@ -467,7 +467,7 @@ export const categoryNameInViewAtom = atom<string | null>((get) => {
   const category = storeProducts.find(
     (category) => category.id === categoryIdInView
   );
-  return category?.name ?? null;
+  return category?.name ?? "Tất cả danh mục";
 });
 
 export const oaMessageReqDataAtom = atom<OAMessageReqData | null>(null);
