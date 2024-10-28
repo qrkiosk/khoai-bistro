@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useAtomValue } from "jotai";
 import { Icon } from "zmp-ui";
-import { Drawer, DrawerContent, IconButton, Text } from "@chakra-ui/react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  IconButton,
+  Text,
+} from "@chakra-ui/react";
 
 import { isEditingCartItemAtom, selectedProductIdAtom } from "../../../state";
 import { useProductDrawer } from "./localState";
@@ -27,6 +33,7 @@ const ProductDrawer = () => {
       isOpen={isOpen}
       onClose={onClose}
     >
+      <DrawerOverlay />
       <DrawerContent>
         <IconButton
           isRound={true}

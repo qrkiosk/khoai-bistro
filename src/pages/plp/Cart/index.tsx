@@ -1,7 +1,7 @@
 import React from "react";
 import { useAtomValue } from "jotai";
 import isEmpty from "lodash/isEmpty";
-import { Box, Drawer, DrawerContent } from "@chakra-ui/react";
+import { Box, Drawer, DrawerContent, DrawerOverlay } from "@chakra-ui/react";
 
 import { cartAtom } from "../../../state";
 import { useCartDrawer } from "../../../hooks";
@@ -32,6 +32,7 @@ const Cart = () => {
         isOpen={isOpen}
         onClose={onClose}
       >
+        <DrawerOverlay />
         <DrawerContent>
           {isCartEmpty ? <CartEmptyState /> : <CartContent />}
         </DrawerContent>
