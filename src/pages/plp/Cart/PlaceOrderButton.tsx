@@ -91,7 +91,7 @@ const PlaceOrderButton = () => {
         customerId: customer.id,
         customerName: customer.name,
         tableName: table.name,
-        quantity: merchantSideOrder.details.length,
+        quantity: merchantSideOrder.totalQuantity,
         totalAmount: merchantSideOrder.totalAmount,
         orderId,
         orderCode: merchantSideOrder.code,

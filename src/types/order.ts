@@ -62,6 +62,7 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
   deliveryFee: number;
   serviceFee: number;
   totalAmount: number;
+  totalQuantity: number;
   status: null;
   isActive: boolean;
   note: ""; // not used, always empty

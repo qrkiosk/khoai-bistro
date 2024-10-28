@@ -163,8 +163,8 @@ const ProductDetails = () => {
             autoFocus={false}
             colorScheme={APP_DANGER_COLOR}
             w="100%"
-            textAlign="left"
-            size="md"
+            borderRadius="lg"
+            size="lg"
             onClick={() => {
               removeFromCart(productVariant.uniqIdentifier);
               onClose();
@@ -179,7 +179,6 @@ const ProductDetails = () => {
             colorScheme={APP_ACCENT_COLOR}
             w="100%"
             borderRadius="lg"
-            textAlign="left"
             size="lg"
             onClick={addToCartWithAuthInquiry}
           >
