@@ -62,7 +62,7 @@ const MainListHeader = () => {
       <Box
         ref={bannerImgRef}
         className="flex justify-center relative w-full"
-        h="33%"
+        h="25%"
         background="url(https://www.shutterstock.com/image-photo/cup-coffee-beans-sack-on-600nw-1037995396.jpg)"
       >
         <Card

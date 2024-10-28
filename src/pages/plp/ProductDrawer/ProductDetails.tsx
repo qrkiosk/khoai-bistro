@@ -126,6 +126,8 @@ const ProductDetails = () => {
           <NoteTextarea />
           <HStack maxW="180px">
             <Button
+              p={0}
+              minW="50px"
               isDisabled={productVariantQty === minQty}
               onClick={() => updateProductVariantQty("DEC", minQty)}
             >
@@ -136,7 +138,11 @@ const ProductDetails = () => {
             <Box minW="50px" textAlign="center">
               <Heading fontSize="xl">{productVariantQty}</Heading>
             </Box>
-            <Button onClick={() => updateProductVariantQty("INC")}>
+            <Button
+              p={0}
+              minW="50px"
+              onClick={() => updateProductVariantQty("INC")}
+            >
               <Text fontSize="xl" color="var(--chakra-colors-blue-500)">
                 ＋
               </Text>

@@ -44,13 +44,11 @@ const CategoriesDrawer = () => {
                     colorScheme={alreadyInView ? APP_ACCENT_COLOR : undefined}
                     justifyContent="flex-start"
                     onClick={() => {
-                      if (alreadyInView || !categoryRefsMap.has(category.id)) {
-                        return;
+                      if (categoryRefsMap.has(category.id)) {
+                        const ref = categoryRefsMap.get(category.id)!;
+                        ref.current?.scrollIntoView({ behavior: "instant" });
+                        onClose();
                       }
-
-                      const ref = categoryRefsMap.get(category.id)!;
-                      ref.current?.scrollIntoView({ behavior: "instant" });
-                      onClose();
                     }}
                   >
                     <Text fontSize="sm" fontWeight="semibold">
