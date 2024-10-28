@@ -42,7 +42,7 @@ export const useRenderFromCOResult = () => {
   return isLoading;
 };
 
-export const useDelayedRendering = (delayInMs: number) => {
+export const useDelayedRender = (delayInMs: number) => {
   const [shouldRender, { on: triggerRendering }] = useBoolean(false);
 
   useEffect(() => {

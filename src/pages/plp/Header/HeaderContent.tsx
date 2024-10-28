@@ -21,7 +21,7 @@ import {
   storeInfoAtom,
   userNameAtom,
 } from "../../../state";
-import { useDelayedRendering, useIsLoadedTableOrStore } from "../../../hooks";
+import { useDelayedRender, useIsLoadedTableOrStore } from "../../../hooks";
 import { useCategoryDrawer } from "../localState";
 import {
   inputAtom,
@@ -42,7 +42,7 @@ const HeaderContent = () => {
   const userName = useAtomValue(userNameAtom);
   const { data: storeInfo } = useAtomValue(storeInfoAtom);
   const isLoadedTableOrStore = useIsLoadedTableOrStore();
-  const showCategoryNameInView = useDelayedRendering(800);
+  const showCategoryNameInView = useDelayedRender(800);
 
   const onChangeInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value),

@@ -8,7 +8,7 @@ import {
   mainContentRefAtom,
   storeProductsByCategoryAtom,
 } from "../../../state";
-import { useDelayedRendering } from "../../../hooks";
+import { useDelayedRender } from "../../../hooks";
 import { SkeletonContent } from "../../../components/skeletons";
 import MainList from "./MainList";
 import SearchResult from "./SearchResult";
@@ -23,7 +23,7 @@ const MainContent = () => {
   const { data: categories, isLoading: isFetching } = useAtomValue(
     storeProductsByCategoryAtom
   );
-  const shouldRender = useDelayedRendering(600);
+  const shouldRender = useDelayedRender(600);
 
   if (!shouldRender || isFetching || isEmpty(categories)) {
     return (
