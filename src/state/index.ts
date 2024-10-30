@@ -112,14 +112,14 @@ export const storeProductsByCategoryAtom = atomWithQuery<
   CategoryWithProducts[],
   Error,
   CategoryWithProducts[],
-  [string, number | null]
+  [string, number | null, number | null]
 >((get) => ({
   initialData: [],
-  queryKey: ["product/category", get(storeIdAtom)],
-  queryFn: async ({ queryKey: [, storeId] }) => {
-    if (storeId == null) return [];
+  queryKey: ["product/category", get(storeIdAtom), get(companyIdAtom)],
+  queryFn: async ({ queryKey: [, storeId, companyId] }) => {
+    if (storeId == null || companyId == null) return [];
 
-    const response = await getStoreProductsByCategory({ storeId });
+    const response = await getStoreProductsByCategory({ storeId, companyId });
     return response.data.data.filter(
       (category) => category.products.length > 0
     );

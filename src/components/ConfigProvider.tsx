@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { getConfig } from "../utils/config";
 
@@ -8,7 +8,7 @@ const CSS_VARIABLES = {
   "--zmp-background-white": "#ffffff",
 };
 
-const ConfigProvider = ({ children }: { children: ReactNode }) => {
+const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     Object.keys(CSS_VARIABLES)
       .filter((cssVar) => CSS_VARIABLES[cssVar])

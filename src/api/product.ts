@@ -8,9 +8,18 @@ import {
 import { Response } from "./types";
 import { BASE_URL } from "./constants";
 
-export const getStoreProducts = ({ storeId }: { storeId: number }) => {
+export const getStoreProducts = ({
+  storeId,
+  companyId,
+}: {
+  storeId: number;
+  companyId: number;
+}) => {
   return axios.post<Response<Product[]>>(`${BASE_URL}/product`, {
-    filtered: [{ id: "storeId", value: storeId }],
+    filtered: [
+      { id: "storeId", value: storeId },
+      { id: "companyId", value: companyId },
+    ],
     sorted: [{ id: "seq", asc: true }],
     pageSize: 1000,
     page: 0,
@@ -19,9 +28,11 @@ export const getStoreProducts = ({ storeId }: { storeId: number }) => {
 
 export const getStoreProductsByCategory = ({
   storeId,
+  companyId,
   name,
 }: {
   storeId: number;
+  companyId: number;
   name?: string;
 }) => {
   return axios.post<Response<CategoryWithProducts[]>>(
@@ -29,6 +40,7 @@ export const getStoreProductsByCategory = ({
     {
       filtered: [
         { id: "storeId", value: storeId },
+        { id: "companyId", value: companyId },
         { id: "name", value: name ?? "" },
       ],
       sorted: [{ id: "seq", asc: true }],
