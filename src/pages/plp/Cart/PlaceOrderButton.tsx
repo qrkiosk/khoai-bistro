@@ -54,11 +54,7 @@ const PlaceOrderButton = () => {
       const createMSOrderResult = await createMerchantSideOrder(orderData);
       const { id: orderId, companyId, storeId } = createMSOrderResult.data.data;
 
-      const queryMSOrderResult = await queryMerchantSideOrder({
-        orderId,
-        companyId,
-        storeId,
-      });
+      const queryMSOrderResult = await queryMerchantSideOrder(orderId);
       const merchantSideOrder = queryMSOrderResult.data.data;
 
       if (!merchantSideOrder.isActive) {

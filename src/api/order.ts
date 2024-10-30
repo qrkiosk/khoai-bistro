@@ -10,19 +10,8 @@ export const createMerchantSideOrder = (order: Order) => {
   >(`${BASE_URL}/order/create`, order);
 };
 
-export const queryMerchantSideOrder = ({
-  orderId,
-  companyId,
-  storeId,
-}: {
-  orderId: string;
-  companyId: number;
-  storeId: number;
-}) => {
-  return axios.post<Response<MerchantSideOrder>>(
-    `${BASE_URL}/order/${orderId}`,
-    { companyId, storeId }
-  );
+export const queryMerchantSideOrder = (orderId: string) => {
+  return axios.get<Response<MerchantSideOrder>>(`${BASE_URL}/order/${orderId}`);
 };
 
 export const sendZaloMessage = (data: OAMessageReqData) =>
