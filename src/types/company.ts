@@ -1,6 +1,6 @@
 import { CreateUpdateTrace } from "./common";
 
-export interface StoreTable extends CreateUpdateTrace {
+export interface Table extends CreateUpdateTrace {
   id: number;
   companyId: number;
   storeId: number;

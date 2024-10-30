@@ -66,6 +66,7 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
   status: null;
   isActive: boolean;
   note: ""; // not used, always empty
+  mac: string;
   details: Array<{
     id: string;
     productId: string;
@@ -83,7 +84,6 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
     isActive: boolean;
     note: string;
   }>;
-  mac: string;
 }
 
 export interface OAMessageReqData {

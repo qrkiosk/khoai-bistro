@@ -6,7 +6,7 @@ import isEmpty from "lodash/isEmpty";
 import sortBy from "lodash/sortBy";
 
 import { UserInfo } from "../types/user";
-import { Store, StoreTable } from "../types/company";
+import { Store, Table } from "../types/company";
 import { Cart, CartProductVariant } from "../types/cart";
 import {
   CategoryWithProducts,
@@ -61,9 +61,9 @@ export const setSearchParamIdsAtom = atom(null, (_get, set, search: string) => {
 });
 
 export const tableInfoAtom = atomWithQuery<
-  StoreTable | null,
+  Table | null,
   Error,
-  StoreTable | null,
+  Table | null,
   [string, number | null]
 >((get) => ({
   initialData: null,

@@ -2,7 +2,7 @@ import isEmpty from "lodash/isEmpty";
 
 import { Cart } from "../types/cart";
 import { Order, OrderDetail, OrderProductVariant } from "../types/order";
-import { StoreTable } from "../types/company";
+import { Table } from "../types/company";
 import { UserInfo } from "../types/user";
 import { calcItemTotalAmount } from "./cart";
 
@@ -61,7 +61,7 @@ export const buildOrder = ({
   customer,
   cart,
 }: {
-  table: StoreTable;
+  table: Table;
   customer: UserInfo;
   cart: Cart;
 }): Order => ({
