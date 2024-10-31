@@ -14,7 +14,7 @@ const ProductItem = {} as {
   List: React.FC<{ product: Product }>;
 };
 
-ProductItem.Banner = ({ product }: { product: Product }) => {
+ProductItem.Banner = ({ product }) => {
   const setSelectedProductId = useSetAtom(selectedProductIdAtom);
   const selectProduct = useCallback(() => {
     setSelectedProductId(product.id);
@@ -68,7 +68,7 @@ ProductItem.Banner = ({ product }: { product: Product }) => {
   );
 };
 
-ProductItem.Grid = ({ product }: { product: Product }) => {
+ProductItem.Grid = ({ product }) => {
   const setSelectedProductId = useSetAtom(selectedProductIdAtom);
   const selectProduct = useCallback(() => {
     setSelectedProductId(product.id);
@@ -103,7 +103,7 @@ ProductItem.Grid = ({ product }: { product: Product }) => {
   );
 };
 
-ProductItem.List = ({ product }: { product: Product }) => {
+ProductItem.List = ({ product }) => {
   const setSelectedProductId = useSetAtom(selectedProductIdAtom);
   const selectProduct = useCallback(() => {
     setSelectedProductId(product.id);
