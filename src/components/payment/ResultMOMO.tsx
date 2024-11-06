@@ -6,7 +6,7 @@ import { CheckTransactionReturns } from "zmp-sdk";
 
 import { ResultPageLocation } from "../../types/payment";
 import { sendZaloMessage } from "../../api/order";
-import { clearCartAtom, oaMessageReqDataAtom } from "../../state";
+import { clearCartAtom, postCheckoutDataAtom } from "../../state";
 import { useCartDrawer } from "../../hooks";
 import { IconPaymentFail, IconPaymentSuccess } from "./icons";
 import ResultTemplate from "./ResultTemplate";
@@ -21,7 +21,7 @@ const ResultMOMO = ({
   const { state }: ResultPageLocation = useLocation();
   const { onClose: closeCart } = useCartDrawer();
   const clearCart = useSetAtom(clearCartAtom);
-  const oaMessageReqData = useAtomValue(oaMessageReqDataAtom);
+  const postCheckoutData = useAtomValue(postCheckoutDataAtom);
   const isSuccessful = paymentResult.resultCode === 1;
 
   const onClose = useCallback(() => {
@@ -33,9 +33,10 @@ const ResultMOMO = ({
 
   useEffect(() => {
     if (isSuccessful) {
-      if (oaMessageReqData != null) sendZaloMessage(oaMessageReqData);
       clearCart();
       closeCart();
+
+      if (postCheckoutData != null) sendZaloMessage(postCheckoutData);
     }
   }, [isSuccessful]);
 

@@ -8,6 +8,7 @@ import { useBoolean } from "@chakra-ui/react";
 import { delay } from "../utils";
 import { matchStatusBarColor } from "../utils/device";
 import { verifyLocationSearch } from "../utils/product";
+import { cancelMerchantSideOrder } from "../api/order";
 import {
   isCartDrawerOpenAtom,
   isUserAuthorizedAtom,
@@ -16,6 +17,7 @@ import {
   clearCartAtom,
   tableInfoAtom,
   storeInfoAtom,
+  postCheckoutDataAtom,
 } from "../state";
 
 export const useResetCart = () => {
@@ -106,6 +108,8 @@ export const useCartDrawer = () => {
 export const useHandlePayment = () => {
   const navigate = useNavigate();
   const search = useAtomValue(getSearchAtom);
+  const postCheckoutData = useAtomValue(postCheckoutDataAtom);
+  const orderId = postCheckoutData?.orderId;
 
   useEffect(() => {
     if (!verifyLocationSearch(search)) return;
@@ -114,16 +118,27 @@ export const useHandlePayment = () => {
     searchParams.set("checkoutRedirect", "true");
     const redirectSearch = searchParams.toString();
 
+    events.off(EventName.OpenApp);
     events.on(EventName.OpenApp, (data: { path: string }) => {
+      console.log("EventName.OpenApp", data);
       navigate(data?.path || "/result", {
         replace: true,
         state: { ...data, redirectSearch },
       });
     });
 
-    events.on(EventName.OnDataCallback, (data) => {
-      const { appTransID, eventType } = data;
+    events.off(EventName.OnDataCallback);
+    events.on(EventName.OnDataCallback, async (data) => {
+      console.log("EventName.OnDataCallback", data, orderId);
+      if (!data && !!orderId) {
+        await cancelMerchantSideOrder({
+          id: orderId,
+          reason: "Incomplete payment process",
+        });
+        return;
+      }
 
+      const { appTransID, eventType } = data;
       if (appTransID || eventType === "PAY_BY_CUSTOM_METHOD") {
         navigate("/result", {
           replace: true,
@@ -132,7 +147,9 @@ export const useHandlePayment = () => {
       }
     });
 
+    events.off(EventName.PaymentClose);
     events.on(EventName.PaymentClose, (data = {}) => {
+      console.log("EventName.PaymentClose", data);
       const { zmpOrderId } = data;
 
       navigate("/result", {
@@ -143,7 +160,7 @@ export const useHandlePayment = () => {
         },
       });
     });
-  }, [search]);
+  }, [search, orderId]);
 };
 
 export function useToBeImplemented() {

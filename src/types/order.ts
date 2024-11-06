@@ -86,7 +86,7 @@ export interface MerchantSideOrder extends CreateUpdateTrace {
   }>;
 }
 
-export interface OAMessageReqData {
+export interface PostCheckoutData {
   customerId: string;
   customerName: string;
   tableName: string;

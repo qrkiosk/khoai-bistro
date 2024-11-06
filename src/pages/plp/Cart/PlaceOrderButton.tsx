@@ -3,12 +3,12 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { Box, Button, Text, useBoolean, useToast } from "@chakra-ui/react";
 import { Payment } from "zmp-sdk";
 
-import { OAMessageReqData } from "../../../types/order";
+import { PostCheckoutData } from "../../../types/order";
 import {
   cartAtom,
   cartSubtotalAtom,
   cartTotalQtyAtom,
-  oaMessageReqDataAtom,
+  postCheckoutDataAtom,
   storeInfoAtom,
   tableInfoAtom,
   userInfoAtom,
@@ -32,7 +32,7 @@ const PlaceOrderButton = () => {
   const customer = useAtomValue(userInfoAtom);
   const subtotal = useAtomValue(cartSubtotalAtom);
   const cartTotalQty = useAtomValue(cartTotalQtyAtom);
-  const saveOAMessageReqData = useSetAtom(oaMessageReqDataAtom);
+  const savePostCheckoutData = useSetAtom(postCheckoutDataAtom);
 
   const onClickPlaceOrder = async () => {
     showLoading();
@@ -83,7 +83,7 @@ const PlaceOrderButton = () => {
       });
       const { messageToken } = paymentResult;
 
-      const newOAMessageReqData: OAMessageReqData = {
+      const postCheckoutData: PostCheckoutData = {
         customerId: customer.id,
         customerName: customer.name,
         tableName: table.name,
@@ -95,8 +95,7 @@ const PlaceOrderButton = () => {
         companyId,
         storeId,
       };
-      saveOAMessageReqData(newOAMessageReqData);
-      console.log(newOAMessageReqData);
+      savePostCheckoutData(postCheckoutData);
     } catch (error: any) {
       console.log(error);
       toast(
