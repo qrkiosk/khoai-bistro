@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 import { Page, useNavigate } from "zmp-ui";
 import { CheckTransactionReturns } from "zmp-sdk";
 
-import { ResultPageLocation } from "../../types/payment";
+import { PaymentResultCode, ResultPageLocation } from "../../types/payment";
 import { sendZaloMessage } from "../../api/order";
 import { clearCartAtom, postCheckoutDataAtom } from "../../state";
 import { useCartDrawer } from "../../hooks";
@@ -22,7 +22,7 @@ const ResultMOMO = ({
   const { onClose: closeCart } = useCartDrawer();
   const clearCart = useSetAtom(clearCartAtom);
   const postCheckoutData = useAtomValue(postCheckoutDataAtom);
-  const isSuccessful = paymentResult.resultCode === 1;
+  const isSuccessful = paymentResult.resultCode === PaymentResultCode.SUCCESS;
 
   const onClose = useCallback(() => {
     navigate(

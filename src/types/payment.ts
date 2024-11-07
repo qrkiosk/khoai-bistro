@@ -7,6 +7,12 @@ export enum PaymentType {
   MOMO = "MOMO",
 }
 
+export enum PaymentResultCode {
+  SUCCESS = 1,
+  PENDING = 0,
+  FAILED = -1,
+}
+
 export interface State {
   path?: string;
   data?: string | Record<string, string>;

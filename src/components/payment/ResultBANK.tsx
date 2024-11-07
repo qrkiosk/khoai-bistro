@@ -12,7 +12,7 @@ import { IconPaymentFail, IconPaymentSuccess } from "./icons";
 import ResultTemplate from "./ResultTemplate";
 import CloseResultButton from "./CloseResultButton";
 
-const ResultCOD = ({
+const ResultBANK = ({
   paymentResult,
 }: {
   paymentResult: CheckTransactionReturns;
@@ -46,7 +46,7 @@ const ResultCOD = ({
         <>
           <ResultTemplate
             title="Đặt đơn thành công"
-            message="Đơn hàng COD của bạn đã được ghi nhận và sẽ được xử lý trong thời gian sớm nhất."
+            message="Đơn hàng chuyển khoản ngân hàng của bạn đã được ghi nhận và sẽ được xử lý trong thời gian sớm nhất."
             icon={<IconPaymentSuccess />}
           />
           <CloseResultButton onClose={onClose}>Hoàn tất</CloseResultButton>
@@ -65,4 +65,4 @@ const ResultCOD = ({
   );
 };
 
-export default ResultCOD;
+export default ResultBANK;

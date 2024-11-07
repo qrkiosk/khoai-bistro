@@ -111,6 +111,8 @@ export const useHandlePayment = () => {
   const postCheckoutData = useAtomValue(postCheckoutDataAtom);
   const orderId = postCheckoutData?.orderId;
 
+  // effect to attach handlers to OpenApp and PaymentClose events
+  // with search as the only dependency
   useEffect(() => {
     if (!verifyLocationSearch(search)) return;
 
@@ -126,6 +128,30 @@ export const useHandlePayment = () => {
         state: { ...data, redirectSearch },
       });
     });
+
+    events.off(EventName.PaymentClose);
+    events.on(EventName.PaymentClose, (data = {}) => {
+      console.log("EventName.PaymentClose", data);
+      const { zmpOrderId } = data;
+
+      navigate("/result", {
+        replace: true,
+        state: {
+          data: { zmpOrderId },
+          redirectSearch,
+        },
+      });
+    });
+  }, [search]);
+
+  // effect to attach a handler to the OnDataCallback event
+  // with search and orderId as the dependencies
+  useEffect(() => {
+    if (!verifyLocationSearch(search)) return;
+
+    const searchParams = new URLSearchParams(search);
+    searchParams.set("checkoutRedirect", "true");
+    const redirectSearch = searchParams.toString();
 
     events.off(EventName.OnDataCallback);
     events.on(EventName.OnDataCallback, async (data) => {
@@ -145,20 +171,6 @@ export const useHandlePayment = () => {
           state: { ...data, redirectSearch },
         });
       }
-    });
-
-    events.off(EventName.PaymentClose);
-    events.on(EventName.PaymentClose, (data = {}) => {
-      console.log("EventName.PaymentClose", data);
-      const { zmpOrderId } = data;
-
-      navigate("/result", {
-        replace: true,
-        state: {
-          data: { zmpOrderId },
-          redirectSearch,
-        },
-      });
     });
   }, [search, orderId]);
 };

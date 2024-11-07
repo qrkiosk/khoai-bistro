@@ -6,12 +6,18 @@ import {
   Payment,
 } from "zmp-sdk";
 
-import { PaymentType, State, ResultPageLocation } from "../../types/payment";
+import {
+  PaymentType,
+  State,
+  ResultPageLocation,
+  PaymentResultCode,
+} from "../../types/payment";
 import {
   ResultPending,
   ResultGeneralError,
   ResultCOD,
   ResultMOMO,
+  ResultBANK,
 } from "../../components/payment";
 
 const getCheckTransData = (state: State) => {
@@ -46,7 +52,10 @@ const CheckoutResultPage = () => {
         success: (result) => {
           console.log(result);
           setPaymentResult(result);
-          if (result.resultCode === 0 && checkTransAttempts.current < 5) {
+          if (
+            result.resultCode === PaymentResultCode.PENDING &&
+            checkTransAttempts.current < 5
+          ) {
             // Transaction still in progress, retry every 2.5s for 5 times
             // After 5 attempts without success, transaction will be considered a failed one
             // TODO: Mark the corresponding merchant-side order as failed if transaction fails
@@ -80,6 +89,7 @@ const CheckoutResultPage = () => {
     case PaymentType.COD:
       return <ResultCOD paymentResult={paymentResult} />;
     case PaymentType.BANK:
+      return <ResultBANK paymentResult={paymentResult} />;
     default:
       return null;
   }
