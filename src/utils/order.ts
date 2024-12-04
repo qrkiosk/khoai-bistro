@@ -1,8 +1,8 @@
 import isEmpty from "lodash/isEmpty";
 
 import { Cart } from "../types/cart";
-import { Order, OrderDetail, OrderProductVariant } from "../types/order";
 import { Table } from "../types/company";
+import { Order, OrderDetail, OrderProductVariant } from "../types/order";
 import { UserInfo } from "../types/user";
 import { calcItemTotalAmount } from "./cart";
 
@@ -70,6 +70,9 @@ export const buildOrder = ({
   tableId: table.id,
   tableName: table.name,
   note: "",
+  discountAmount: 0, // promotion application to be implemented in the future
+  discountPercentage: 0, // promotion application to be implemented in the future
+  discountVoucher: 0, // promotion application to be implemented in the future
   paymentType: cart.payment.paymentType,
   sourceType: cart.shipping.shippingType,
   customer,

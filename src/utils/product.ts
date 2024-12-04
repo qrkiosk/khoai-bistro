@@ -1,6 +1,6 @@
 export const getTestSearchParams = () => {
   const searchParams = new URLSearchParams({
-    tableId: "4",
+    tableId: "6",
     storeId: "2",
     companyId: "1",
   });

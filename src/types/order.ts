@@ -1,5 +1,3 @@
-import { AsyncCallbackFailObject, CheckTransactionReturns } from "zmp-sdk";
-
 import { CreateUpdateTrace } from "./common";
 import { PaymentType } from "./payment";
 import { ShippingType } from "./shipping";
@@ -14,6 +12,9 @@ export interface Order {
   tableId: number;
   tableName: string;
   note: string;
+  discountAmount: number;
+  discountPercentage: number;
+  discountVoucher: number;
   details: OrderDetail[];
 }
 
